@@ -3,32 +3,49 @@ import {
   View,
   TextInput,
   StyleSheet,
-  TouchableHighlight,
+  TouchableOpacity,
   Text
 } from 'react-native';
+import { email } from '../validations.js';
 
 export default class LoginForm extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      valid : false,
+      message : ''
+    }
+  }
+
+  handleChange = (event) => {
+    this.setState({valid : email(event.nativeEvent.text)});
+    this.setState({message : ((this.state.valid == false) && (event.nativeEvent.text.length != 0)) ? 'Invalid email' : (event.nativeEvent.text.length == 0) ? 'required' : ''})
+  }
+
   render(){
     return (
       <View style={styles.inputContainer}>
+        <Text style={styles.errorMessage}>{this.state.message}</Text>
         <TextInput
-          placeholder = 'username'
+          placeholder = 'email'
           style={styles.input}
+          onChange={this.handleChange}
         />
         <TextInput
           placeholder = 'password'
+          secureTextEntry
           style={styles.input}
         />
-        <TouchableHighlight
+        <TouchableOpacity
           onPress={this.props.buttonPressed}
           underlayColor='transparent'>
           <View style={styles.button}>
             <Text style={styles.buttonText}>Login</Text>
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
         <View style={styles.belowLogin}>
           <Text style={styles.text} onPress={this.props.buttonPressed}>forgot password?</Text>
-          <Text style={styles.text} onPress={this.props.buttonPressed}>New user?sign up</Text>
+          <Text style={styles.text} onPress={this.props.signUpPressed}>New user?sign up</Text>
         </View>
       </View>
     )
@@ -46,7 +63,8 @@ const styles = StyleSheet.create({
   input : {
     padding : 15,
     width : 300,
-    fontSize : 15
+    fontSize : 15,
+    fontWeight : '300'
   },
   button : {
     width : 200,
@@ -68,5 +86,11 @@ const styles = StyleSheet.create({
   },
   text : {
     padding : 20
+  },
+  errorMessage : {
+    flexDirection : 'row',
+    justifyContent : 'flex-end',
+    alignItems : 'flex-end',
+    color : 'red'
   }
 })

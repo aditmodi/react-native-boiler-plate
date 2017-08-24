@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import {
-  Text
+  Text,
+  View,
+  KeyboardAvoidingView,
+  TextInput,
+  TouchableOpacity
 } from 'react-native';
 import {
   StackNavigator
@@ -8,12 +12,22 @@ import {
 
 export default class ForgotPassScreen extends Component {
   static navigationOptions = {
-    title: 'Hello Mr.',
+    title: 'Password Reset',
   };
 
   render() {
+    const { navigate } = this.props.navigation;
     return (
-      <Text>Hello</Text>
+      <KeyboardAvoidingView behaviour="padding">
+        <Text>Enter recovery email :</Text>
+        <TextInput/>
+        <TouchableOpacity onPress={
+          () =>
+          navigate('ResetPass')
+        }>
+          <Text>Submit</Text>
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
     )
   }
 }
