@@ -37,7 +37,7 @@ export default class LoginForm extends Component {
           style={styles.input}
         />
         <TouchableOpacity
-          onPress={this.props.buttonPressed}
+          onPress={this.props.loginPressed}
           underlayColor='transparent'>
           <View style={styles.button}>
             <Text style={styles.buttonText}>Login</Text>

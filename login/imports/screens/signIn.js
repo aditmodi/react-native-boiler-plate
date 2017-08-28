@@ -23,11 +23,15 @@ export default class SignInScreen extends Component {
             <LogoContainer image={require('../img/react-native-logo.png')}/>
             <LoginForm buttonPressed={
               () =>
-              navigate('ForgotPass',{name : 'Jane'})
+              navigate('ForgotPass')
             }
             signUpPressed={
               () =>
               navigate('SignUp')
+            }
+            loginPressed={
+              () =>
+              navigate('Home')
             }
             />
             </KeyboardAvoidingView>

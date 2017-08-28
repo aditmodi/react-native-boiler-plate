@@ -23,7 +23,7 @@ export default class ForgotPassScreen extends Component {
         <TextInput/>
         <TouchableOpacity onPress={
           () =>
-          navigate('ResetPass')
+          navigate('MidWay')
         }>
           <Text>Submit</Text>
         </TouchableOpacity>
