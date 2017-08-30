@@ -57,7 +57,7 @@ export default class InputValidation extends Component{
       msg = '';
       visible = false;
     }
-    this.setState({valid : valid, errorMessage : msg, errorVisible : visible});
+    this.setState({value : text, valid : valid, errorMessage : msg, errorVisible : visible});
   }
 
   render(){
@@ -68,7 +68,8 @@ export default class InputValidation extends Component{
           style={styles.input}
           placeholder={this.props.PLACEHOLDER}
           onChangeText={(text) => this.handleChange(text)}
-          ref = {(i) =>{this[this.props.name] = i}}
+          onChange={this.props.Change}
+          onBlur={this.props.Blur}
           // underlineColorAndroid='rgba(0,0,0,0)'
         />
         <InputError

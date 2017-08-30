@@ -20,6 +20,7 @@
     "react-native-linear-gradient": "^2.2.0",
     "react-native-side-menu": "^1.0.2",
     "react-native-sidebar": "^0.3.0",
+    "react-native-simple-radio-button": "^2.6.1",
     "react-navigation": "^1.0.0-beta.11"
   },
   "devDependencies": {
