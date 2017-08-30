@@ -22,6 +22,7 @@ export default class GenderRadio extends Component {
   render(){
     return(
       <View>
+        <Text>Gender</Text>
         <RadioForm
           radio_props={radio_props}
           initial={0}

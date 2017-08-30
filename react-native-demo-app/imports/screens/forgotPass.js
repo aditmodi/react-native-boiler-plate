@@ -11,7 +11,7 @@ import {
 } from 'react-navigation';
 
 export default class ForgotPassScreen extends Component {
-  static navigationOptions = {
+  static navigationOptions={
     title: 'Password Reset',
   };
 

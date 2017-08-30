@@ -6,7 +6,11 @@ let express    = require('express');        // call express
 let app        = express();                 // define our app using express
 let bodyParser = require('body-parser');
 let mongoose   = require('mongoose');
-mongoose.connect('mongodb://localhost/user',{ useMongoClient: true }); // connect to our database
+mongoose.connect('mongodb://localhost:27017/react-native',{ useMongoClient: true },(error) => {
+                                                                                        if(error){
+                                                                                          return console.error(error);
+                                                                                        }
+                                                                                      }); // connect to our database
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST

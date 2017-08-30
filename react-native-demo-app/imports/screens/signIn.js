@@ -15,12 +15,12 @@ import LinearGradient from 'react-native-linear-gradient';
 
 export default class SignInScreen extends Component {
 
-  static navigationOptions = {
+  static navigationOptions={
     header : null
   }
 
   render(){
-    const { navigate } = this.props.navigation;
+    const { navigate }= this.props.navigation;
     return(
         <LinearGradient colors={['#00bfff', '#87cefa', '#ba55d3']} style={styles.gradient}>
           <KeyboardAvoidingView behaviour="height" style={styles.container}>

@@ -26,6 +26,15 @@ export default class InputValidation extends Component{
     }
   }
 
+  clear = () => {
+    this.setState({
+      value : '',
+      valid : false,
+      errorMessage : '',
+      errorVisible : false
+    });
+  }
+
   handleChange = (text) => {
     console.log("text : ", text);
     const { type } = this.props;
@@ -66,10 +75,11 @@ export default class InputValidation extends Component{
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder={this.props.PLACEHOLDER}
+          placeholder={this.props.placeHolder}
           onChangeText={(text) => this.handleChange(text)}
           onChange={this.props.Change}
           onBlur={this.props.Blur}
+          value={this.state.value}
           // underlineColorAndroid='rgba(0,0,0,0)'
         />
         <InputError

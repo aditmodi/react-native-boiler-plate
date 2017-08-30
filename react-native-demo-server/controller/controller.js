@@ -43,8 +43,8 @@ exports.check = function(req, res) {
 };
 exports.addUser = function(req, res) {
         let user = new User();      // create a new instance of the User model
-        user.firstName = req.body.firstName;  // set the users name (comes from the request)
-        user.lastName = req.body.lastName;
+        user.firstName = req.body.fname;  // set the users name (comes from the request)
+        user.lastName = req.body.lname;
         user.email = req.body.email;
         user.password = req.body.password;
         user.gender = req.body.gender;
@@ -52,7 +52,7 @@ exports.addUser = function(req, res) {
         // save the user and check for errors
         user.save(function(err) {
             if (err)
-                res.send(err);
+                return res.send(err);
             res.json({
               status : "ok",
 	            data   : user._id
@@ -133,21 +133,21 @@ exports.updateUser = function(req, res) { //update user by username
                    });
                });
 };
-// exports.admin = function (req, res, next) { // restrictions to admin
-//       let role = req.decoded._doc.role;
-//       console.log(role);
-//       if (role === 'admin') {
-//         return next();
-//       } else {
-//         res.status(403).send('Unauthorized Access!!')
-//       }
-// };
-// exports.user = function (req, res, next) { // restrictions to user
-//           let role = req.decoded._doc.role;
-//           console.log(role);
-//           if (role === 'user') {
-//               next()
-//           } else {
-//               res.status(403).send('Unauthorized Access!!')
-//           }
+exports.admin = function (req, res, next) { // restrictions to admin
+      let role = req.decoded._doc.role;
+      console.log(role);
+      if (role === 'admin') {
+        return next();
+      } else {
+        res.status(403).send('Unauthorized Access!!')
+      }
+};
+exports.user = function (req, res, next) { // restrictions to user
+          let role = req.decoded._doc.role;
+          console.log(role);
+          if (role === 'user') {
+              next()
+          } else {
+              res.status(403).send('Unauthorized Access!!')
+          }
 };

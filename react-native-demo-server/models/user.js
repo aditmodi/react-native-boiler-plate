@@ -11,7 +11,7 @@ var userSchema = new Schema({
   },
   password : String,
   gender : String,
-  phone : Number
+  phone : String
 })
 
 //Export mongoose model
