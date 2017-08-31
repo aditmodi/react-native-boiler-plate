@@ -7,7 +7,8 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
-  Text
+  Text,
+  Alert
 } from 'react-native';
 import InputValidation from './inputValidation.js';
 import { Form } from './signUpFormDetails.js';
@@ -21,35 +22,59 @@ export default class SignUpForm extends Component {
   }
 
   handleSubmit = () => {
-    // fname = this.fname.state.value;
-    // lname = this.fname.state.value;
-    // email = this.fname.state.value;
-    // fname = this.fname.state.value;
-    // fname = this.fname.state.value;
-    // fname = this.fname.state.value;
-    // if (this.fname.state.value == true &&)
-
-    fetch('http://192.168.1.189:3001/api/users',{
-      method: 'POST',
-      headers: {
-   'Accept': 'application/json',
-   'Content-Type': 'application/json',
- },
-      body: JSON.stringify({
-        fname:this.fname.state.value,
-        lname:this.lname.state.value,
-        email:this.email.state.value,
-        password:this.password.state.value,
-        phone:this.phone.state.value,
-        gender:this.gender.state.value
+    console.log("fisrt name state : ", this.fname.state.valid);
+    console.log("last name state : ", this.lname.state.valid);
+    console.log("phone state : ", this.phone.state.valid);
+    console.log("gender state : ", this.gender.state.value);
+    console.log("email state : ", this.email.state.valid);
+    console.log("password state : ", this.password.state.valid);
+    if (this.fname.state.valid == true && this.lname.state.valid == true && this.email.state.valid == true && this.phone.state.valid == true){
+      fetch('http://192.168.1.189:3001/api/users',{
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fname: this.fname.state.value,
+          lname: this.lname.state.value,
+          email: this.email.state.value,
+          password: this.password.state.value,
+          phone: this.phone.state.value,
+          gender: this.gender.state.value
+        })
       })
-    })
-    .then((ref) => {
-      console.log("ref", ref);
-    })
-    .catch((error) => {
+      .then((ref) => {
+        console.log("ref", ref);
+      })
+      .catch((error) => {
         console.error(error);
-      });
+        });
+      Alert.alert('Form submitted');
+      fetch('http://192.168.1.189:3001/api/authenticate')
+      .then((token) => {
+        console.log("token:", token);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      this.fname.clear();
+      this.lname.clear();
+      this.email.clear();
+      this.password.clear();
+      this.phone.clear();
+      this.cPassword.clear();
+      fetch('http://192.168.1.189:3001/api/authenticate')
+      .then((token) => {
+        console.log("token:", token);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+    }
+    else {
+      Alert.alert('Please resolve the errors');
+    }
   }
 
   render(){
@@ -76,13 +101,13 @@ export default class SignUpForm extends Component {
               type="password"
               placeHolder="Password"
               ref={(input) => {this.password = input}}
-              secureTextEntry
+              secure
             />
             <InputValidation
-              type="password"
+              type="confirmPassword"
               placeHolder="Confirm Password"
               ref={(input) => {this.cPassword = input}}
-              secureTextEntry
+              secure
             />
             <GenderRadio
               ref={(input) => {this.gender = input}}

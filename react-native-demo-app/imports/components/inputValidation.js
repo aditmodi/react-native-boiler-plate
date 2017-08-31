@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import {
   TextInput,
   View,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 import InputError from './inputError.js';
 import {
@@ -14,6 +14,9 @@ import {
   email,
   passMatch
 } from '../validations.js';
+
+var pass1 = '';
+var pass2 = '';
 
 export default class InputValidation extends Component{
   constructor(props){
@@ -36,7 +39,7 @@ export default class InputValidation extends Component{
   }
 
   handleChange = (text) => {
-    console.log("text : ", text);
+
     const { type } = this.props;
     let valid;
     if (type == 'email'){
@@ -48,7 +51,30 @@ export default class InputValidation extends Component{
     if (type == 'text'){
       valid = alphaNumeric(text);
     }
+    if (type == 'password'){
+      pass1 = text;
+    }
+    if (type == 'confirmPassword'){
+      pass2 = text;
+    }
+    if (pass1.length != 0 && pass2.length != 0){
+      this.match(pass1, pass2);
+    }
     this.validate(text, valid);
+  }
+
+  match = (pass1, pass2) => {
+    let valid;
+    let msg;
+    let visible;
+    if (pass1.length != 0 && pass2.length != 0) {
+      valid = passMatch(pass1, pass2);
+    }
+    if (valid == false) {
+      msg = 'passwords do not match';
+      visible = true;
+    }
+    this.setState({value : pass2, valid : valid, errorMessage : msg, errorVisible : visible});
   }
 
   validate = (text, valid) => {
@@ -80,6 +106,7 @@ export default class InputValidation extends Component{
           onChange={this.props.Change}
           onBlur={this.props.Blur}
           value={this.state.value}
+          secureTextEntry={this.props.secure}
           // underlineColorAndroid='rgba(0,0,0,0)'
         />
         <InputError

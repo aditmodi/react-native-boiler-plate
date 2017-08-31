@@ -1,22 +1,49 @@
 let express  = require('express');
 let router = express.Router();
 let ctrl = require('../controller/controller');
+let passport = require('passport');
+let LocalStrategy = require('passport-local').Strategy;
 
-var app = require('express')();
-var basicAuth = require('express-basic-auth');
+let User = require('../models/user');
+// var app = require('express')();
+// var basicAuth = require('express-basic-auth');
 
-router.post('/authenticate', ctrl.getToken);
+// router.post('/authenticate', ctrl.getToken);
 router.get('/', ctrl.check);
 router.post('/users',ctrl.addUser);
 router.delete('/users/:email',ctrl.deleteUser);
-router.use(ctrl.authUser);
+// router.use(ctrl.authUser);
 router.get('/users',ctrl.admin,ctrl.getAll);
 router.get('/users/:email',ctrl.admin,ctrl.getByName);
 router.put('/users/:email',ctrl.user,ctrl.updateUser);
-app.use(basicAuth({
-    users: {
-        'email': 'admin',
-        'password': 'admin'
-    }
-}))
+passport.use(new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password',
+    passReqToCallback: true,
+    session: false
+}, function(req, email, password, done) {
+          User.findOne({ email: email }, function (err, user) {
+            if (err) { return done(err); }
+            if (!user) { return done(null, false); }
+            if (user.password != password) { return done(null, false); }
+            return done(null, user);
+    })
+  }
+  ));
+router.post('/authenticate', passport.authenticate('local', { failureRedirect: '/api' }),
+  function(req, res) {
+    res.redirect('/api');
+  });
+passport.serializeUser(function(user, cb) {
+  cb(null, user.id);
+});
+
+passport.deserializeUser(function(id, cb) {
+  User.findById(id, function (err, user) {
+    if (err) { return cb(err); }
+    cb(null, user);
+  });
+});
+
+
 module.exports = router;

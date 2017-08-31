@@ -7,15 +7,15 @@ import {
 } from 'react-native';
 
 var radio_props = [
-  {label: 'male', value: 0 },
-  {label: 'female', value: 1 }
+  {label: 'male', value: 'male' },
+  {label: 'female', value: 'female' }
 ];
 
 export default class GenderRadio extends Component {
   constructor(props){
     super(props);
     this.state = {
-      value : 0
+      value : 'male'
     }
   }
 
@@ -25,7 +25,7 @@ export default class GenderRadio extends Component {
         <Text>Gender</Text>
         <RadioForm
           radio_props={radio_props}
-          initial={0}
+          initial={'male'}
           onPress={(value) => {this.setState({value:value})}}
         />
       </View>

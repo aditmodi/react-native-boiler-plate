@@ -12,14 +12,41 @@ export default class LoginForm extends Component {
   constructor(props){
     super(props);
     this.state = {
+      email : '',
+      pass : '',
       valid : false,
       message : ''
     }
   }
 
-  handleChange = (event) => {
-    this.setState({valid : email(event.nativeEvent.text)});
-    this.setState({message : ((this.state.valid == false) && (event.nativeEvent.text.length != 0)) ? 'Invalid email' : (event.nativeEvent.text.length == 0) ? 'required' : ''})
+  handleChange = (text) => {
+    console.log("text: ", text);
+    let valid;
+    valid = email(text);
+    this.validate(text, valid);
+
+  }
+
+  validate = (text, valid) =>{
+    let msg;
+    if ((valid == false) && (text.length != 0)){
+      msg = 'Invalid';
+    }
+    if (text.length == 0){
+      msg = 'This field is required';
+        }
+    if (valid == true){
+      msg = '';
+    }
+    this.state.email = text;
+    this.setState({valid : valid, message : msg});
+    console.log("email : ", this.state.email);
+  }
+
+  assignPass = (text) => {
+    this.state.pass = text;
+    this.setState({message : ''});
+    console.log("password : ", this.state.pass);
   }
 
   render(){
@@ -29,12 +56,16 @@ export default class LoginForm extends Component {
         <TextInput
           placeholder = 'email'
           style={styles.input}
-          onChange={this.handleChange}
+          onChangeText={(text) => this.handleChange(text)}
+          // ref={this.props.email}
         />
         <TextInput
           placeholder = 'password'
           secureTextEntry
           style={styles.input}
+          onChangeText={(text) => this.assignPass(text)}
+          // ref={this.props.password}
+          secureTextEntry
         />
         <TouchableOpacity
           onPress={this.props.loginPressed}

@@ -3,41 +3,41 @@ let User = require('../models/user');            // get an instance of the expre
 let config = require('../config');
 // let roles = require('../permissions/permission');
 
-exports.getToken = function(req, res) { //to obtain token
-  console.log("aunthenticate");
-  // find the user
-  User.findOne({
-    email: req.body.email
-  }, function(err, user) {
-
-    if (err) throw err;
-
-    if (!user) {
-      res.json({ success: false, message: 'Authentication failed. User not found.' });
-    } else if (user) {
-
-      // check if password matches
-      if (user.password != req.body.password) {
-        res.json({ success: false, message: 'Authentication failed. Wrong password.' });
-      } else {
-
-        // if user is found and password is right
-        // create a token
-        let token = jwt.sign(user, config.secret, {
-          expiresIn: 1440 // expires in 24 hours
-        });
-
-        // return the information including token as JSON
-        res.json({
-          success: true,
-          // user : user.name,
-          message: 'Enjoy your token!',
-          token: token
-        });
-      }
-    }
-  });
-}
+// exports.getToken = function(req, res) { //to obtain token
+//   console.log("aunthenticate");
+//   // find the user
+//   User.findOne({
+//     email: req.body.email
+//   }, function(err, user) {
+//
+//     if (err) throw err;
+//
+//     if (!user) {
+//       res.json({ success: false, message: 'Authentication failed. User not found.' });
+//     } else if (user) {
+//
+//       // check if password matches
+//       if (user.password != req.body.password) {
+//         res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+//       } else {
+//
+//         // if user is found and password is right
+//         // create a token
+//         let token = jwt.sign(user, config.secret, {
+//           expiresIn: 1440 // expires in 24 hours
+//         });
+//
+//         // return the information including token as JSON
+//         res.json({
+//           success: true,
+//           // user : user.name,
+//           message: 'Enjoy your token!',
+//           token: token
+//         });
+//       }
+//     }
+//   });
+// }
 exports.check = function(req, res) {
     res.json("hooray! welcome to our api");
 };
@@ -69,30 +69,30 @@ exports.deleteUser = function(req,res) {
           })
         });
 };
-exports.authUser = function(req, res, next) {
-        console.log("use");
-        let token = req.body.token || req.query.token || req.headers['x-access-token'];
-        // decode token
-        if (token) {
-          // verifies secret and checks exp
-          jwt.verify(token, config.secret, function(err, decoded) {
-            if (err) {
-              return res.json({ success: false, message: 'Failed to authenticate token.' });
-            } else {
-              // if everything is good, save to request for use in other routes
-              req.decoded = decoded;
-              next();
-            }
-          });
-        } else {
-          // if there is no token
-          // return an error
-          return res.status(403).send({
-              success: false,
-              message: 'No token provided.'
-          });
-        }    // next(); // make sure we go to the next routes and don't stop here
-};
+// exports.authUser = function(req, res, next) {
+//         console.log("use");
+//         let token = req.body.token || req.query.token || req.headers['x-access-token'];
+//         // decode token
+//         if (token) {
+//           // verifies secret and checks exp
+//           jwt.verify(token, config.secret, function(err, decoded) {
+//             if (err) {
+//               return res.json({ success: false, message: 'Failed to authenticate token.' });
+//             } else {
+//               // if everything is good, save to request for use in other routes
+//               req.decoded = decoded;
+//               next();
+//             }
+//           });
+//         } else {
+//           // if there is no token
+//           // return an error
+//           return res.status(403).send({
+//               success: false,
+//               message: 'No token provided.'
+//           });
+//         }    // next(); // make sure we go to the next routes and don't stop here
+// };
 exports.getAll = function(req, res) {  //show all users
             User.find(function(err, users) {
                 if (err)
@@ -151,3 +151,11 @@ exports.user = function (req, res, next) { // restrictions to user
               res.status(403).send('Unauthorized Access!!')
           }
 };
+// exports.authUser =  function(req, email, password, done) {
+//           User.findOne({ email: email }, function (err, user) {
+//             if (err) { return done(err); }
+//             if (!user) { return done(null, false); }
+//             if (!user.verifyPassword(password)) { return done(null, false); }
+//             return done(null, user);
+//     });
+//   }
