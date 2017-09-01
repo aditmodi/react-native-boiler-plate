@@ -8,7 +8,8 @@ import {
   TextInput,
   Button,
   Image,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  AsyncStorage
 } from 'react-native';
 import LogoContainer from '../components/logoContainer.js'; //first screen logo and title
 import LoginForm from '../components/loginForm.js'; //LoginForm having email and password field
@@ -55,15 +56,17 @@ export default class SignInScreen extends Component {
                       password: this.login.state.pass
                     })
                   })
-                  .then((ref) => {
-                    () => navigate('Home');
-                    console.log("ref", ref);
-                  })
+                  .then( (response) => response.json())
+                .then(response => {
+                  console.log("dfvgsdugfusdjgujgdsuj",response.token);
+                  AsyncStorage.setItem('@Token:key', response.token);
+                  navigate('Home')
+                })
                   .catch((error) => {
                     console.error(error);
-                    })
-                }
+                  })
 
+                }
               }
             />
             </KeyboardAvoidingView>

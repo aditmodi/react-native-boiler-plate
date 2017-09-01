@@ -51,9 +51,26 @@ export default class SignUpForm extends Component {
         console.error(error);
         });
       Alert.alert('Form submitted');
-      fetch('http://192.168.1.189:3001/api/authenticate')
-      .then((token) => {
-        console.log("token:", token);
+      fetch('http://192.168.1.189:3001/api/authenticate',{
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: this.email.state.value,
+          password: this.password.state.value
+        })
+      })
+      .then(async(token) => {
+        try {
+          await AsyncStorage.setItem('@Token:key',token);
+          console.log('token saved');
+          () => navigate('Home')
+        }
+        catch(error){
+          console.error('Error saving data :', error);
+        }
       })
       .catch((error) => {
         console.error(error);

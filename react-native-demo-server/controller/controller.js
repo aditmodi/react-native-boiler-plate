@@ -1,6 +1,14 @@
+// import {
+//   alphaNumeric,
+//   onlyNumber,
+//   email
+// } from '../validations-server';
+
 let jwt = require('jsonwebtoken');
 let User = require('../models/user');            // get an instance of the express Router
 let config = require('../config');
+let passport = require('passport');
+
 // let roles = require('../permissions/permission');
 
 // exports.getToken = function(req, res) { //to obtain token
@@ -42,22 +50,30 @@ exports.check = function(req, res) {
     res.json("hooray! welcome to our api");
 };
 exports.addUser = function(req, res) {
-        let user = new User();      // create a new instance of the User model
-        user.firstName = req.body.fname;  // set the users name (comes from the request)
-        user.lastName = req.body.lname;
-        user.email = req.body.email;
-        user.password = req.body.password;
-        user.gender = req.body.gender;
-        user.phone = req.body.phone;
-        // save the user and check for errors
-        user.save(function(err) {
-            if (err)
-                return res.send(err);
-            res.json({
-              status : "ok",
-	            data   : user._id
-            });
-        });
+  // let valid1 = alphaNumeric(req.body.fname);
+  // let valid2 = alphaNumeric(req.body.lname);
+  // let valid3 = email(req.body.email);
+  // let valid4 = onlyNumber(req.body.phone);
+
+  // if (valid1==true && valid2==true && valid3==true && valid4==true){
+
+    let user = new User();      // create a new instance of the User model
+    user.firstName = req.body.fname;  // set the users name (comes from the request)
+    user.lastName = req.body.lname;
+    user.email = req.body.email;
+    user.password = req.body.password;
+    user.gender = req.body.gender;
+    user.phone = req.body.phone;
+    // save the user and check for errors
+    user.save(function(err) {
+      if (err)
+      return res.send(err);
+      res.json({
+        status : "ok",
+        data   : user._id
+      });
+    });
+  // }
 };
 exports.deleteUser = function(req,res) {
       User.findOneAndRemove({email:req.params.email}, function(err, user) {
@@ -133,24 +149,25 @@ exports.updateUser = function(req, res) { //update user by username
                    });
                });
 };
-exports.admin = function (req, res, next) { // restrictions to admin
-      let role = req.decoded._doc.role;
-      console.log(role);
-      if (role === 'admin') {
-        return next();
-      } else {
-        res.status(403).send('Unauthorized Access!!')
-      }
-};
-exports.user = function (req, res, next) { // restrictions to user
-          let role = req.decoded._doc.role;
-          console.log(role);
-          if (role === 'user') {
-              next()
-          } else {
-              res.status(403).send('Unauthorized Access!!')
-          }
-};
+// exports.admin = function (req, res, next) { // restrictions to admin
+//       let role = req.decoded._doc.role;
+//       console.log(role);
+//       if (role === 'admin') {
+//         return next();
+//       } else {
+//         res.status(403).send('Unauthorized Access!!')
+//       }
+// };
+// exports.user = function (req, res, next) { // restrictions to user
+//       let role = req.decoded._doc.role;
+//       console.log(role);
+//       if (role === 'user') {
+//           next()
+//       } else {
+//           res.status(403).send('Unauthorized Access!!')
+//       }
+// };
+
 // exports.authUser =  function(req, email, password, done) {
 //           User.findOne({ email: email }, function (err, user) {
 //             if (err) { return done(err); }
@@ -159,3 +176,33 @@ exports.user = function (req, res, next) { // restrictions to user
 //             return done(null, user);
 //     });
 //   }
+
+exports.authUser = function(req, res) {
+  // res.redirect('/api');
+  console.log("user :", req.user);
+  console.log("user :", req.sessionID);
+  var token = req.sessionID;
+  // console.log()
+
+  res.format({
+    json: () => {
+    // if (status) return res.status(status).json(obj);
+    // console.log('190---------------',res.json(obj))
+      return res.json({
+        success : true,
+        message : 'Enjoy your token',
+        token : token
+      });
+    }
+    });
+  // res.json({
+  //   success : true,
+  //   message : 'Enjoy your token',
+  //   token : token
+  // })
+  // console.log();
+  // res.send(token);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////

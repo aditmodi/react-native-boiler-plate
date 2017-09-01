@@ -1,8 +1,4 @@
 module.exports = {
-  'secret' : 'token created',
-  'database' : 'mongodb://192.168.1.189:27017/Users',
-  'permissions' : {
-    'admin': ['PUT'],
-    'user': ['GET']
-  }
-};
+  clientId: '8puWuJWZYls1Ylawxm6CMiYREhsGGSyw',
+  url: 'http://localhost:3001',
+}
