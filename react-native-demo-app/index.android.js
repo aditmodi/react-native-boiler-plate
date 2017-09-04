@@ -8,6 +8,7 @@ import reEnterPassScreen from './imports/screens/reEnterPass';
 import HomeScreen from './imports/screens/home';
 import MidWayScreen from './imports/screens/midWay';
 import ProfileScreen from './imports/screens/profile';
+import './ReactotronConfig';
 
 const login = StackNavigator({
   SignIn: { screen: SignInScreen },

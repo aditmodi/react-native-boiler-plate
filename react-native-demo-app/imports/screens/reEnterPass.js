@@ -5,8 +5,10 @@ import {
   KeyboardAvoidingView,
   TextInput,
   TouchableOpacity,
-  Alert
+  Alert,
+  StyleSheet
 } from 'react-native';
+import InputValidation from '../components/inputValidation';
 
 export default class reEnterPassScreen extends Component {
   constructor(props){
@@ -15,14 +17,24 @@ export default class reEnterPassScreen extends Component {
       valid : false
     }
   }
+
+  static navigationOptions = {
+    header: null
+  }
+  
   render(){
     return(
-      <KeyboardAvoidingView behaviour="padding">
-        <Text>Enter new password :</Text>
-        <TextInput/>
-        <Text>Re-Enter new password :</Text>
-        <TextInput/>
+      <KeyboardAvoidingView style={styles.container} behaviour="padding">
+        <InputValidation
+          type="password"
+          label="Enter your new password"
+        />
+        <InputValidation
+          type="password"
+          label="Re-enter your new password"
+        />
         <TouchableOpacity
+          style={styles.reset}
           onPress={
             () => {
               if (this.state.valid == true){
@@ -34,9 +46,27 @@ export default class reEnterPassScreen extends Component {
             }
           }
           >
-          <Text>Reset</Text>
+          <Text style={styles.text}>Reset</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    height: 350,
+    justifyContent: 'space-around',
+    alignItems: 'stretch'
+  },
+  reset: {
+    borderWidth: 1,
+    backgroundColor: '#00008b'
+  },
+  text: {
+    textAlign: 'center',
+    padding: 10,
+    fontSize: 20,
+    color: '#ffffff'
+  }
+})

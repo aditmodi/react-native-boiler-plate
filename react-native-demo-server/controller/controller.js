@@ -68,12 +68,14 @@ exports.addUser = function(req, res) {
     user.save(function(err) {
       if (err)
       return res.send(err);
-      res.json({
-        status : "ok",
-        data   : user._id
-      });
+      // res.json({
+      //   status : "ok",
+      //   data   : user._id
+      // });
+      res.redirect(200,'/api/authenticate');
     });
   // }
+
 };
 exports.deleteUser = function(req,res) {
       User.findOneAndRemove({email:req.params.email}, function(err, user) {

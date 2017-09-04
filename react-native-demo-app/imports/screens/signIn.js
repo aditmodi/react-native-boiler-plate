@@ -14,6 +14,7 @@ import {
 import LogoContainer from '../components/logoContainer.js'; //first screen logo and title
 import LoginForm from '../components/loginForm.js'; //LoginForm having email and password field
 import LinearGradient from 'react-native-linear-gradient'; //Library for linear gradient
+import BackgroundImage from '../components/background';
 
 export default class SignInScreen extends Component {
 
@@ -25,7 +26,8 @@ export default class SignInScreen extends Component {
     const { navigate }= this.props.navigation;    //to navigate
     //KeyboardAvoidingView is used to avoid when keyboard comes up the field you want to enter your input in.
     return(
-        <LinearGradient colors={['#00bfff', '#87cefa', '#ba55d3']} style={styles.gradient}>
+        // <LinearGradient style={styles.gradient}>
+        <BackgroundImage>
           <KeyboardAvoidingView behaviour="height" style={styles.container}>
             <LogoContainer image={require('../img/react-native-logo.png')}/>
             <LoginForm
@@ -70,17 +72,19 @@ export default class SignInScreen extends Component {
               }
             />
             </KeyboardAvoidingView>
-        </LinearGradient>
+        </BackgroundImage>
+
+        // </LinearGradient>
     )
   }
 }
 
 const styles = StyleSheet.create({
   container : {
-    flex : 1          //expands according to the size of parent
-  },
-  gradient : {
-    flex : 1,
+    flex : 1,          //expands according to the size of parent
+  // },
+  // gradient : {
+  //   flex : 1,
     flexDirection : 'column',           //to define primary axis along which the components will be aligned
     justifyContent : 'space-between',   //along that axis how will content be placed
     alignItems :'stretch'               //look of individual components

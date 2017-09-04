@@ -4,9 +4,11 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Text
+  Text,
+
 } from 'react-native';
 import { email } from '../validations.js';
+import InputValidation from './inputValidation';
 
 export default class LoginForm extends Component {
   constructor(props){
@@ -52,21 +54,16 @@ export default class LoginForm extends Component {
   render(){
     return (
       <View style={styles.inputContainer}>
-        <Text style={styles.errorMessage}>{this.state.message}</Text>
-        <TextInput
-          placeholder = 'email'
-          style={styles.input}
-          onChangeText={(text) => this.handleChange(text)}
-          // ref={this.props.email}
-        />
-        <TextInput
-          placeholder = 'password'
-          secureTextEntry
-          style={styles.input}
-          onChangeText={(text) => this.assignPass(text)}
-          // ref={this.props.password}
-          secureTextEntry
-        />
+        <View style={styles.input}>
+          <InputValidation
+            type="email"
+            label="Enter you email"
+          />
+          <InputValidation
+            type="password"
+            label="Enter your password"
+          />
+        </View>  
         <TouchableOpacity
           onPress={this.props.loginPressed}
           underlayColor='transparent'>
@@ -88,26 +85,22 @@ const styles = StyleSheet.create({
     flex : 1,
     flexDirection : 'column',
     justifyContent : 'space-between',
-    alignItems : 'center',
+    alignItems : 'stretch',
     marginBottom : 150
-  },
-  input : {
-    padding : 15,
-    width : 300,
-    fontSize : 15,
-    fontWeight : '300'
   },
   button : {
     width : 200,
     marginTop : 50,
-    backgroundColor : 'transparent',
+    backgroundColor : '#00008b',
     borderWidth : 1,
-    borderRadius : 20
+    marginLeft: 100
   },
   buttonText : {
+    color: '#ffffff',
     padding : 10,
-    fontSize : 15,
-    textAlign : 'center'
+    fontSize : 20,
+    textAlign : 'center',
+    fontWeight: 'bold'
   },
   belowLogin : {
     // flex : 0.5,
@@ -116,7 +109,8 @@ const styles = StyleSheet.create({
     alignItems : 'stretch'
   },
   text : {
-    padding : 20
+    padding : 20,
+    color: '#00008b',
   },
   errorMessage : {
     flexDirection : 'row',

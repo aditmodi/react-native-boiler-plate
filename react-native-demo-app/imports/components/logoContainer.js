@@ -10,12 +10,8 @@ export default class LogoContainer extends Component {
   render(){
     return(
       <View style={styles.logoContainer}>
-        <Image
-          source = {this.props.image}
-          style = {styles.logo}
-        />
         <Text style={styles.title}>
-          Welcome.
+          Successive Softwares
         </Text>
       </View>
     )
@@ -36,8 +32,9 @@ const styles = StyleSheet.create({
   },
   title : {
     fontSize : 25,
-    fontStyle : 'italic',
+    fontWeight : 'bold',
     textAlign : 'center',
-    width : 200
+    width : 200,
+    color: '#00008b'
   }
 })

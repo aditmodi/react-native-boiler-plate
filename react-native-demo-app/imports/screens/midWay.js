@@ -4,10 +4,12 @@ import {
   Text,
   View
 } from 'react-native';
-import { StackNavigator } from 'react-navigation';
 
 export default class MidWayScreen extends Component {
 
+  static navigationOptions = {
+    header: null
+  }
 
   render(){
     const { navigate } = this.props.navigation;

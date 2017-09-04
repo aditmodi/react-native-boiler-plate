@@ -21,11 +21,15 @@ export default class GenderRadio extends Component {
 
   render(){
     return(
-      <View>
-        <Text>Gender</Text>
+      <View style={styles.genderContainer}>
+        <Text style={styles.genderHeading}>Gender</Text>
         <RadioForm
+          style={styles.radio}
           radio_props={radio_props}
+          formHorizontal={true}
           initial={'male'}
+          animation={'true'}
+          labelHorizontal={true}
           onPress={(value) => {this.setState({value:value})}}
         />
       </View>
@@ -35,18 +39,23 @@ export default class GenderRadio extends Component {
 
 const styles = StyleSheet.create({
   genderContainer : {
-    flex : 1,
-    flexDirection : 'row',
-    justifyContent : 'space-between',
-    alignItems : 'flex-start'
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginLeft: 20
   },
   genderHeading : {
-    marginLeft : 10,
-    fontWeight : 'bold',
-    color : '#000000',
+    // marginLeft : 10,
+    // fontWeight : 'bold',
+    color : '#00008b',
     fontSize : 15
   },
   checkbox : {
-    color : '#000000'
+    color : '#00008b'
   },
+  radio: {
+    marginLeft: 50,
+    // fontSize: 15
+  }
 })

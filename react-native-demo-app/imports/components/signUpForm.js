@@ -14,6 +14,8 @@ import InputValidation from './inputValidation.js';
 import { Form } from './signUpFormDetails.js';
 import LinearGradient from 'react-native-linear-gradient';
 import GenderRadio from './genderRadio.js';
+import BackgroundImage from './background.js';
+
 
 export default class SignUpForm extends Component {
 
@@ -21,152 +23,100 @@ export default class SignUpForm extends Component {
     super(props);
   }
 
-  handleSubmit = () => {
-    console.log("fisrt name state : ", this.fname.state.valid);
-    console.log("last name state : ", this.lname.state.valid);
-    console.log("phone state : ", this.phone.state.valid);
-    console.log("gender state : ", this.gender.state.value);
-    console.log("email state : ", this.email.state.valid);
-    console.log("password state : ", this.password.state.valid);
-    if (this.fname.state.valid == true && this.lname.state.valid == true && this.email.state.valid == true && this.phone.state.valid == true){
-      fetch('http://192.168.1.189:3001/api/users',{
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          fname: this.fname.state.value,
-          lname: this.lname.state.value,
-          email: this.email.state.value,
-          password: this.password.state.value,
-          phone: this.phone.state.value,
-          gender: this.gender.state.value
-        })
-      })
-      .then((ref) => {
-        console.log("ref", ref);
-      })
-      .catch((error) => {
-        console.error(error);
-        });
-      Alert.alert('Form submitted');
-      fetch('http://192.168.1.189:3001/api/authenticate',{
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: this.email.state.value,
-          password: this.password.state.value
-        })
-      })
-      .then(async(token) => {
-        try {
-          await AsyncStorage.setItem('@Token:key',token);
-          console.log('token saved');
-          () => navigate('Home')
-        }
-        catch(error){
-          console.error('Error saving data :', error);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-      this.fname.clear();
-      this.lname.clear();
-      this.email.clear();
-      this.password.clear();
-      this.phone.clear();
-      this.cPassword.clear();
-      fetch('http://192.168.1.189:3001/api/authenticate')
-      .then((token) => {
-        console.log("token:", token);
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-    }
-    else {
-      Alert.alert('Please resolve the errors');
-    }
-  }
-
   render(){
     return(
-      <LinearGradient colors={['#00bfff', '#87cefa', '#ba55d3']} style={styles.gradient}>
+      // <BackgroundImage>
+        <LinearGradient colors={['transparent', 'transparent']} style={styles.gradient}>
         <ScrollView>
           <KeyboardAvoidingView behaviour="padding">
             <InputValidation
               type="text"
-              placeHolder="First Name"
-              ref={(input) => {this.fname = input}}
+              // placeHolder="First Name"
+              // ref={(input) => {this.fname = input}}
+              ref={this.props.fname}
+              label="First name"
             />
             <InputValidation
               type="text"
-              placeHolder="Last Name"
-              ref={(input) => {this.lname = input}}
+              // placeHolder="Last Name"
+              // ref={(input) => {this.lname = input}}
+              ref={this.props.lname}
+              label="Last name"
             />
             <InputValidation
               type="email"
-              placeHolder="email"
-              ref={(input) => {this.email = input}}
+              // placeHolder="email"
+              // ref={(input) => {this.email = input}}
+              ref={this.props.email}
+              label="Email"
             />
             <InputValidation
               type="password"
-              placeHolder="Password"
-              ref={(input) => {this.password = input}}
+              // placeHolder="Password"
+              // ref={(input) => {this.password = input}}
+              ref={this.props.password}
+              label="Password"
               secure
             />
             <InputValidation
               type="confirmPassword"
-              placeHolder="Confirm Password"
-              ref={(input) => {this.cPassword = input}}
+              // placeHolder="Confirm Password"
+              // ref={(input) => {this.cPassword = input}}
+              label="Confirm password"
+              ref={this.props.cPassword}
               secure
             />
             <GenderRadio
-              ref={(input) => {this.gender = input}}
+              // ref={(input) => {this.gender = input}}
+              ref={this.props.gender}
             />
             <InputValidation
               type="number"
-              placeHolder="phone"
-              ref={(input) => {this.phone = input}}
+              // ref={(input) => {this.phone = input}}
+              label="Phone no."
+              ref={this.props.phone}
             />
-            <TouchableOpacity style={styles.submit} onPress={this.handleSubmit}>
-              <Text>Submit</Text>
+            <TouchableOpacity style={styles.button} onPress={this.props.handleSubmit}>
+              <Text style={styles.buttonText}>Submit</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={this.props.signInPressed}>
-              <Text>Sign-in</Text>
+            <TouchableOpacity style={styles.button} onPress={this.props.signInPressed}>
+              <Text style={styles.buttonText}>Sign-in</Text>
             </TouchableOpacity>
           </KeyboardAvoidingView>
         </ScrollView>
+
       </LinearGradient>
+    // </BackgroundImage>
     )
   }
 }
 
 const styles = StyleSheet.create({
 
-  signUpHeading : {
-    textAlign : 'center',
-    fontWeight : 'bold',
-    fontSize : 20,
-    color : '#000000'
+  // signUpHeading : {
+  //   textAlign : 'center',
+  //   fontWeight : 'bold',
+  //   fontSize : 20,
+  //   color : '#000000'
+  // },
+  gradient: {
+    flex: 1,
+    justifyContent: 'space-between',
+    alignItems: 'stretch',
   },
-
-  gradient : {
-    flex : 1
-  },
-  submit : {
-    flex : 1,
-    flexDirection : 'row',
-    justifyContent : 'space-around',
-    // alignItems : 'center',
+  button : {
     borderWidth : 1,
-    borderRadius : 20,
+    // width: 100,
     padding : 10,
-    marginTop : 10
+    marginTop : 10,
+    backgroundColor: '#00008b',
+  },
+  buttonText: {
+    // flexDirection: 'row',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    textAlign: 'center',
+    color: '#ffffff',
+    fontWeight: 'bold'
   }
 })

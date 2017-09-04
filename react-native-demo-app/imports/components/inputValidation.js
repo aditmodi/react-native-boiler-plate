@@ -14,6 +14,7 @@ import {
   email,
   passMatch
 } from '../validations.js';
+import FloatingLabel from 'react-native-floating-labels';
 
 var pass1 = '';
 var pass2 = '';
@@ -55,9 +56,6 @@ export default class InputValidation extends Component{
       pass1 = text;
     }
     if (type == 'confirmPassword'){
-      pass2 = text;
-    }
-    if (pass1.length != 0 && pass2.length != 0){
       this.match(pass1, pass2);
     }
     this.validate(text, valid);
@@ -99,16 +97,15 @@ export default class InputValidation extends Component{
     const { name } = this.props;
     return(
       <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder={this.props.placeHolder}
+        <FloatingLabel
+          inputStyle={styles.input}
+          labelStyle={styles.label}
           onChangeText={(text) => this.handleChange(text)}
           onChange={this.props.Change}
           onBlur={this.props.Blur}
           value={this.state.value}
           secureTextEntry={this.props.secure}
-          // underlineColorAndroid='rgba(0,0,0,0)'
-        />
+          >{this.props.label}</FloatingLabel>
         <InputError
           errorVisible={this.state.errorVisible}
           errorMessage={this.state.errorMessage}
@@ -125,7 +122,11 @@ const styles = StyleSheet.create({
     alignItems : 'stretch'
   },
   input : {
-    // borderWidth : 1,
+    borderWidth : 0,
     margin : 5
+  },
+  label : {
+    color : '#00008b',
+    fontSize : 15
   }
 })

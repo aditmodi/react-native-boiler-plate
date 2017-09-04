@@ -20,7 +20,7 @@ passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password',
     passReqToCallback: true,
-    session: false
+    session: true
 }, function(req, email, password, done) {
   console.log("IS THIS CALLING?");
           User.findOne({ email: email }, function (err, user) {
@@ -36,6 +36,7 @@ router.post('/authenticate',
   passport.authenticate('local', { failureRedirect: '/api' }),
   ctrl.authUser);
 passport.serializeUser(function(user, cb) {
+  console.log('serializeUser called');
   cb(null, user.id);
 });
 
