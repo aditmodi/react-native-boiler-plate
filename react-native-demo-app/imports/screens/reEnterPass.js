@@ -13,6 +13,7 @@ import InputValidation from '../components/inputValidation';
 export default class reEnterPassScreen extends Component {
   constructor(props){
     super(props);
+    //Defining state
     this.state = {
       valid : false
     }
@@ -21,7 +22,7 @@ export default class reEnterPassScreen extends Component {
   static navigationOptions = {
     header: null
   }
-  
+
   render(){
     return(
       <KeyboardAvoidingView style={styles.container} behaviour="padding">
@@ -37,9 +38,11 @@ export default class reEnterPassScreen extends Component {
           style={styles.reset}
           onPress={
             () => {
+              //when token is not expired
               if (this.state.valid == true){
                 Alert.alert('Your password has been reset!!')
               }
+              //when token gets expired
               else {
                 Alert.alert('Session Expired!!')
               }

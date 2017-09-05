@@ -28,13 +28,14 @@ passport.use(new LocalStrategy({
             if (!user) { return done(null, false); }
             if (user.password != password) { return done(null, false); }
             else{
-              return done(null, user); }
+              return done(null, user);
+            }
     });
   }
   ));
 router.post('/authenticate',
   passport.authenticate('local', { failureRedirect: '/api' }),
-  ctrl.authUser);
+  ctrl.getToken);
 passport.serializeUser(function(user, cb) {
   console.log('serializeUser called');
   cb(null, user.id);

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {
   TextInput,
   View,
-  TouchableOpacity,
+  TouchableOpacity,                           //component for customised button
   Text,
   Alert,
   AsyncStorage
@@ -18,13 +18,9 @@ export default class SignUpScreen extends Component {
 
   submit = () => {
     const { navigate } = this.props.navigation;
-    // console.log("fisrt name state : ", this.fname.state.valid);
-    // console.log("last name state : ", this.lname.state.valid);
-    // console.log("phone state : ", this.phone.state.valid);
-    // console.log("gender state : ", this.gender.state.value);
-    // console.log("email state : ", this.email.state.valid);
-    // console.log("password state : ", this.password.state.valid);
+    //when entered values are valid
     if (this.fname.state.valid == true && this.lname.state.valid == true && this.email.state.valid == true && this.phone.state.valid == true){
+      //going to route '/users' to add new user
       fetch('http://192.168.1.189:3001/api/users',{
         method: 'POST',
         headers: {
@@ -40,14 +36,7 @@ export default class SignUpScreen extends Component {
           gender: this.gender.state.value
         })
       })
-      // .then((ref) => {
-      //   console.log("ref", ref);
-      // })
-    //   .then( (response) => response.json())
-    // .then(response => {
-    //   console.log("dfvgsdugfusdjgujgdsuj",response.token);
-    //   AsyncStorage.setItem('@Token:key', response.token);
-    //   navigate('Home')
+      //going to route '/authenticate' to generate token for the new user and automatically redirect him to home page
     .then(() => {
       fetch('http://192.168.1.189:3001/api/authenticate',{
         method: 'POST',
@@ -61,38 +50,42 @@ export default class SignUpScreen extends Component {
         })
       })
       .then( (response) => response.json())
-    .then(response => {
+      .then(response => {
       console.log("dfvgsdugfusdjgujgdsuj",response.token);
       AsyncStorage.setItem('@Token:key', response.token);
       navigate('Home')
-    })
+      })
       .catch((error) => {
         console.error(error);
       })
     })
-      .catch((error) => {
-        console.error(error);
-        });
-      Alert.alert('Form submitted');
+    .catch((error) => {
+      console.error(error);
+    });
+    //to alert the user
+    Alert.alert('Form submitted');
 
-      this.fname.clear();
-      this.lname.clear();
-      this.email.clear();
-      this.password.clear();
-      this.phone.clear();
-      this.cPassword.clear();
+    //to clear the form after submitting
+    this.fname.clear();
+    this.lname.clear();
+    this.email.clear();
+    this.password.clear();
+    this.phone.clear();
+    this.cPassword.clear();
     }
     else {
+      // when some value is not valid
       Alert.alert('Please resolve the errors');
     }
   }
 
   render(){
-    const { navigate } = this.props.navigation;
+    const { navigate } = this.props.navigation;         //For navigation
     return(
       <BackgroundImage>
         <SignUpForm signInPressed={() => navigate('SignIn')}
           handleSubmit={this.submit}
+          //props of ref - fname, lname, email, password, cPassword, phone, gender
           fname={(input) => {this.fname = input}}
           lname={(input) => {this.lname = input}}
           email={(input) => {this.email = input}}

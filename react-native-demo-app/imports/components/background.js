@@ -8,7 +8,7 @@ export default class BackgroundImage extends Component {
   render() {
     return (
       <Image
-        source={require('../img/nodejs-icon.svg')}
+        source={require('../img/react-native.jpg')}
         style={styles.backgroundImage}
         >{this.props.children}
       </Image>
@@ -21,6 +21,6 @@ const styles = StyleSheet.create({
     flex: 1,
     height: null,
     width: null,
-    resizeMode: 'cover'
+    resizeMode: 'cover'                           //Resize the photo according to the parent
   }
 })

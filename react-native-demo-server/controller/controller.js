@@ -170,16 +170,9 @@ exports.updateUser = function(req, res) { //update user by username
 //       }
 // };
 
-// exports.authUser =  function(req, email, password, done) {
-//           User.findOne({ email: email }, function (err, user) {
-//             if (err) { return done(err); }
-//             if (!user) { return done(null, false); }
-//             if (!user.verifyPassword(password)) { return done(null, false); }
-//             return done(null, user);
-//     });
-//   }
 
-exports.authUser = function(req, res) {
+
+exports.getToken = function(req, res) {
   // res.redirect('/api');
   console.log("user :", req.user);
   console.log("user :", req.sessionID);

@@ -100,6 +100,7 @@ export default class InputValidation extends Component{
         <FloatingLabel
           inputStyle={styles.input}
           labelStyle={styles.label}
+          style={this.props.style}
           onChangeText={(text) => this.handleChange(text)}
           onChange={this.props.Change}
           onBlur={this.props.Blur}
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
   inputContainer : {
     flex : 1,
     justifyContent : 'flex-start',
-    alignItems : 'stretch'
+    alignItems : 'stretch',
   },
   input : {
     borderWidth : 0,

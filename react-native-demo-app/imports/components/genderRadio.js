@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+//used Radio library from npm
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import {
   Text,

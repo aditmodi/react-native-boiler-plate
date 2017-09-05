@@ -5,17 +5,13 @@ import {
   TouchableOpacity
 } from 'react-native';
 import Menu from '../components/sidebarMenu.js';
-// const SideMenu = require('react-native-side-menu');
-import SideMenu from 'react-native-side-menu';
+import SideMenu from 'react-native-side-menu';                  //SideMenu component for react-native
 import HomeContent from '../components/homeContent.js';
 import Navbar from '../components/navbar.js';
 
 import { StackNavigator } from 'react-navigation';
 
 export default class HomeScreen extends Component{
-
-  // const {params} = navigation.state;
-
   constructor(props){
     super(props);
     this.state = {
@@ -26,7 +22,6 @@ export default class HomeScreen extends Component{
   static navigationOptions = {
     header : null
   }
-
 
   menuPressed = () => {
     this.setState({ menuOpen : true })

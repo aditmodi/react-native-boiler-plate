@@ -20,8 +20,8 @@ export default class InputError extends Component {
 const styles = StyleSheet.create({
   error : {
     color : 'red',
-    textAlign : 'left',
-    marginLeft : 20,
-    top : 0
+    textAlign : 'right',
+    right: 20,
+    bottom : 35,
   }
 })
