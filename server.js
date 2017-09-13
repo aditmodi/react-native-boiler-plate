@@ -11,16 +11,12 @@ let LocalStrategy = require('passport-local').Strategy;
 let JwtStrategy = require('passport-jwt').Strategy;
 let ExtractJwt = require('passport-jwt').ExtractJwt;
 let User = require('./models/user');
-mongoose.connect('mongodb://localhost:27017/react-native', { useMongoClient: true }, (error) => {
-  if(error){
-    return console.error(error);
-  }
-}); // connect to our database
 
-// configure app to use bodyParser()
-// this will let us get the data from a POST
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+
+// ROUTES FOR OUR API
+var routes = require('./routes/routes');
+
+
 
 let port = process.env.PORT || 3001;        // set our port
 
@@ -29,9 +25,20 @@ let port = process.env.PORT || 3001;        // set our port
  options.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
  options.secretOrKey = '7x0jhxt&quot.kl9thpX6';
 
+ app.use(passport.initialize());
+
+ // configure app to use bodyParser()
+ // this will let us get the data from a POST
+ app.use(bodyParser.json());
+ app.use(bodyParser.urlencoded({ extended: false }));
+
+ // all of our routes will be prefixed with /api
+ app.use(require('serve-static')(__dirname + '/../../public'));
+ app.use(require('cookie-parser')());
+ app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+
  // Configure Passport to use local strategy for initial authentication.
  passport.use('local', new LocalStrategy(User.authenticate()));
-
 
 // Configure Passport to use JWT strategy to look up Users
 passport.use('jwt', new JwtStrategy(options, function(jwt_payload, done) {
@@ -50,17 +57,18 @@ passport.use('jwt', new JwtStrategy(options, function(jwt_payload, done) {
   })
 }));
 
-// ROUTES FOR OUR API
-var routes = require('./routes/routes');
 
-// all of our routes will be prefixed with /api
-app.use(require('serve-static')(__dirname + '/../../public'));
-app.use(require('cookie-parser')());
-app.use(require('body-parser').urlencoded({ extended: true }));
-app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
-app.use(passport.initialize());
+
+
+// app.use(passport.initialize());
 app.use(passport.session());
 app.use('/api', routes);
+
+mongoose.connect('mongodb://localhost:27017/react-native', { useMongoClient: true }, (error) => {
+  if(error){
+    return console.error(error);
+  }
+}); // connect to our database
 
 // START THE SERVER
 app.listen(port);

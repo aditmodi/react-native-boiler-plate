@@ -1,83 +1,12 @@
 let express  = require('express');
 let router = express.Router();
 let ctrl = require('../controller/controller');
-let passport = require('passport');
-let User = require('../models/user');
-var jwt = require('jsonwebtoken');
 
-var secret = '7x0jhxt"9(thpX6';
-
-router.get('/protected', function (req, res, next) {
-  passport.authenticate('jwt', function (err, user, info) {
-    if (err) {
-      // internal server error occurred
-      return next(err);
-    }
-    if (!user) {
-      // no JWT or user found
-      return res.status(401).json({ error: 'Invalid credentials.' });
-    }
-    if (user) {
-// authentication was successful! send user the secret code.
-      return res
-        .status(200)
-        .json({ secret: '123' });
-    }
-  })(req, res, next);
-});
-
-//users.js in routes
-router.post('/register', function (req, res) {
-  User.register(new User({
-    firstName : req.body.fname,  // set the users name (comes from the request)
-    lastName : req.body.lname,
-    email : req.body.email,
-    gender : req.body.gender,
-    phone : req.body.phone,
-  }), req.body.password, function (err, user) {
-    if (err) {
-      return res.status(400).send({ error: 'Email address in use.' })
-    }
-    user.save(function(err) {
-          if (err)
-          return res.send(err);
-          res.json({
-            status : "ok",
-            data   : user._id
-          });
-    // res.status(200).send({ user: user.id });
-  });
-})
-});
-
-router.post('/login', function (req, res, next) {
-  console.log('Route login: body  ', req.body);
-  console.log('Route login: header  ', req.headers);
-
-  passport.authenticate('local', function (err, user, info) {
-    console.log('login --> auth: user ', user);
-    console.log('login --> auth: info ', info);
-
-    if (err) {
-      console.error('login --> auth: err ', err);
-      return next(err)
-    }
-    if (!user) {
-      console.error('login --> auth: user not found');
-      return res.status(401).json({ error: 'Invalid credentials.' });
-    }
-    if (user) {
-    console.log('login --> auth: success user: ', user);
-      var token = jwt.sign({ id: user._id, email: user.email }, secret);
-      console.log('login --> auth: success token: ', token);
-
-      return res
-        .status(200)
-        .json({ token: token });
-    }
-  })(req, res, next);
-});
-
+router.get('/', ctrl.check);
+router.get('/logout', ctrl.authUser, ctrl.logOut);
+router.get('/protected', ctrl.protected);
+router.post('/register', ctrl.register);
+router.post('/login', ctrl.login);
 module.exports = router;
 
 

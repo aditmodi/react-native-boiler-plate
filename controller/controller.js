@@ -3,51 +3,156 @@
 //   onlyNumber,
 //   email
 // } from '../validations-server';
-
 let jwt = require('jsonwebtoken');
 let User = require('../models/user');            // get an instance of the express Router
 let config = require('../config');
 let passport = require('passport');
+let logout = require('express-passport-logout');
+
+var secret = '7x0jhxt"9(thpX6';
 
 // let roles = require('../permissions/permission');
+exports.login = function (req, res, next) {
+  console.log('Route login: body  ', req.body);
+  console.log('Route login: header  ', req.headers);
 
-// exports.getToken = function(req, res) { //to obtain token
-//   console.log("aunthenticate");
-//   // find the user
-//   User.findOne({
-//     email: req.body.email
-//   }, function(err, user) {
-//
-//     if (err) throw err;
-//
-//     if (!user) {
-//       res.json({ success: false, message: 'Authentication failed. User not found.' });
-//     } else if (user) {
-//
-//       // check if password matches
-//       if (user.password != req.body.password) {
-//         res.json({ success: false, message: 'Authentication failed. Wrong password.' });
-//       } else {
-//
-//         // if user is found and password is right
-//         // create a token
-//         let token = jwt.sign(user, config.secret, {
-//           expiresIn: 1440 // expires in 24 hours
-//         });
-//
-//         // return the information including token as JSON
-//         res.json({
-//           success: true,
-//           // user : user.name,
-//           message: 'Enjoy your token!',
-//           token: token
-//         });
-//       }
-//     }
-//   });
-// }
+  passport.authenticate('local', function (err, user, info) {
+    console.log('login --> auth: user ', user);
+    console.log('login --> auth: info ', info);
+
+    if (err) {
+      console.error('login --> auth: err ', err);
+      return next(err)
+    }
+    if (!user) {
+      console.error('login --> auth: user not found');
+      return res.status(401).json({ error: 'Invalid credentials.' });
+    }
+    if (user) {
+      console.log('login --> auth: success user: ', user);
+      if (user.password != req.body.password) {
+        res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+      }
+      else {
+        var token = jwt.sign({ id: user._id, email: user.email }, secret, {
+          expiresIn: 1440     //expires in 24 hours
+        });
+        console.log('login --> auth: success token: ', token);
+      }
+
+      return res
+      .status(200)
+      .json({ token: token });
+    }
+  })(req, res, next);
+}
+
 exports.check = function(req, res) {
     res.json("hooray! welcome to our api");
+}
+
+exports.register = function (req, res) {
+  User.register(new User({
+    firstName : req.body.fname,  // set the users name (comes from the request)
+    lastName : req.body.lname,
+    email : req.body.email,
+    gender : req.body.gender,
+    phone : req.body.phone,
+  }), req.body.password, function (err, user) {
+    if (err) {
+      return res.status(400).send({ error: 'Email address in use.' })
+    }
+    user.save(function(err) {
+          if (err)
+          return res.send(err);
+          res.json({
+            status : "ok",
+            data   : user._id
+          });
+    // res.status(200).send({ user: user.id });
+    });
+  })
+}
+
+
+exports.protected = function (req, res, next) {
+  passport.authenticate('jwt', function (err, user, info) {
+    if (err) {
+      // internal server error occurred
+      return next(err);
+    }
+    if (!user) {
+      // no JWT or user found
+      return res.status(401).json({ error: 'Invalid credentials.' });
+    }
+    if (user) {
+// authentication was successful! send user the secret code.
+      return res
+        .status(200)
+        .json({ secret: '123' });
+    }
+  })(req, res, next);
+}
+
+exports.logOut = function (req, res){
+  console.log("USER:::::::::", req.user);
+  console.log("USER:::::::::", req.headers);
+
+  // const { user } = req;
+  // passport.authenticate('local', function (err, user, info) {
+  //   console.log(err, user, info);
+  // });
+
+
+  // passport.authenticate('jwt', function (err, user, info) {
+  //   if (err) {
+  //     return next(err);
+  //   }
+  //   if (!user) {
+  //     return res.status(401).json({ error: 'Not authorised' })
+  //   }
+  //   if (user) {
+  //     req.logout();
+  //     // req.session.destroy((err) => {
+  //     //   res.redirect('/api/login');
+  //     // })
+  //   }
+  // })
+  // req.session.destroy(function (err) {
+  //   res.redirect('/api/login');
+  // });
+  req.logout();
+  res.json({status: 'ok'});
+  // res.redirect('/api/login');
+}
+
+exports.authUser = function(req, res, next) {
+  console.log(req.headers);
+  console.log(req.headers['token']);
+  let token = req.headers['token'];
+  // decode token
+  if (token != null) {
+    // verifies secret and checks exp
+    jwt.verify(token, secret, function(err, decoded) {
+      if (err) {
+        return res.json({ success: false, message: 'Failed to authenticate token.' });
+      } else {
+        // if everything is good, save to request for use in other routes
+        req.decoded = decoded;
+        req.user = decoded;
+        console.log("Req.decoded::>>>>>>", req.decoded);
+        return next();
+      }
+    });
+  } else {
+    // if there is no token
+    // return an error
+    console.log("NO ITS HERE");
+    return res.status(403).send({
+      success: false,
+      message: 'No token provided.'
+    });
+  }    // next(); // make sure we go to the next routes and don't stop here
 };
 // exports.addUser = function(req, res) {
 //   // let valid1 = alphaNumeric(req.body.fname);
@@ -86,30 +191,6 @@ exports.check = function(req, res) {
 // 	               data :null
 //           })
 //         });
-// };
-// exports.authUser = function(req, res, next) {
-//         console.log("use");
-//         let token = req.body.token || req.query.token || req.headers['x-access-token'];
-//         // decode token
-//         if (token) {
-//           // verifies secret and checks exp
-//           jwt.verify(token, config.secret, function(err, decoded) {
-//             if (err) {
-//               return res.json({ success: false, message: 'Failed to authenticate token.' });
-//             } else {
-//               // if everything is good, save to request for use in other routes
-//               req.decoded = decoded;
-//               next();
-//             }
-//           });
-//         } else {
-//           // if there is no token
-//           // return an error
-//           return res.status(403).send({
-//               success: false,
-//               message: 'No token provided.'
-//           });
-//         }    // next(); // make sure we go to the next routes and don't stop here
 // };
 // exports.getAll = function(req, res) {  //show all users
 //             User.find(function(err, users) {
