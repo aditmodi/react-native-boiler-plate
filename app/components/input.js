@@ -12,11 +12,13 @@ import {
 import {
   email,
   alphaNumeric,
-  onlyNumber
+  onlyNumber,
+  passMatch
 } from '../utils/validations';
-// import getTheme from '../../native-base-theme/components';
-// import material from '../../native-base-theme/variables/material';
 import InputError from './inputError';
+
+var text1='';
+var text2='';
 
 export default class InputField extends Component {
   constructor(props){
@@ -56,6 +58,19 @@ export default class InputField extends Component {
     else if (type == 'number') {
       valid = onlyNumber(text);
     }
+    else if (type == 'password' || type== 'cPassword'){
+      if (type == 'password'){
+        text1 = text;
+        valid = true;
+      }
+      else {
+        text2 = text;
+        valid = passMatch(text1, text2);
+      }
+      console.log("valid:",valid);
+      console.log("text1:",text1);
+      console.log("text2:",text2);
+    }
     else {
       valid = true;
     }
@@ -67,6 +82,9 @@ export default class InputField extends Component {
     if (valid == false) {
       if (text.length == 0) {
         msg = 'Required field';
+      }
+      else if (type == 'cPassword'){
+        msg = 'Passwords do not match'
       }
       else {
         msg = 'Invalid';
@@ -80,12 +98,12 @@ export default class InputField extends Component {
       msg = 'Limit is only upto 10 digits';
       visible = true;
       error = true;
-      icon = 'close-circle';
+      // icon = 'close-circle';
       success = false;
     }
     else {
       success = true;
-      icon = 'checkmark-circle';
+      // icon = 'checkmark-circle';
       visible = false;
       msg = '';
       error = false;
@@ -104,6 +122,10 @@ export default class InputField extends Component {
   render(){
     return(
       <View>
+        <InputError
+          errorVisible={this.state.errorVisible}
+          errorMessage={this.state.errorMessage}
+        />
         <Item
           floatingLabel
           success={this.state.success}
@@ -113,19 +135,11 @@ export default class InputField extends Component {
             secureTextEntry={this.props.secure}
             onChangeText={(text) => this.handleChange(text)}
             value={this.state.value}
+            keyboardType={this.props.keyboard}
           />
         </Item>
-        <InputError
-          errorVisible={this.state.errorVisible}
-          errorMessage={this.state.errorMessage}
-        />
+
       </View>
     )
   }
 }
-
-const styles = StyleSheet.create({
-  icon: {
-    // marginLeft: 50,
-  }
-})

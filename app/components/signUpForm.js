@@ -7,8 +7,7 @@ import {
   Item,
   Input,
   Icon,
-  Label,
-  InputGroup
+  Label
 } from 'native-base';
 import {
   KeyboardAvoidingView,
@@ -63,6 +62,7 @@ export default class SignUpForm extends Component {
                 type='number'
                 label='Phone No.'
                 ref={this.props.phone}
+                keyboard={'numeric'}
               />
               <Button style={styles.submitButton} onPress={this.props.submitPressed}>
                 <Text style={styles.submitText}>Submit</Text>
@@ -77,8 +77,8 @@ export default class SignUpForm extends Component {
 
 const styles = StyleSheet.create({
   Container: {
-    flex: 1,
-    backgroundColor: '#ffffff',
+    // flex: 1,
+    // backgroundColor: '#ffffff',
   },
   submitButton: {
     flexDirection:'row',

@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   Container: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: '#ffffff'
+    // backgroundColor: '#ffffff'
   },
   formContainer: {
     // flex: 1,
@@ -102,19 +102,18 @@ const styles = StyleSheet.create({
   heading: {
     // flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center'
   },
-  // headingText: {
-  //   fontSize: 20,
-  //   fontWeight: 'bold',
-  // }
+  headingText: {
+    flex: 1
+  },
   mainHead: {
     fontSize: 20,
     fontWeight: 'bold',
     textDecorationLine: 'underline'
   },
   subHead: {
-    textAlign: 'center'
+    textAlign: 'left'
   }
 })

@@ -3,12 +3,14 @@ import {
   Text,
   View,
   TouchableOpacity,
-  AsyncStorage
+  AsyncStorage,
+  Alert
 } from 'react-native';
 import Menu from '../components/sideBar';
 import SideMenu from 'react-native-side-menu';                  //SideMenu component for react-native
 import HomeContent from '../components/homeContent';
-import Navbar from '../components/navbar';
+import HeaderComponent from '../components/headerComponent';
+import ProtectedView from './ProtectedView';
 
 import { StackNavigator } from 'react-navigation';
 
@@ -28,10 +30,28 @@ export default class HomeScreen extends Component{
     this.setState({ menuOpen : true })
   }
 
-  handleLogout = () => {
+  handleLogout = async() => {
     const { navigate } = this.props.navigation;
-    AsyncStorage.removeItem('jwt');
-    alert('You have been logged out.');
+    let hello = await AsyncStorage.getItem('jwt', (err, token) => {
+      console.log("TOKENNNN:::", token);
+      fetch('http://192.168.1.189:3001/api/logout',{
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          token: `${token}`
+        }
+      })
+      .then((response) => {
+        response.json();
+        AsyncStorage.removeItem('jwt');
+        navigate('SignIn');
+      })
+      .catch((e) => {
+        Alert.alert("There was an error logging out");
+      });
+
+    })
+    Alert.alert('You have been logged out.');
     navigate('SignIn');
   }
 
@@ -44,7 +64,11 @@ export default class HomeScreen extends Component{
     />;
     return(
         <SideMenu isOpen={this.state.menuOpen} menu={menu}>
-          <Navbar menuPress={this.menuPressed} navIcon='menu'/>
+          <HeaderComponent
+            leftIcon='menu'
+            leftPressed={this.menuPressed}
+            title='Welcome to react native'
+          />
           <HomeContent menuPress={this.menuPressed}/>
         </SideMenu>
     );

@@ -1,10 +1,11 @@
-import React, {
+import React, { Component } from 'react';
+import {
   ActivityIndicatorIOS,
   AsyncStorage,
-  Component,
   StyleSheet,
   Text,
-  View
+  View,
+  Alert
 } from 'react-native'
 
 class ProtectedView extends Component {
@@ -24,10 +25,11 @@ class ProtectedView extends Component {
 
   _fetchData = () => {
     AsyncStorage.getItem('jwt', (err, token) => {
+      console.log("TOKEN FROM.............................",token);
       fetch('http://192.168.1.189:3001/api/protected', {
         headers: {
           Accept: 'application/json',
-          Authorization: `JWT ${token}`
+          token: `JWT ${token}`
         }
       })
       .then((response) => response.json())
@@ -38,7 +40,7 @@ class ProtectedView extends Component {
         })
       })
       .catch(() => {
-        alert('There was an error fetching the secret info.')
+        Alert.alert('There was an error fetching the secret info.')
       })
       .done()
     })

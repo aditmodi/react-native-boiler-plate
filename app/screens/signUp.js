@@ -1,23 +1,20 @@
 import React, { Component } from 'react';
 import {
   Alert,
-  Platform
+  Platform,
+  View,
+  StyleSheet
 } from 'react-native';
 import SignUpForm from '../components/signUpForm';
-
-var header,title;
+import HeaderComponent from '../components/headerComponent';
 
 export default class SignUpScreen extends Component {
   constructor(props){
     super(props);
   }
 
-  header = (Platform.OS === 'android') ? true : null;
-  title = (Platform.OS === 'ios') ? '' : 'SignUpForm';
-
   static navigationOptions = {
-    header: header,
-    title: title
+    header: null
   }
 
   handleSubmit = () => {
@@ -68,16 +65,30 @@ export default class SignUpScreen extends Component {
   render(){
     const { navigate } = this.props.navigation;
     return(
-      <SignUpForm
-        fname={(input) => {this.fname = input}}
-        lname={(input) => {this.lname = input}}
-        email={(input) => {this.email = input}}
-        password={(input) => {this.password = input}}
-        cPassword={(input) => {this.cPassword = input}}
-        gender={(input) => {this.gender = input}}
-        phone={(input) => {this.phone = input}}
-        submitPressed={this.handleSubmit}
-      />
+      <View style={styles.container}>
+        <HeaderComponent
+          leftIcon='arrow-back'
+          leftPressed={() => navigate('SignIn')}
+          title='New User'
+        />
+        <SignUpForm
+          fname={(input) => {this.fname = input}}
+          lname={(input) => {this.lname = input}}
+          email={(input) => {this.email = input}}
+          password={(input) => {this.password = input}}
+          cPassword={(input) => {this.cPassword = input}}
+          gender={(input) => {this.gender = input}}
+          phone={(input) => {this.phone = input}}
+          submitPressed={this.handleSubmit}
+        />
+      </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#ffffff'
+  }
+})
