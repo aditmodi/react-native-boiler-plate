@@ -20,10 +20,6 @@ export default class HomeScreen extends Component{
     }
   }
 
-  static navigationOptions = {
-    header : null
-  }
-
   menuPressed = () => {
     this.setState({ menuOpen : true })
   }

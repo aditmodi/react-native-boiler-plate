@@ -7,17 +7,10 @@ import {
 } from 'react-native';
 import LoginForm from '../components/loginForm';  //Form with email and password
 
-
 export default class SignInScreen extends Component {
   constructor(props) {
     super(props);
   }
-
-  static navigationOptions = {            //object for the options in navigation bar
-    header: null                          //removing the navigation header
-  }
-
-
 
   render(){
     const { navigate } = this.props.navigation;     //to navigate to other pages
@@ -44,22 +37,26 @@ export default class SignInScreen extends Component {
                 })
                 .then((response) => response.json())
                 .then(async(res) => {
-                  console.log("res:", res);
-
-                    console.log("The Response is", res.token);        //token is created
-                    try {
-                      await AsyncStorage.setItem('jwt', res.token);   //token is stored
+                    console.log("The Response is", res);        //token is created
+                    if (res.token){
+                      try {
+                        await AsyncStorage.setItem('jwt', res.token);   //token is stored
+                        Alert.alert('Welcome');
+                        // Redirect to home screen
+                        navigate('Home');
+                      }
+                      catch (error){
+                        Alert.alert('got this error');
+                        console.error(error);
+                      }
                     }
-                    catch (error){
-                      console.error(error);
+                    else {
+                      Alert.alert(res.message)
                     }
-                    Alert.alert(`Success! You may now access protected content.`);
-                    // Redirect to home screen
-                    navigate('Home');
                 })
                 .catch((e) => {
-                  console.log("dsfdf",e);
-                  Alert.alert('There was an error logging in.');    //triggers when there is server issue
+                  console.log("DASDASDSA", e);
+                  Alert.alert('Check your internet connection');    //triggers when there is server issue
                 })
                 .done()
               }

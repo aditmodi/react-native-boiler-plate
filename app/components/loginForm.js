@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Container,
   Content,
@@ -17,6 +18,18 @@ import InputField from './input';
 export default class LoginForm extends Component {
   constructor(props){
     super(props);
+  }
+
+  static propTypes = {
+    loginEmail: PropTypes.func,
+    loginPass: PropTypes.func,
+    loginPressed: PropTypes.func,
+    forgotPassPressed: PropTypes.func,
+    signUpPressed: PropTypes.func,
+  }
+
+  static defaultProps = {
+    //
   }
 
   render(){
@@ -93,7 +106,8 @@ const styles = StyleSheet.create({
   loginText: {
     fontSize: 15,
     alignSelf: 'center',
-    marginBottom: 10
+    marginBottom: 10,
+    backgroundColor: 'transparent'
   },
   extraContainer: {
     alignSelf: 'center',

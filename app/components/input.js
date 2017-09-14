@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Item,
   Input,
@@ -32,6 +33,12 @@ export default class InputField extends Component {
       errorMessage: '',
       value: ''
     }
+  }
+
+  static propTypes = {
+    label : PropTypes.string,
+    secure : PropTypes.bool,
+    keyboard : PropTypes.string
   }
 
   clear = () => {
@@ -86,6 +93,9 @@ export default class InputField extends Component {
       else if (type == 'cPassword'){
         msg = 'Passwords do not match'
       }
+      else if (type== 'password'){
+        msg = 'Passwords do not match'
+      }
       else {
         msg = 'Invalid';
       }
@@ -134,6 +144,7 @@ export default class InputField extends Component {
           <Input
             secureTextEntry={this.props.secure}
             onChangeText={(text) => this.handleChange(text)}
+            onBlur={this.handleBlur}
             value={this.state.value}
             keyboardType={this.props.keyboard}
           />

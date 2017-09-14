@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import{
   Text,
   View,
@@ -7,6 +8,13 @@ import{
 } from 'react-native';
 
 export default class Menu extends Component{
+
+  static propTypes = {
+    homeButton: PropTypes.func,
+    profileButton: PropTypes.func,
+    logoutButton: PropTypes.func
+  }
+
   render(){
     return(
       <View style={styles.menuContainer}>

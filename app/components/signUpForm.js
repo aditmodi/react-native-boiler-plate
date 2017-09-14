@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import InputField from './input';
+import PropTypes from 'prop-types';
 import {
   Button,
   Form,
@@ -22,10 +23,20 @@ export default class SignUpForm extends Component {
     super(props);
   }
 
+  static propTypes = {
+    fname: PropTypes.func,
+    lname: PropTypes.func,
+    email: PropTypes.func,
+    password: PropTypes.func,
+    cPassword: PropTypes.func,
+    gender: PropTypes.func,
+    phone: PropTypes.func
+  }
+
   render(){
     return(
       <ScrollView >
-        <KeyboardAvoidingView behaviour="padding" style={styles.Container}>    
+        <KeyboardAvoidingView behaviour="padding" style={styles.Container}>
           <Form>
             <View>
               <InputField

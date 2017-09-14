@@ -12,10 +12,6 @@ export default class SignUpScreen extends Component {
     super(props);
   }
 
-  static navigationOptions = {
-    header: null
-  }
-
   handleSubmit = () => {
     const { navigate } = this.props.navigation;
     //when entered values are valid
@@ -67,7 +63,7 @@ export default class SignUpScreen extends Component {
       <View style={styles.container}>
         <HeaderComponent
           leftIcon='arrow-back'                             //to navigate back
-          leftPressed={() => navigate('SignIn')}            
+          leftPressed={() => navigate('SignIn')}
           title='New User'
         />
         <SignUpForm
