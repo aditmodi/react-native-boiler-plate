@@ -24,8 +24,8 @@ export default class SignUpForm extends Component {
 
   render(){
     return(
-      <ScrollView style={styles.Container}>
-        <KeyboardAvoidingView behaviour="padding" >
+      <ScrollView >
+        <KeyboardAvoidingView behaviour="padding" style={styles.Container}>    
           <Form>
             <View>
               <InputField
@@ -71,6 +71,7 @@ export default class SignUpForm extends Component {
           </Form>
         </KeyboardAvoidingView>
       </ScrollView>
+
     )
   }
 }

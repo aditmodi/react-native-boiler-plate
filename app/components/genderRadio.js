@@ -12,6 +12,7 @@ var radio_props = [
   {label: 'female', value: 'female' }
 ];
 
+//this class is for gender field
 export default class GenderRadio extends Component {
   constructor(props){
     super(props);
@@ -27,10 +28,10 @@ export default class GenderRadio extends Component {
         <RadioForm
           style={styles.radio}
           radio_props={radio_props}
-          formHorizontal={true}
+          formHorizontal={true}                       //radioboxes direction
           initial={'male'}
           // animation={'true'}
-          labelHorizontal={true}
+          labelHorizontal={true}                      //radiobox label direction
           onPress={(value) => {this.setState({value:value})}}
         />
       </View>

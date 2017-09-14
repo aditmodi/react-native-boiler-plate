@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import {
   Alert,
-  Platform,
   View,
   StyleSheet
 } from 'react-native';
 import SignUpForm from '../components/signUpForm';
-import HeaderComponent from '../components/headerComponent';
+import HeaderComponent from '../components/headerComponent';    //separate component for header bar
 
 export default class SignUpScreen extends Component {
   constructor(props){
@@ -67,8 +66,8 @@ export default class SignUpScreen extends Component {
     return(
       <View style={styles.container}>
         <HeaderComponent
-          leftIcon='arrow-back'
-          leftPressed={() => navigate('SignIn')}
+          leftIcon='arrow-back'                             //to navigate back
+          leftPressed={() => navigate('SignIn')}            
           title='New User'
         />
         <SignUpForm
@@ -89,6 +88,7 @@ export default class SignUpScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    top: 0,
   }
 })
