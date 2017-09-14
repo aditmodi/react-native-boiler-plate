@@ -2,7 +2,7 @@
 
 // BASE SETUP
 // call the packages we need
-let express    = require('express');        // call express
+import express from 'express';        // call express
 let app = express();                 // define our app using express
 let bodyParser = require('body-parser');
 let mongoose   = require('mongoose');

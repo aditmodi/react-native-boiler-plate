@@ -26,12 +26,12 @@ exports.login = function (req, res, next) {
     }
     if (!user) {
       console.error('login --> auth: user not found');
-      return res.status(401).json({ error: 'Invalid credentials.' });
+      return res.json({ success: false, token: null, message: 'Your email or password is wrong!' });
     }
     if (user) {
       console.log('login --> auth: success user: ', user);
       if (user.password != req.body.password) {
-        res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+        res.json({ success: false, token: null, message: info.IncorrectPasswordError });
       }
       else {
         var token = jwt.sign({ id: user._id, email: user.email }, secret, {
@@ -40,9 +40,7 @@ exports.login = function (req, res, next) {
         console.log('login --> auth: success token: ', token);
       }
 
-      return res
-      .status(200)
-      .json({ token: token });
+      return res.json({ success: true, token: token, message: 'Success! You may now access protected content.' });
     }
   })(req, res, next);
 }
@@ -97,30 +95,6 @@ exports.protected = function (req, res, next) {
 exports.logOut = function (req, res){
   console.log("USER:::::::::", req.user);
   console.log("USER:::::::::", req.headers);
-
-  // const { user } = req;
-  // passport.authenticate('local', function (err, user, info) {
-  //   console.log(err, user, info);
-  // });
-
-
-  // passport.authenticate('jwt', function (err, user, info) {
-  //   if (err) {
-  //     return next(err);
-  //   }
-  //   if (!user) {
-  //     return res.status(401).json({ error: 'Not authorised' })
-  //   }
-  //   if (user) {
-  //     req.logout();
-  //     // req.session.destroy((err) => {
-  //     //   res.redirect('/api/login');
-  //     // })
-  //   }
-  // })
-  // req.session.destroy(function (err) {
-  //   res.redirect('/api/login');
-  // });
   req.logout();
   res.json({status: 'ok'});
   // res.redirect('/api/login');
