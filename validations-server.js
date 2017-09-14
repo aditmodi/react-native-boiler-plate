@@ -1,4 +1,4 @@
-export const alphaNumeric = (value) => {
+exports.alphaNumeric = (value) => {
   var reg = /^[a-z0-9]+$/i;
   if(reg.test(value) && value.length != 0){
     return true
@@ -7,7 +7,7 @@ export const alphaNumeric = (value) => {
   }
 }
 
-export const onlyNumber = (value) => {
+exports.onlyNumber = (value) => {
   var reg = /^[0-9]+$/;
   if(reg.test(value) && value.length != 0){
     return true;
@@ -16,7 +16,7 @@ export const onlyNumber = (value) => {
   }
 }
 
-export const email = (value) => {
+exports.email = (value) => {
   var reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if(reg.test(value) && value.length != 0){
     return true;
