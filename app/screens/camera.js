@@ -19,20 +19,34 @@ export default class CameraScreen extends Component {
     const options = {};
     //options.location = ...
     this.camera.capture({metadata: options})
-      .then((data) => console.log(data))
+      .then(
+        (data) => {
+          fetch('http://192.168.1.189:3001/api/addPhoto', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: data
+          })
+          console.log(data);
+        }
+      )
       .catch(err => console.error(err));
   }
 
   handlePhoto = () => {
     this.setState({
       mode: 'Camera.constants.CaptureMode.video'
-    })
+    });
+    console.log("Camera");
   }
 
   handleVideo = () => {
     this.setState({
       mode: 'Camera.constants.CaptureMode.still'
-    })
+    });
+    console.log("Video");
   }
 
   render(){
@@ -44,7 +58,7 @@ export default class CameraScreen extends Component {
         }}
         style={styles.preview}
         aspect={Camera.constants.Aspect.fill}
-        captureMode={Camera.constants.CaptureMode.video}>
+        captureMode={Camera.constants.CaptureMode.still}>
         <Text onPress={this.handlePhoto}>Photo</Text>
         <Text
           style={styles.capture}
