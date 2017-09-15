@@ -2,7 +2,7 @@
 
 // BASE SETUP
 // call the packages we need
-import express from 'express';        // call express
+let express    = require('express');        // call express
 let app = express();                 // define our app using express
 let bodyParser = require('body-parser');
 let mongoose   = require('mongoose');
@@ -11,11 +11,12 @@ let LocalStrategy = require('passport-local').Strategy;
 let JwtStrategy = require('passport-jwt').Strategy;
 let ExtractJwt = require('passport-jwt').ExtractJwt;
 let User = require('./models/user');
+const multer = require('multer');
 
 
 // ROUTES FOR OUR API
 var routes = require('./routes/routes');
-
+var imgRoute = require('./routes/images');
 
 
 let port = process.env.PORT || 3001;        // set our port
@@ -57,12 +58,19 @@ passport.use('jwt', new JwtStrategy(options, function(jwt_payload, done) {
   })
 }));
 
-
-
-
 // app.use(passport.initialize());
 app.use(passport.session());
 app.use('/api', routes);
+
+//For imageSchema
+app.use('/api', imgRoute);
+app.use(multer({
+  dest: './uploads/',
+  rename: function (fieldname, filename) {
+    return filename;
+  }
+}).array('photo'));
+
 
 mongoose.connect('mongodb://localhost:27017/react-native', { useMongoClient: true }, (error) => {
   if(error){
