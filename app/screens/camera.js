@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import {
+  Icon
+} from 'native-base';
+import RNFetchBlob from 'react-native-fetch-blob';
 import Camera from 'react-native-camera';
 import {
   View,
@@ -20,16 +24,31 @@ export default class CameraScreen extends Component {
     //options.location = ...
     this.camera.capture({metadata: options})
       .then(
+      //   (data) => {
+      //   console.log("data:", data);
+      // }
         (data) => {
-          fetch('http://192.168.1.189:3001/api/addPhoto', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            },
-            body: data
-          })
-          console.log(data);
+        //   fetch('http://192.168.1.189:3001/api/addPhoto', {
+        //     method: 'POST',
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //       'Accept': 'application/json'
+        //     },
+        //     body: data
+        //   })
+        //   console.log(data);
+        // RNFetchBlob.fetch('POST', 'http://192.168.1.189:3001/api/addPhoto',{
+        //   'Dropbox-API-Arg': JSON.stringify({
+        //     path: data.path,
+        //     mode: 'add',
+        //     autorename: true,
+        //     mute: false
+        //   }),
+        //   'Content-Type': 'application/octet-stream'
+        // }, base64ImageString)
+        // .then((res) => {
+        //   console.log("this is the response:", res.json);
+        // })
         }
       )
       .catch(err => console.error(err));
@@ -60,9 +79,10 @@ export default class CameraScreen extends Component {
         aspect={Camera.constants.Aspect.fill}
         captureMode={Camera.constants.CaptureMode.still}>
         <Text onPress={this.handlePhoto}>Photo</Text>
-        <Text
+        <Icon
+          name='camera'
           style={styles.capture}
-          onPress={this.takePicture}>[CAPTURE]</Text>
+          onPress={this.takePicture}/>
         <Text onPress={this.handleVideo}>Video</Text>
       </Camera>
       </View>
