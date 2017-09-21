@@ -63,13 +63,13 @@ app.use(passport.session());
 app.use('/api', routes);
 
 //For imageSchema
+// app.use(multer({
+//   dest: './uploads/',
+//   rename: function (fieldname, filename) {
+//     return filename;
+//   }
+// }).array('photo'));
 app.use('/api', imgRoute);
-app.use(multer({
-  dest: './uploads/',
-  rename: function (fieldname, filename) {
-    return filename;
-  }
-}).array('photo'));
 
 
 mongoose.connect('mongodb://localhost:27017/react-native', { useMongoClient: true }, (error) => {
