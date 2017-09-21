@@ -2,20 +2,24 @@ import React, { Component } from 'react';
 import {
   Icon
 } from 'native-base';
-import RNFetchBlob from 'react-native-fetch-blob';
+import RNFS from 'react-native-fs';
 import Camera from 'react-native-camera';
 import {
   View,
   StyleSheet,
-  Text
+  Text,
+  ImageStore
 } from 'react-native';
+
+var picturePath;
+let pic;
 
 export default class CameraScreen extends Component {
 
   constructor(props){
     super(props);
     this.state = {
-      mode : 'Camera.constants.CaptureMode.still'
+      uri:''
     }
   }
 
@@ -24,34 +28,45 @@ export default class CameraScreen extends Component {
     //options.location = ...
     this.camera.capture({metadata: options})
       .then(
-      //   (data) => {
-      //   console.log("data:", data);
-      // }
-        (data) => {
-        //   fetch('http://192.168.1.189:3001/api/addPhoto', {
-        //     method: 'POST',
-        //     headers: {
-        //       'Content-Type': 'application/json',
-        //       'Accept': 'application/json'
-        //     },
-        //     body: data
-        //   })
-        //   console.log(data);
-        // RNFetchBlob.fetch('POST', 'http://192.168.1.189:3001/api/addPhoto',{
-        //   'Dropbox-API-Arg': JSON.stringify({
-        //     path: data.path,
-        //     mode: 'add',
-        //     autorename: true,
-        //     mute: false
-        //   }),
-        //   'Content-Type': 'application/octet-stream'
-        // }, base64ImageString)
-        // .then((res) => {
-        //   console.log("this is the response:", res.json);
-        // })
+        async(data) => {
+          console.log('data:', data);
+          pic = data;
+          picturePath = await RNFS.readFile(data.path, 'base64');
         }
       )
+      .then(res => {
+        ImageStore.addImageFromBase64(picturePath, (result) => {console.log(result)}, (error) => {console.error(error)});
+      })
+      .then(res => {
+
+      })
       .catch(err => console.error(err));
+  }
+
+  storePicture = () => {
+    console.log("picture path:", picturePath);
+    if (picturePath) {
+      const config = {
+        method: 'POST',
+         headers: {
+           'Accept': 'application/json',
+           'Content-Type': 'multipart/form-data',
+           'Authorization': 'Bearer ' + 'SECRET_OAUTH2_TOKEN_IF_AUTH',
+         },
+         body: JSON.stringify({
+           picturePath
+         })
+      }
+      fetch('http://192.168.1.189:3001/api/addPhoto', config)
+      .then((responseData) => {
+         console.log("this is the response:::",responseData._bodyInit);
+         ImageStore.addImageFromBase64(responseData._bodyInit, (result) => { console.log("working", result) }, (error) => { console.error(error); });
+       })
+     .catch(err => {
+         console.log(err);
+       })
+     }
+
   }
 
   handlePhoto = () => {
@@ -78,12 +93,24 @@ export default class CameraScreen extends Component {
         style={styles.preview}
         aspect={Camera.constants.Aspect.fill}
         captureMode={Camera.constants.CaptureMode.still}>
-        <Text onPress={this.handlePhoto}>Photo</Text>
-        <Icon
-          name='camera'
-          style={styles.capture}
-          onPress={this.takePicture}/>
-        <Text onPress={this.handleVideo}>Video</Text>
+        <View style={styles.iconContainer}>
+          <Icon
+            name='camera'
+            style={styles.iconCam}
+            onPress={this.handlePhoto}/>
+          <Icon
+            name='radio-button-on'
+            style={styles.iconCam}
+            onPress={this.takePicture}/>
+          <Icon
+            name='arrow-up'
+            style={styles.iconCam}
+            onPress={this.storePicture}/>
+          <Icon
+            name='videocam'
+            style={styles.iconCam}
+            onPress={this.handleVideo}/>
+        </View>
       </Camera>
       </View>
     )
@@ -107,5 +134,14 @@ const styles = StyleSheet.create({
     color: '#000',
     padding: 10,
     margin: 40
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'stretch'
+  },
+  iconCam: {
+    padding: 20,
+    backgroundColor: '#ffffff'
   }
 });

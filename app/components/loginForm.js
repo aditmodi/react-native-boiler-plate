@@ -11,7 +11,8 @@ import {
   View,
   StyleSheet,
   KeyboardAvoidingView,
-  Image
+  Image,
+  ScrollView
 } from 'react-native';
 import InputField from './input';
 
@@ -45,38 +46,40 @@ export default class LoginForm extends Component {
             <Text style={styles.subHead}>Let your neurons run.</Text>
           </View>
         </View>
-        <KeyboardAvoidingView behaviour="padding" >
-          <Form>
-            <View style={styles.formContainer}>
-              <InputField
-                type="email"
-                label='Email'
-                ref={this.props.loginEmail}
-              />
-              <InputField
-                type="password"
-                secure
-                label='Password'
-                ref={this.props.loginPass}
-              />
-              <Button success large
-                style={styles.loginButton}
-                onPress={this.props.loginPressed}>
-                <Text style={styles.loginText}>Login</Text>
-              </Button>
+        <KeyboardAvoidingView behaviour="padding">
+          <ScrollView>
+            <Form>
+              <View style={styles.formContainer}>
+                <InputField
+                  type="email"
+                  label='Email'
+                  ref={this.props.loginEmail}
+                />
+                <InputField
+                  type="password"
+                  secure
+                  label='Password'
+                  ref={this.props.loginPass}
+                />
+                <Button success large
+                  style={styles.loginButton}
+                  onPress={this.props.loginPressed}>
+                  <Text style={styles.loginText}>Login</Text>
+                </Button>
 
-              <View style={styles.extraContainer}>
-                <Button transparent success small
-                  onPress={this.props.forgotPassPressed}>
-                  <Text>forgot password?</Text>
-                </Button>
-                <Button transparent success small
-                  onPress={this.props.signUpPressed}>
-                  <Text>New user? sign-up</Text>
-                </Button>
-              </View>
-              </View>
-          </Form>
+                <View style={styles.extraContainer}>
+                  <Button transparent success small
+                    onPress={this.props.forgotPassPressed}>
+                    <Text>forgot password?</Text>
+                  </Button>
+                  <Button transparent success small
+                    onPress={this.props.signUpPressed}>
+                    <Text>New user? sign-up</Text>
+                  </Button>
+                </View>
+                </View>
+            </Form>
+          </ScrollView>    
         </KeyboardAvoidingView>
       </View>
 

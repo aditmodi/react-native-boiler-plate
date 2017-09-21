@@ -24,15 +24,14 @@ export default class ProfileScreen extends Component {
           leftIcon='arrow-back'
           title='Profile'
         />
-        {/* <Button success onPress={this.togglePhoto}>
-          <Text>Click to add photos</Text>
-        </Button> */}
-        {/* <Toggle hidden={this.state.hidden}> */}
-          <Button succes>
+          <Button success>
             <Text>Add from gallery</Text>
           </Button>
-          <Button succes onPress={() => navigate('Camera')}>
+          <Button success onPress={() => navigate('Camera')}>
             <Text>Open camera</Text>
+          </Button>
+          <Button success onPress={() => navigate('Images')}>
+            <Text>Show images</Text>
           </Button>
       </View>
     )
