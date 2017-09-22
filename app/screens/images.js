@@ -2,47 +2,73 @@ import React, {Component} from 'react';
 import {
   View,
   Image,
-  ScrollView
+  ScrollView,
+  StyleSheet,
+  Text
 } from 'react-native';
+
+var urls = new Array();
 
 export default class ImageScreen extends Component {
   constructor(props){
     super(props);
     this.state = {
-      url: ''
+      url: []
     }
   }
 
   componentWillMount() {
     fetch('http://192.168.1.189:3001/api/getPhoto',{
-      method: 'GET'
-    })
-    .then((res) => {
-      console.log("response::::", res);
-      this.setState({
-        url: res._bodyInit
+        method: 'GET'
       })
-    })
-    .catch(err => {
-      console.log(err);
-    })
+      .then(response => {return response.json()})
+      .then((res) => {
+        res.data.map((item, index) => {
+          urls[index] = item.img.url
+        });
+        this.setState({
+          url: urls
+        });
+        console.log("STATE::", this.state.url);
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }
 
-  renderImages = () => {
-    return (
-      <Image
-        source={{uri:this.state.url}}
-      />
+  renderImages = (url, i) => {
+    return(
+      <View key={i}>
+        <Image
+          style={styles.image}
+          source={{uri: url}}
+        />
+        <Text>{url}</Text>
+      </View>
+
     )
   }
 
   render(){
     return(
-      <View>
         <ScrollView>
-          {this.renderImages}
+          {
+            this.state.url.map((item, i) => {
+              return this.renderImages(item, i)
+            })
+          }
         </ScrollView>
-      </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  image: {
+    alignSelf: 'center',
+    height: 200,
+    width: 200,
+    backgroundColor: '#000000',
+    padding: 20,
+    margin: 20,
+  }
+})

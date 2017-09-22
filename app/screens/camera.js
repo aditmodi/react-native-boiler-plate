@@ -32,10 +32,11 @@ export default class CameraScreen extends Component {
           console.log('data:', data);
           pic = data;
           picturePath = await RNFS.readFile(data.path, 'base64');
+          // picturePath = data.path;
         }
       )
       .then(res => {
-        ImageStore.addImageFromBase64(picturePath, (result) => {console.log(result)}, (error) => {console.error(error)});
+        // ImageStore.addImageFromBase64(picturePath, (result) => {console.log(result)}, (error) => {console.error(error)});
       })
       .then(res => {
 
@@ -46,24 +47,31 @@ export default class CameraScreen extends Component {
   storePicture = () => {
     console.log("picture path:", picturePath);
     if (picturePath) {
+      // var data = new FormData();
+      // data.append('photo',
+      //   picturePath
+      // );
+
+
       const config = {
         method: 'POST',
          headers: {
-           'Accept': 'application/json',
-           'Content-Type': 'multipart/form-data',
-           'Authorization': 'Bearer ' + 'SECRET_OAUTH2_TOKEN_IF_AUTH',
+          //  'Accept': 'application/json',
+           'Content-Type': 'application/json',
+          //  'Authorization': 'Bearer ' + 'SECRET_OAUTH2_TOKEN_IF_AUTH',
          },
          body: JSON.stringify({
-           picturePath
+           data: picturePath
          })
       }
+
       fetch('http://192.168.1.189:3001/api/addPhoto', config)
       .then((responseData) => {
          console.log("this is the response:::",responseData._bodyInit);
-         ImageStore.addImageFromBase64(responseData._bodyInit, (result) => { console.log("working", result) }, (error) => { console.error(error); });
+        //  ImageStore.addImageFromBase64(responseData._bodyInit, (result) => { console.log("working", result) }, (error) => { console.error(error); });
        })
      .catch(err => {
-         console.log(err);
+         console.log("YOYOY:",err);
        })
      }
 
