@@ -30,8 +30,8 @@ let port = process.env.PORT || 3001;        // set our port
 
  // configure app to use bodyParser()
  // this will let us get the data from a POST
- app.use(bodyParser.json());
- app.use(bodyParser.urlencoded({ extended: false }));
+ app.use(bodyParser.json({limit: '50mb'}));
+ app.use(bodyParser.urlencoded({limit: '50mb', extended: true }));
 
  // all of our routes will be prefixed with /api
  app.use(require('serve-static')(__dirname + '/../../public'));

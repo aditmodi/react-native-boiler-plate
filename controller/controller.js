@@ -54,6 +54,7 @@ exports.register = function (req, res) {
     firstName : req.body.fname,  // set the users name (comes from the request)
     lastName : req.body.lname,
     email : req.body.email,
+    password : req.body.password,
     gender : req.body.gender,
     phone : req.body.phone,
   }), req.body.password, function (err, user) {

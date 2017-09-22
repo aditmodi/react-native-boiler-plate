@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "babel": "babel --presets react ./*.js"
+    "babel": "babel --presets react ./*.js",
+    "start": "export CLOUDINARY_URL=cloudinary://611966755818566:5IRHcHHOyHBMB6M6kDWPj3uvTnc@nodexperts && nodemon server.js"
   },
   "dependencies": {
     "body-parser": "^1.17.2",
