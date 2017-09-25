@@ -4,13 +4,14 @@ var cloudinary = require('cloudinary');
 
 
 exports.addImages = function(req, res){
-  // console.log("It comes here: ..... ", req.body);
+  console.log("It comes here: ..... ", req.body.email);
+  var newImg = new ImageDB();
   cloudinary.uploader.upload(
      `data:image/jpg;base64,${req.body.data}`,
     // req.body.photo,
     function(result){
     console.log("this is the url:", result);
-    var newImg = new ImageDB();
+    newImg.email = req.body.email;
     newImg.img.url = result.secure_url;
     newImg.save(function(err){
       if(err){
@@ -25,7 +26,9 @@ exports.addImages = function(req, res){
 }
 
 exports.getImages = function(req, res) {
-  ImageDB.find(function(err, imageUrl) {
+  console.log("BODY EMAIL: ", req.params.email);
+  ImageDB.find({email: req.params.email}, function(err, imageUrl) {
+    console.log("IMAGE URL:::", imageUrl);
     if (err)
       res.send(err);
 
