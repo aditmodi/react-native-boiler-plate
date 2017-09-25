@@ -8,7 +8,7 @@ import {
   Alert
 } from 'react-native'
 
-class ProtectedView extends Component {
+export default class ProtectedView extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -29,7 +29,7 @@ class ProtectedView extends Component {
       fetch('http://192.168.1.189:3001/api/protected', {
         headers: {
           Accept: 'application/json',
-          token: `JWT ${token}`
+          token: `${token}`
         }
       })
       .then((response) => response.json())
@@ -64,7 +64,7 @@ class ProtectedView extends Component {
     return (
       <View style={styles.container}>
         {
-          this.state.showIndicator
+          this.state.showIndicator == true
           ? this._renderIndicator()
           :
             <Text style={styles.centering}>
@@ -103,5 +103,3 @@ var styles = StyleSheet.create({
     alignItems: 'center'
   }
 })
-
-module.exports = ProtectedView;

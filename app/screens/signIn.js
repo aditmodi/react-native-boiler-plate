@@ -41,6 +41,7 @@ export default class SignInScreen extends Component {
                     if (res.token){
                       try {
                         await AsyncStorage.setItem('jwt', res.token);   //token is stored
+                        await AsyncStorage.setItem('email', this.loginEmail.state.value);   //email is stored
                         Alert.alert('Welcome');
                         // Redirect to home screen
                         navigate('Home');

@@ -8,7 +8,8 @@ import {
   View,
   StyleSheet,
   Text,
-  ImageStore
+  ImageStore,
+  AsyncStorage
 } from 'react-native';
 
 var picturePath;
@@ -36,44 +37,39 @@ export default class CameraScreen extends Component {
         }
       )
       .then(res => {
-        // ImageStore.addImageFromBase64(picturePath, (result) => {console.log(result)}, (error) => {console.error(error)});
-      })
-      .then(res => {
-
+        // console.log(res.json());
       })
       .catch(err => console.error(err));
   }
 
-  storePicture = () => {
+  storePicture = async() => {
     console.log("picture path:", picturePath);
-    if (picturePath) {
-      // var data = new FormData();
-      // data.append('photo',
-      //   picturePath
-      // );
+    let hello = AsyncStorage.getItem('email', (err, email) => {
+      console.log("Email", email);
+      if (picturePath) {
+        const config = {
+          method: 'POST',
+          headers: {
+            //  'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            //  'Authorization': 'Bearer ' + 'SECRET_OAUTH2_TOKEN_IF_AUTH',
+          },
+          body: JSON.stringify({
+            data: picturePath,
+            email: email
+          })
+        }
 
-
-      const config = {
-        method: 'POST',
-         headers: {
-          //  'Accept': 'application/json',
-           'Content-Type': 'application/json',
-          //  'Authorization': 'Bearer ' + 'SECRET_OAUTH2_TOKEN_IF_AUTH',
-         },
-         body: JSON.stringify({
-           data: picturePath
-         })
+        fetch('http://192.168.1.189:3001/api/addPhoto', config)
+        .then((responseData) => {
+          console.log("this is the response:::",responseData._bodyInit);
+          //  ImageStore.addImageFromBase64(responseData._bodyInit, (result) => { console.log("working", result) }, (error) => { console.error(error); });
+        })
+        .catch(err => {
+          console.log("YOYOY:",err);
+        })
       }
-
-      fetch('http://192.168.1.189:3001/api/addPhoto', config)
-      .then((responseData) => {
-         console.log("this is the response:::",responseData._bodyInit);
-        //  ImageStore.addImageFromBase64(responseData._bodyInit, (result) => { console.log("working", result) }, (error) => { console.error(error); });
-       })
-     .catch(err => {
-         console.log("YOYOY:",err);
-       })
-     }
+    });
 
   }
 

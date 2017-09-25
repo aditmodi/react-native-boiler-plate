@@ -49,6 +49,7 @@ export default class HomeScreen extends Component{
       .then((response) => {
         response.json();
         AsyncStorage.removeItem('jwt');                                 //remove the token from the local storage
+        AsyncStorage.removeItem('email');
         navigate('SignIn');                                             //and then navigate to sign in page
       })
       .catch((e) => {
