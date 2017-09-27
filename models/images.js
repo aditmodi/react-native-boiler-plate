@@ -5,7 +5,8 @@ var imageSchema = new Schema({
   img: {
     url: String,
   },
-  email: String
+  email: String,
+  date: Date
 })
 
 module.exports = mongoose.model('ImageDB', imageSchema);
