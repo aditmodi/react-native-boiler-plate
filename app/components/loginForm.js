@@ -36,6 +36,7 @@ export default class LoginForm extends Component {
   render(){
     return(
       <View style={styles.Container}>
+        <ScrollView>
         <View style={styles.heading}>
           <Image
             style={styles.headLogo}
@@ -47,7 +48,7 @@ export default class LoginForm extends Component {
           </View>
         </View>
         <KeyboardAvoidingView behaviour="padding">
-          <ScrollView>
+
             <Form>
               <View style={styles.formContainer}>
                 <InputField
@@ -79,8 +80,9 @@ export default class LoginForm extends Component {
                 </View>
                 </View>
             </Form>
-          </ScrollView>    
+
         </KeyboardAvoidingView>
+        </ScrollView>
       </View>
 
     )

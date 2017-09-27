@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
-  Icon
+  Icon,
+  Button,
 } from 'native-base';
 import RNFS from 'react-native-fs';
 import Camera from 'react-native-camera';
@@ -8,7 +9,9 @@ import {
   View,
   StyleSheet,
   Text,
-  ImageStore
+  Image,
+  AsyncStorage,
+  Alert
 } from 'react-native';
 
 var picturePath;
@@ -19,7 +22,7 @@ export default class CameraScreen extends Component {
   constructor(props){
     super(props);
     this.state = {
-      uri:''
+      path: null
     }
   }
 
@@ -30,96 +33,137 @@ export default class CameraScreen extends Component {
       .then(
         async(data) => {
           console.log('data:', data);
+          this.setState({path: data.path})
           pic = data;
           picturePath = await RNFS.readFile(data.path, 'base64');
           // picturePath = data.path;
         }
       )
       .then(res => {
-        // ImageStore.addImageFromBase64(picturePath, (result) => {console.log(result)}, (error) => {console.error(error)});
-      })
-      .then(res => {
-
+        // console.log(res.json());
       })
       .catch(err => console.error(err));
   }
 
-  storePicture = () => {
+  storePicture = async() => {
     console.log("picture path:", picturePath);
-    if (picturePath) {
-      // var data = new FormData();
-      // data.append('photo',
-      //   picturePath
-      // );
+    let hello = AsyncStorage.getItem('email', (err, email) => {
+      console.log("Email", email);
+      if (picturePath) {
+        const config = {
+          method: 'POST',
+          headers: {
+            //  'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            //  'Authorization': 'Bearer ' + 'SECRET_OAUTH2_TOKEN_IF_AUTH',
+          },
+          body: JSON.stringify({
+            data: picturePath,
+            email: email
+          })
+        }
 
-
-      const config = {
-        method: 'POST',
-         headers: {
-          //  'Accept': 'application/json',
-           'Content-Type': 'application/json',
-          //  'Authorization': 'Bearer ' + 'SECRET_OAUTH2_TOKEN_IF_AUTH',
-         },
-         body: JSON.stringify({
-           data: picturePath
-         })
+        fetch('http://192.168.1.189:3001/api/addPhoto', config)
+        .then((responseData) => {
+          console.log("this is the response:::",responseData._bodyInit);
+          Alert.alert('Image has been uploaded');
+          this.setState({path:null})
+          //  ImageStore.addImageFromBase64(responseData._bodyInit, (result) => { console.log("working", result) }, (error) => { console.error(error); });
+        })
+        .catch(err => {
+          console.log("YOYOY:",err);
+        })
       }
-
-      fetch('http://192.168.1.189:3001/api/addPhoto', config)
-      .then((responseData) => {
-         console.log("this is the response:::",responseData._bodyInit);
-        //  ImageStore.addImageFromBase64(responseData._bodyInit, (result) => { console.log("working", result) }, (error) => { console.error(error); });
-       })
-     .catch(err => {
-         console.log("YOYOY:",err);
-       })
-     }
-
-  }
-
-  handlePhoto = () => {
-    this.setState({
-      mode: 'Camera.constants.CaptureMode.video'
     });
-    console.log("Camera");
+
   }
 
-  handleVideo = () => {
+  // handlePhoto = () => {
+  //   this.setState({
+  //     mode: 'Camera.constants.CaptureMode.video'
+  //   });
+  //   console.log("Camera");
+  // }
+  //
+  // handleVideo = () => {
+  //   this.setState({
+  //     mode: 'Camera.constants.CaptureMode.still'
+  //   });
+  //   console.log("Video");
+  // }
+
+  returnToCamera = () => {
     this.setState({
-      mode: 'Camera.constants.CaptureMode.still'
-    });
-    console.log("Video");
+      path:null
+    })
   }
 
-  render(){
+  renderImage = () => {
     return(
-      <View style={styles.container}>
-        <Camera
+      <View style={styles.imageCont}>
+        <Image
+          source={{ uri: this.state.path }}
+          style={styles.image}
+        >
+        <View style={styles.imageButtons1}>
+
+        </View>
+        <View style={styles.imageButtons2}>
+          <Button danger
+            style={styles.button}
+            onPress={this.returnToCamera}
+            >
+            <Icon name='close'/>
+            <Text>Cancel</Text>
+          </Button>
+          <Button success
+            style={styles.button}
+            onPress={this.storePicture}>
+            <Icon name='arrow-round-up'/>
+            <Text>Upload</Text>
+          </Button>
+        </View>
+        </Image>
+      </View>
+    )
+  }
+
+  renderCamera = () => {
+    const { navigate } = this.props.navigation;
+    return(
+      <Camera
         ref={(cam) => {
           this.camera = cam;
         }}
         style={styles.preview}
         aspect={Camera.constants.Aspect.fill}
-        captureMode={Camera.constants.CaptureMode.still}>
+        captureMode={Camera.constants.CaptureMode.still}
+        captureTarget={Camera.constants.CaptureTarget.disk}>
         <View style={styles.iconContainer}>
-          <Icon
-            name='camera'
+          <Icon dark
+            name='arrow-back'
             style={styles.iconCam}
-            onPress={this.handlePhoto}/>
+            onPress={() => navigate('Profile')}
+          />
           <Icon
             name='radio-button-on'
-            style={styles.iconCam}
+            style={styles.iconCapture}
             onPress={this.takePicture}/>
           <Icon
-            name='arrow-up'
+            name='arrow-forward'
             style={styles.iconCam}
-            onPress={this.storePicture}/>
-          <Icon
-            name='videocam'
-            style={styles.iconCam}
-            onPress={this.handleVideo}/>
+            onPress={() => navigate('Images')}
+            />
         </View>
       </Camera>
+    )
+  }
+
+  render(){
+    const { navigate } = this.props.navigation;
+    return(
+      <View style={styles.container}>
+        {this.state.path ? this.renderImage() : this.renderCamera()}
       </View>
     )
   }
@@ -129,6 +173,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
+  },
+  imageCont:{
+    flex:1,
+  },
+  image:{
+    flex:1
   },
   preview: {
     flex: 1,
@@ -150,6 +200,30 @@ const styles = StyleSheet.create({
   },
   iconCam: {
     padding: 20,
-    backgroundColor: '#ffffff'
+    color: '#ffffff',
+    marginTop: 20,
+    alignSelf: 'flex-start'
+    // backgroundColor: '#ffffff'
+  },
+  iconCapture: {
+    padding: 20,
+    color: '#ffffff',
+    fontSize: 70,
+    alignSelf: 'center'
+  },
+  backarrow: {
+    alignSelf: 'flex-start',
+  },
+  imageButtons1: {
+    justifyContent: 'center',
+    alignSelf: 'flex-end'
+  },
+  imageButtons2: {
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  button: {
+    padding: 20,
+    margin: 10
   }
 });

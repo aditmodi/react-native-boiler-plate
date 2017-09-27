@@ -41,6 +41,7 @@ export default class SignInScreen extends Component {
                     if (res.token){
                       try {
                         await AsyncStorage.setItem('jwt', res.token);   //token is stored
+                        await AsyncStorage.setItem('email', this.loginEmail.state.value);   //email is stored
                         Alert.alert('Welcome');
                         // Redirect to home screen
                         navigate('Home');
@@ -74,7 +75,7 @@ export default class SignInScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,                  //adjusts according to the screen
+    flex: 1,                    //adjusts according to the screen
     backgroundColor: '#ffffff'
   }
 })

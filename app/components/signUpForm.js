@@ -35,8 +35,9 @@ export default class SignUpForm extends Component {
 
   render(){
     return(
-      <ScrollView >
+
         <KeyboardAvoidingView behaviour="padding" style={styles.Container}>
+          <ScrollView>
           <Form>
             <View>
               <InputField
@@ -73,15 +74,16 @@ export default class SignUpForm extends Component {
                 type='number'
                 label='Phone No.'
                 ref={this.props.phone}
-                keyboard={'numeric'}
+                // keyboard={'numeric'}
               />
               <Button style={styles.submitButton} onPress={this.props.submitPressed}>
                 <Text style={styles.submitText}>Submit</Text>
               </Button>
             </View>
           </Form>
+          </ScrollView>
         </KeyboardAvoidingView>
-      </ScrollView>
+
 
     )
   }

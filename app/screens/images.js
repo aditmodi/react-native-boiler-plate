@@ -4,8 +4,10 @@ import {
   Image,
   ScrollView,
   StyleSheet,
-  Text
+  Text,
+  AsyncStorage
 } from 'react-native';
+import HeaderComponent from '../components/headerComponent';
 
 var urls = new Array();
 
@@ -17,12 +19,15 @@ export default class ImageScreen extends Component {
     }
   }
 
-  componentWillMount() {
-    fetch('http://192.168.1.189:3001/api/getPhoto',{
+  async componentWillMount() {
+    let hello = AsyncStorage.getItem('email', (err, email) => {
+      console.log("this is the email we get on client side--->", email);
+      fetch(`http://192.168.1.189:3001/api/getPhoto/${email}`,{
         method: 'GET'
       })
       .then(response => {return response.json()})
       .then((res) => {
+        console.log("this is the response:::", res);
         res.data.map((item, index) => {
           urls[index] = item.img.url
         });
@@ -30,10 +35,12 @@ export default class ImageScreen extends Component {
           url: urls
         });
         console.log("STATE::", this.state.url);
+        urls = new Array();
       })
       .catch(err => {
         console.log(err);
       })
+    });
   }
 
   renderImages = (url, i) => {
@@ -50,14 +57,22 @@ export default class ImageScreen extends Component {
   }
 
   render(){
+    const { navigate } = this.props.navigation;
     return(
-        <ScrollView>
-          {
-            this.state.url.map((item, i) => {
-              return this.renderImages(item, i)
-            })
-          }
-        </ScrollView>
+        <View>
+          <HeaderComponent
+            leftIcon='arrow-back'
+            leftPressed={() => navigate('Profile')}
+            title='Images'
+          />
+          <ScrollView>
+            {
+              this.state.url.map((item, i) => {
+                return this.renderImages(item, i)
+              })
+            }
+          </ScrollView>
+        </View>
     )
   }
 }

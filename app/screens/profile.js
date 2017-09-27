@@ -22,8 +22,10 @@ export default class ProfileScreen extends Component {
       <View>
         <HeaderComponent
           leftIcon='arrow-back'
+          leftPressed={() => navigate('Home')}
           title='Profile'
         />
+        <View style={styles.buttons}>
           <Button success>
             <Text>Add from gallery</Text>
           </Button>
@@ -33,7 +35,16 @@ export default class ProfileScreen extends Component {
           <Button success onPress={() => navigate('Images')}>
             <Text>Show images</Text>
           </Button>
+        </View>
       </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  buttons: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'stretch'
+  }
+})

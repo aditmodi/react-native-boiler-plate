@@ -19,7 +19,7 @@ export default class HeaderComponent extends Component {
 
   render(){
     return(
-      <Header style={styles.header}>
+      <Header transparent={this.props.transparent} style={styles.header}>
         <Left>
           <Button transparent onPress={this.props.leftPressed}>
             <Icon name={this.props.leftIcon}/>
