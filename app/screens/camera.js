@@ -220,7 +220,8 @@ const styles = StyleSheet.create({
   },
   imageButtons2: {
     flexDirection: 'row',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignItems: 'flex-end',
   },
   button: {
     padding: 20,

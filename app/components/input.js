@@ -131,11 +131,7 @@ export default class InputField extends Component {
 
   render(){
     return(
-      <View>
-        <InputError
-          errorVisible={this.state.errorVisible}
-          errorMessage={this.state.errorMessage}
-        />
+      <View style={styles.input}>
         <Item
           floatingLabel
           success={this.state.success}
@@ -149,8 +145,18 @@ export default class InputField extends Component {
             keyboardType={this.props.keyboard}
           />
         </Item>
-
+        <InputError
+          errorVisible={this.state.errorVisible}
+          errorMessage={this.state.errorMessage}
+        />
       </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  // input: {
+  //   marginTop: 15,
+  //   padding: 10
+  // },
+})

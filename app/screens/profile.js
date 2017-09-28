@@ -26,9 +26,6 @@ export default class ProfileScreen extends Component {
           title='Profile'
         />
         <View style={styles.buttons}>
-          <Button success>
-            <Text>Add from gallery</Text>
-          </Button>
           <Button success onPress={() => navigate('Camera')}>
             <Text>Open camera</Text>
           </Button>

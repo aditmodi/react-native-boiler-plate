@@ -35,54 +35,53 @@ export default class SignUpForm extends Component {
 
   render(){
     return(
+      <ScrollView>
+        <Form>
+          <KeyboardAvoidingView behaviour="padding"  style={styles.Container}>
+            <InputField
+              type='text'
+              label='First Name'
+              ref={this.props.fname}
+            />
+            <InputField
+              type='text'
+              label='Last Name'
+              ref={this.props.lname}
+            />
+            <InputField
+              type='email'
+              label='Email'
+              ref={this.props.email}
+            />
+            <InputField
+              type='password'
+              label='Password'
+              ref={this.props.password}
+              secure
+            />
+            <InputField
+              type='cPassword'
+              label='Confirm Password'
+              ref={this.props.cPassword}
+              secure
+            />
+            <GenderRadio
+              ref={this.props.gender}
+            />
+            <InputField
+              type='number'
+              label='Phone No.'
+              ref={this.props.phone}
+              // keyboard={'numeric'}
+            />
+            <Button style={styles.submitButton} onPress={this.props.submitPressed}>
+              <Text style={styles.submitText}>Submit</Text>
+            </Button>
+          </KeyboardAvoidingView>
+        </Form>
+      </ScrollView>
 
-        <KeyboardAvoidingView behaviour="padding" style={styles.Container}>
-          <ScrollView>
-          <Form>
-            <View>
-              <InputField
-                type='text'
-                label='First Name'
-                ref={this.props.fname}
-              />
-              <InputField
-                type='text'
-                label='Last Name'
-                ref={this.props.lname}
-              />
-              <InputField
-                type='email'
-                label='Email'
-                ref={this.props.email}
-              />
-              <InputField
-                type='password'
-                label='Password'
-                ref={this.props.password}
-                secure
-              />
-              <InputField
-                type='cPassword'
-                label='Confirm Password'
-                ref={this.props.cPassword}
-                secure
-              />
-              <GenderRadio
-                ref={this.props.gender}
-              />
-              <InputField
-                type='number'
-                label='Phone No.'
-                ref={this.props.phone}
-                // keyboard={'numeric'}
-              />
-              <Button style={styles.submitButton} onPress={this.props.submitPressed}>
-                <Text style={styles.submitText}>Submit</Text>
-              </Button>
-            </View>
-          </Form>
-          </ScrollView>
-        </KeyboardAvoidingView>
+
 
 
     )

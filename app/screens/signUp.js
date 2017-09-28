@@ -26,16 +26,24 @@ export default class SignUpScreen extends Component {
         body: JSON.stringify({
           fname: this.fname.state.value,
           lname: this.lname.state.value,
-          email: this.email.state.value,
+          email: (this.email.state.value).toLowerCase(),
           password: this.password.state.value,
           phone: this.phone.state.value,
           gender: this.gender.state.value
         })
       })
     .then((response) => response.json())
-    .then(() => {
-      Alert.alert("Success! Now you may log in");
-      navigate('SignIn');
+    .then((res) => {
+      Alert.alert(res.message);
+      if(res.message == 'Success!! You may now log in.'){
+        navigate('SignIn');
+        this.fname.clear();
+        this.lname.clear();
+        this.email.clear();
+        this.password.clear();
+        this.phone.clear();
+        this.cPassword.clear();
+      }
     })
     .catch((error) => {
       console.error(error);
@@ -44,12 +52,6 @@ export default class SignUpScreen extends Component {
     // Alert.alert('Form submitted');
 
     //to clear the form after submitting
-    this.fname.clear();
-    this.lname.clear();
-    this.email.clear();
-    this.password.clear();
-    this.phone.clear();
-    this.cPassword.clear();
     }
     else {
       // when some value is not valid

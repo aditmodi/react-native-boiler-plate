@@ -1,21 +1,10 @@
 # React Native Demo App
 
 ## Installation:
-* To clone this project click on this [link](https://github.com/aditmodi/react-native-boiler-plate/tree/Auth2)
-* After cloning run `` npm install `` in your terminal
-* Then run ``react-native link`` to automatically link your libraries with the project
-
-**Note: Some libraries might need manual installation and linking too. For that refer the links given in third party libraries section**
-* If you wish to start the project from the start follow this [link](https://facebook.github.io/react-native/docs/getting-started.html) to set up the environment for react native on your system from the beginning
+ Follow this [link](https://facebook.github.io/react-native/docs/getting-started.html) to set up the environment for react native on your system
 
 ## Description:
 This is demo app to get the basic understanding of building an app on react-native for both platforms - Android and iOS. It has the following features:
-
-#### Functionality
-* A simple app including login, logout and signup feature
-* It also includes a camera access functionality where the user can access the phones camera and capture the images
-* After capturing the picture they can even upload it on the cloud and view it in the app itself
-* The order of the image view are by date, i.e., the picture clicked latest will be on top.
 #### Screens
 ##### Sign-In (ref: root_directory/app/screens/signIn.js) :
 * This page will open everytime when the app in device is opened for the first time and then it will open when a user logs out of the app
@@ -36,7 +25,7 @@ This is demo app to get the basic understanding of building an app on react-nati
 ##### Images (ref: root_directory/app/screens/images.js) :
 * Here all the images belonging to the user will be shown
 
-## Third-party libraries
+#### Third-party libraries
 * [cloudinary](https://www.npmjs.com/package/cloudinary)
 * [native-base](https://docs.nativebase.io/docs/GetStarted.html)
 * [prop-types](https://www.npmjs.com/package/prop-types)
@@ -46,8 +35,8 @@ This is demo app to get the basic understanding of building an app on react-nati
 * [react-native-simple-radio-button](https://github.com/moschan/react-native-simple-radio-button)
 * [react-navigation](https://www.npmjs.com/package/react-navigation)
 
-## Components used
-#### React-native
+### Components used
+##### React-native
 * Text
 * View
 * StyleSheet
@@ -58,7 +47,7 @@ This is demo app to get the basic understanding of building an app on react-nati
 * AsyncStorage
 * Alert
 
-#### Native-Base
+##### Native-Base
 * Header
 * Left
 * Right
@@ -74,8 +63,17 @@ This is demo app to get the basic understanding of building an app on react-nati
 * Form
 
 
-## End notes
+## Get started
+ * Run the following commands in a directory which you want to keep as root project
+	```react-native init MyProject```              
+	```cd MyProject```          
+	**Note: Make sure you have an emulator running or a device connected**
+ * For android : create local.properties in android folder and write the following:
+	```javascript
+      sdk.dir = /path to the sdk directory/  ```
+ * ```react-native run-android``` or ```react-native run-ios```  
 
-* To make release Apk for you app refer this [link](https://facebook.github.io/react-native/docs/signed-apk-android.html)
-* To see the server side of this project refer to this [link](https://github.com/aditmodi/react-native-boiler-plate/tree/Auth2_server)
-* For any query, comment down
+
+React navigation : to navigate between screens. For more detailed info click [here](https://reactnavigation.org/).
+
+To make release Apk for you app refer this [link](https://facebook.github.io/react-native/docs/signed-apk-android.html)
