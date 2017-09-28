@@ -11,6 +11,7 @@ let LocalStrategy = require('passport-local').Strategy;
 let JwtStrategy = require('passport-jwt').Strategy;
 let ExtractJwt = require('passport-jwt').ExtractJwt;
 let User = require('./models/user');
+let bcrypt = require('bcrypt');
 const multer = require('multer');
 
 
@@ -40,6 +41,17 @@ let port = process.env.PORT || 3001;        // set our port
 
  // Configure Passport to use local strategy for initial authentication.
  passport.use('local', new LocalStrategy(User.authenticate()));
+ // passport.use(new LocalStrategy(function(username, password, cb){
+ //   bcrypt.compare(password, user.hash, function(err, res){
+ //     if (err) return cb(err);
+ //     if (res === false) {
+ //       return cb(null, false);
+ //     }
+ //     else {
+ //       return cb(null, user);
+ //     }
+ //   })
+ // }))
 
 // Configure Passport to use JWT strategy to look up Users
 passport.use('jwt', new JwtStrategy(options, function(jwt_payload, done) {

@@ -16,7 +16,7 @@ exports.login = function (req, res, next) {
   console.log('Route login: body  ', req.body);
   console.log('Route login: header  ', req.headers);
 
-  passport.authenticate('local', function (err, user, info) {
+  passport.authenticate('local',  function (err, user, info) {
     console.log('login --> auth: user ', user);
     console.log('login --> auth: info ', info);
 
@@ -30,19 +30,22 @@ exports.login = function (req, res, next) {
     }
     if (user) {
       console.log('login --> auth: success user: ', user);
-      if (user.password != req.body.password) {
-        res.json({ success: false, token: null, message: info.IncorrectPasswordError });
-      }
-      else {
-        var token = jwt.sign({ id: user._id, email: user.email }, secret, {
-          expiresIn: 1440     //expires in 24 hours
-        });
-        console.log('login --> auth: success token: ', token);
-      }
-
-      return res.json({ success: true, token: token, message: 'Success! You may now access protected content.' });
+      bcrypt.compare(password, user.hash, function(err, res){
+          if (err) return cb(err);
+          if (res === false) {
+            return res.json({ success: false, token: null, message: info.IncorrectPasswordError });
+          }
+          else {
+            var token = jwt.sign({ id: user._id, email: user.email }, secret, {
+              expiresIn: 1440     //expires in 24 hours
+            });
+            console.log('login --> auth: success token: ', token);
+            return res.json({ success: true, token: token, message: 'Success! You may now access protected content.' });
+          }
+        })
     }
-  })(req, res, next);
+  }
+)(req, res, next);
 }
 
 exports.check = function(req, res) {
@@ -50,26 +53,38 @@ exports.check = function(req, res) {
 }
 
 exports.register = function (req, res) {
-  User.register(new User({
-    firstName : req.body.fname,  // set the users name (comes from the request)
-    lastName : req.body.lname,
-    email : req.body.email,
-    password : req.body.password,
-    gender : req.body.gender,
-    phone : req.body.phone,
-  }), req.body.password, function (err, user) {
+  User.findOne({email:req.body.email}, function(err, user){
+    console.log("user:", user);
     if (err) {
-      return res.status(400).send({ error: 'Email address in use.' })
+      res.send(err)
     }
-    user.save(function(err) {
+    else if (user == null){
+      User.register(new User({
+        firstName : req.body.fname,  // set the users name (comes from the request)
+        lastName : req.body.lname,
+        email : req.body.email,
+        password : req.body.password,
+        gender : req.body.gender,
+        phone : req.body.phone,
+      }), req.body.password, function (err, user) {
+        if (err) {
+          return res.status(400).send({ error: 'Email address in use.' })
+        }
+        user.save(function(err) {
           if (err)
           return res.send(err);
           res.json({
-            status : "ok",
-            data   : user._id
+            message: 'Success!! You may now log in.'
           });
-    // res.status(200).send({ user: user.id });
-    });
+          // res.status(200).send({ user: user.id });
+        });
+      })
+    }
+    else {
+      res.json({
+        message: 'User already exists'
+      })
+    }
   })
 }
 

@@ -4,6 +4,7 @@
     "start": "export CLOUDINARY_URL=cloudinary://611966755818566:5IRHcHHOyHBMB6M6kDWPj3uvTnc@nodexperts && nodemon server.js"
   },
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.17.2",
     "cloudinary": "^1.9.0",
     "dotenv": "^4.0.0",
