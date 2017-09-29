@@ -12,7 +12,7 @@ import {
   Image,
   AsyncStorage,
   Alert,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
 
 let picturePath;
@@ -48,7 +48,7 @@ export default class CameraScreen extends Component {
           // picturePath = data.path;
         },
       )
-      .then((res) => {
+      .then(res => {
         // console.log(res.json());
       })
       .catch(err => console.error(err));

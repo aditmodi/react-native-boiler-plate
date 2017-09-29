@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Text,
   AsyncStorage,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
 import HeaderComponent from '../components/headerComponent';
 
@@ -24,7 +24,7 @@ export default class ImageScreen extends Component {
   }
 
   componentDidMount() {
-    tis.setState({
+    this.setState({
       isLoading: false,
     });
   }

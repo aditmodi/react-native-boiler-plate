@@ -20,9 +20,9 @@ export default class ProfileScreen extends Component {
     return (
       <View>
         <HeaderComponent
-          leftIcon="arrow-back"
+          leftIcon='arrow-back'
           leftPressed={() => navigate('Home')}
-          title="Profile"
+          title='Profile'
         />
         <View style={styles.buttons}>
           <Button success onPress={() => navigate('Camera')}>
