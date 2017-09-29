@@ -8,6 +8,7 @@ let User = require('../models/user');            // get an instance of the expre
 let config = require('../config');
 let passport = require('passport');
 let logout = require('express-passport-logout');
+let bcrypt = require('bcrypt');
 
 var secret = '7x0jhxt"9(thpX6';
 
@@ -16,7 +17,7 @@ exports.login = function (req, res, next) {
   console.log('Route login: body  ', req.body);
   console.log('Route login: header  ', req.headers);
 
-  passport.authenticate('local',  function (err, user, info) {
+  passport.authenticate('local', function (err, user, info) {
     console.log('login --> auth: user ', user);
     console.log('login --> auth: info ', info);
 
@@ -30,22 +31,20 @@ exports.login = function (req, res, next) {
     }
     if (user) {
       console.log('login --> auth: success user: ', user);
-      bcrypt.compare(password, user.hash, function(err, res){
-          if (err) return cb(err);
-          if (res === false) {
-            return res.json({ success: false, token: null, message: info.IncorrectPasswordError });
-          }
-          else {
-            var token = jwt.sign({ id: user._id, email: user.email }, secret, {
-              expiresIn: 1440     //expires in 24 hours
-            });
-            console.log('login --> auth: success token: ', token);
-            return res.json({ success: true, token: token, message: 'Success! You may now access protected content.' });
-          }
-        })
+      bcrypt.compare(req.body.password, user.password, function(err, ret){
+        if (ret == false) {
+          return res.json({ success: false, token: null, message: 'Incorrect Password' });
+        }
+        else {
+          var token = jwt.sign({ id: user._id, email: user.email }, secret, {
+            expiresIn: 1440     //expires in 24 hours
+          });
+          console.log('login --> auth: success token: ', token);
+          return res.json({ success: true, token: token, name: user.firstName });
+        }
+      })
     }
-  }
-)(req, res, next);
+  })(req, res, next);
 }
 
 exports.check = function(req, res) {
@@ -59,26 +58,28 @@ exports.register = function (req, res) {
       res.send(err)
     }
     else if (user == null){
-      User.register(new User({
-        firstName : req.body.fname,  // set the users name (comes from the request)
-        lastName : req.body.lname,
-        email : req.body.email,
-        password : req.body.password,
-        gender : req.body.gender,
-        phone : req.body.phone,
-      }), req.body.password, function (err, user) {
-        if (err) {
-          return res.status(400).send({ error: 'Email address in use.' })
-        }
-        user.save(function(err) {
-          if (err)
-          return res.send(err);
-          res.json({
-            message: 'Success!! You may now log in.'
+      bcrypt.hash(req.body.password, 10, function(err, hash) {
+        User.register(new User({
+          firstName : req.body.fname,  // set the users name (comes from the request)
+          lastName : req.body.lname,
+          email : req.body.email,
+          password : hash,
+          gender : req.body.gender,
+          phone : req.body.phone,
+        }), req.body.password, function (err, user) {
+          if (err) {
+            return res.status(400).send({ error: 'Email address in use.' })
+          }
+          user.save(function(err) {
+            if (err)
+            return res.send(err);
+            res.json({
+              message: 'Success!! You may now log in.'
+            });
+            // res.status(200).send({ user: user.id });
           });
-          // res.status(200).send({ user: user.id });
-        });
-      })
+        })
+      });
     }
     else {
       res.json({
