@@ -3,115 +3,115 @@ import PropTypes from 'prop-types';
 import {
   Item,
   Input,
-  Icon,
   Label,
 } from 'native-base';
 import {
   View,
-  StyleSheet
 } from 'react-native';
 import {
   email,
   alphaNumeric,
   onlyNumber,
-  passMatch
+  passMatch,
 } from '../utils/validations';
 import InputError from './inputError';
 
-var text1='';
-var text2='';
+export let text1 = '';
+export let text2 = '';
 
 export default class InputField extends Component {
-  constructor(props){
+  static propTypes = {
+    label: PropTypes.string,
+    secure: PropTypes.bool,
+    keyboard: PropTypes.string,
+    type: PropTypes.string,
+    blur: PropTypes.func,
+  }
+
+  static defaultProps = {
+    label: null,
+    secure: null,
+    keyboard: null,
+    type: null,
+    blur: null,
+  }
+
+  constructor(props) {
     super(props);
     this.state = {
       success: false,
       error: false,
-      icon: 'checkmark-circle',
       valid: false,
       errorVisible: false,
       errorMessage: '',
-      value: ''
-    }
-  }
-
-  static propTypes = {
-    label : PropTypes.string,
-    secure : PropTypes.bool,
-    keyboard : PropTypes.string
+      value: '',
+    };
   }
 
   clear = () => {
     this.setState({
       success: false,
       error: false,
-      icon: 'checkmark-circle',
       valid: false,
       errorVisible: false,
       errorMessage: '',
-      value: ''
-    })
+      value: '',
+    });
   }
 
   handleChange = (text) => {
     const { type } = this.props;
     let valid;
-    if (type == 'email' ) {
+    if (type === 'email') {
       valid = email(text);
-    }
-    else if (type == 'text') {
+    } else if (type === 'text') {
       valid = alphaNumeric(text);
-    }
-    else if (type == 'number') {
+    } else if (type === 'number') {
       valid = onlyNumber(text);
-    }
-    else if (type == 'password' || type== 'cPassword'){
-      if (type == 'password'){
-        text1 = text;
-        valid = true;
-      }
-      else {
-        text2 = text;
-        valid = passMatch(text1, text2);
-      }
-      console.log("valid:",valid);
-      console.log("text1:",text1);
-      console.log("text2:",text2);
-    }
-    else {
+    } else if (type === 'password') {
+      text1 = text;
+    } else if (type === 'cPassword') {
+      text2 = text;
+      valid = passMatch(text1, text2);
+    } else {
       valid = true;
     }
     this.validate(text, valid, type);
   }
 
   validate = (text, valid, type) => {
-    let msg, visible, success, error, icon;
-    if (valid == false) {
-      if (text.length == 0) {
+    let msg;
+    let visible;
+    let success;
+    let error;
+    if (valid === false && type !== 'password' && type !== 'cPassword') {
+      if (text.length === 0) {
         msg = 'Required field';
-      }
-      else if (type == 'cPassword'){
-        msg = 'Passwords do not match'
-      }
-      else if (type== 'password'){
-        msg = 'Passwords do not match'
-      }
-      else {
+      } else {
         msg = 'Invalid';
       }
       visible = true;
       error = true;
-      icon = 'close-circle';
       success = false;
-    }
-    else if (valid == true && type == 'number' && text.length > 10) {
+    } else if (type === 'password' || type === 'cPassword') {
+      if (valid === false) {
+        msg = 'Passwords do not match';
+        visible = true;
+        error = true;
+        success = false;
+      } else {
+        msg = '';
+        visible = false;
+        error = false;
+        success = true;
+      }
+    } else if (valid === true && type === 'number' && text.length > 10) {
       msg = 'Limit is only upto 10 digits';
       visible = true;
       error = true;
       // icon = 'close-circle';
       success = false;
-    }
-    else {
+    } else {
       success = true;
       // icon = 'checkmark-circle';
       visible = false;
@@ -119,28 +119,29 @@ export default class InputField extends Component {
       error = false;
     }
     this.setState({
-      success: success,
-      error: error,
-      icon: icon,
-      valid: valid,
+      success,
+      error,
+      valid,
       errorVisible: visible,
       errorMessage: msg,
-      value: text
+      value: text,
     });
   }
 
-  render(){
-    return(
-      <View style={styles.input}>
+
+  render() {
+    return (
+      <View>
         <Item
           floatingLabel
           success={this.state.success}
-          error={this.state.error}>
+          error={this.state.error}
+        >
           <Label>{this.props.label}</Label>
           <Input
             secureTextEntry={this.props.secure}
-            onChangeText={(text) => this.handleChange(text)}
-            onBlur={this.handleBlur}
+            onChangeText={text => this.handleChange(text)}
+            onBlur={this.props.blur}
             value={this.state.value}
             keyboardType={this.props.keyboard}
           />
@@ -150,13 +151,6 @@ export default class InputField extends Component {
           errorMessage={this.state.errorMessage}
         />
       </View>
-    )
+    );
   }
 }
-
-const styles = StyleSheet.create({
-  // input: {
-  //   marginTop: 15,
-  //   padding: 10
-  // },
-})

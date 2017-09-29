@@ -47,6 +47,7 @@
 		EEF892A0480C4DF289EEB3AB /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F8752C3764284AD5B6EB1DD8 /* Octicons.ttf */; };
 		EFECE9E674B147E4BF116EE9 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A4A7F0F289F439EA26CBAFA /* Zocial.ttf */; };
 		1C391AFB99F74681992E1589 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5817F821425C4941B4746591 /* libRNFetchBlob.a */; };
+		CC2518B815E84719BFBE732A /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D5DBB0FD254947BC8D001405 /* libSplashScreen.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -330,6 +331,8 @@
 		F8752C3764284AD5B6EB1DD8 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/native-base/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		59F8CA2B7B8542D2A52AD488 /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; name = "RNFetchBlob.xcodeproj"; path = "../node_modules/react-native-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		5817F821425C4941B4746591 /* libRNFetchBlob.a */ = {isa = PBXFileReference; name = "libRNFetchBlob.a"; path = "libRNFetchBlob.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		CE63E99542C74F2182560FEE /* SplashScreen.xcodeproj */ = {isa = PBXFileReference; name = "SplashScreen.xcodeproj"; path = "../node_modules/react-native-splash-screen/ios/SplashScreen.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		D5DBB0FD254947BC8D001405 /* libSplashScreen.a */ = {isa = PBXFileReference; name = "libSplashScreen.a"; path = "libSplashScreen.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -351,6 +354,7 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				1C391AFB99F74681992E1589 /* libRNFetchBlob.a in Frameworks */,
+				CC2518B815E84719BFBE732A /* libSplashScreen.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -554,6 +558,7 @@
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				2B5743BAB29B479DACCEA01A /* RNFS.xcodeproj */,
 				59F8CA2B7B8542D2A52AD488 /* RNFetchBlob.xcodeproj */,
+				CE63E99542C74F2182560FEE /* SplashScreen.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1086,6 +1091,7 @@
 					"$(SRCROOT)/../node_modules/react-native-toggle/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 				);
 				INFOPLIST_FILE = reacNativeDemoApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1099,6 +1105,7 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/reacNativeDemoApp\"",
 					"\"$(SRCROOT)/reacNativeDemoApp\"",
 				);
 			};
@@ -1118,6 +1125,7 @@
 					"$(SRCROOT)/../node_modules/react-native-toggle/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 				);
 				INFOPLIST_FILE = reacNativeDemoApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1131,6 +1139,7 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/reacNativeDemoApp\"",
 					"\"$(SRCROOT)/reacNativeDemoApp\"",
 				);
 			};
@@ -1155,6 +1164,7 @@
 					"$(SRCROOT)/../node_modules/react-native-toggle/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 				);
 				INFOPLIST_FILE = "reacNativeDemoApp-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1197,6 +1207,7 @@
 					"$(SRCROOT)/../node_modules/react-native-toggle/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
 				);
 				INFOPLIST_FILE = "reacNativeDemoApp-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

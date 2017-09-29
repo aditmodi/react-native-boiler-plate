@@ -1,6 +1,10 @@
 export const alphaNumeric = (value) => {
-  var reg = /^[a-z0-9]+$/i;
-  if(reg.test(value) && value.length != 0){
+  var reg1 = /^[a-z0-9]+$/i;
+  var reg2 = /^[0-9]+$/i;
+  if(reg1.test(value) && value.length != 0){
+    if (reg2.test(value)) {
+      return false
+    }
     return true
   }else {
     return false

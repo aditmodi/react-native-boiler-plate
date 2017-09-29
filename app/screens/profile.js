@@ -1,29 +1,28 @@
 import React, { Component } from 'react';
 import {
   Button,
-  Text
+  Text,
 } from 'native-base';
 import {
   View,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 import HeaderComponent from '../components/headerComponent';
 import CameraScreen from './camera';
 
 export default class ProfileScreen extends Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
   }
 
-  render(){
+  render() {
     const { navigate } = this.props.navigation;
-    return(
+    return (
       <View>
         <HeaderComponent
-          leftIcon='arrow-back'
+          leftIcon="arrow-back"
           leftPressed={() => navigate('Home')}
-          title='Profile'
+          title="Profile"
         />
         <View style={styles.buttons}>
           <Button success onPress={() => navigate('Camera')}>
@@ -34,7 +33,7 @@ export default class ProfileScreen extends Component {
           </Button>
         </View>
       </View>
-    )
+    );
   }
 }
 
@@ -42,6 +41,6 @@ const styles = StyleSheet.create({
   buttons: {
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'stretch'
-  }
-})
+    alignItems: 'stretch',
+  },
+});

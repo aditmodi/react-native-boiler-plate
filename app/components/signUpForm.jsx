@@ -1,28 +1,27 @@
 import React, { Component } from 'react';
-import InputField from './input';
 import PropTypes from 'prop-types';
 import {
   Button,
   Form,
   Text,
-  Item,
-  Input,
-  Icon,
-  Label
 } from 'native-base';
 import {
   KeyboardAvoidingView,
-  View,
   StyleSheet,
-  ScrollView
+  ScrollView,
 } from 'react-native';
+import InputField from './input';
 import GenderRadio from './genderRadio';
 
-export default class SignUpForm extends Component {
-  constructor(props){
-    super(props);
-  }
+const styles = StyleSheet.create({
+  submitButton: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    marginTop: 30,
+  },
+});
 
+export default class SignUpForm extends Component {
   static propTypes = {
     fname: PropTypes.func,
     lname: PropTypes.func,
@@ -30,38 +29,54 @@ export default class SignUpForm extends Component {
     password: PropTypes.func,
     cPassword: PropTypes.func,
     gender: PropTypes.func,
-    phone: PropTypes.func
+    phone: PropTypes.func,
+    handleBlur: PropTypes.func,
+    submitPressed: PropTypes.func,
   }
 
-  render(){
-    return(
+  static defaultProps = {
+    fname: null,
+    lname: null,
+    email: null,
+    password: null,
+    cPassword: null,
+    gender: null,
+    phone: null,
+    handleBlur: null,
+    submitPressed: null,
+  }
+
+  render() {
+    return (
       <ScrollView>
         <Form>
-          <KeyboardAvoidingView behaviour="padding"  style={styles.Container}>
+          <KeyboardAvoidingView behaviour="padding">
             <InputField
-              type='text'
-              label='First Name'
+              type="text"
+              label="First Name"
               ref={this.props.fname}
             />
             <InputField
-              type='text'
-              label='Last Name'
+              type="text"
+              label="Last Name"
               ref={this.props.lname}
             />
             <InputField
-              type='email'
-              label='Email'
+              type="email"
+              label="Email"
               ref={this.props.email}
             />
             <InputField
-              type='password'
-              label='Password'
+              type="password"
+              label="Password"
+              blur={this.props.handleBlur}
               ref={this.props.password}
               secure
             />
             <InputField
-              type='cPassword'
-              label='Confirm Password'
+              type="cPassword"
+              label="Confirm Password"
+              blur={this.props.handleBlur}
               ref={this.props.cPassword}
               secure
             />
@@ -69,33 +84,19 @@ export default class SignUpForm extends Component {
               ref={this.props.gender}
             />
             <InputField
-              type='number'
-              label='Phone No.'
+              type="number"
+              label="Phone No."
               ref={this.props.phone}
               // keyboard={'numeric'}
             />
             <Button style={styles.submitButton} onPress={this.props.submitPressed}>
-              <Text style={styles.submitText}>Submit</Text>
+              <Text>Submit</Text>
             </Button>
           </KeyboardAvoidingView>
         </Form>
       </ScrollView>
 
 
-
-
-    )
+    );
   }
 }
-
-const styles = StyleSheet.create({
-  Container: {
-    // flex: 1,
-    // backgroundColor: '#ffffff',
-  },
-  submitButton: {
-    flexDirection:'row',
-    alignSelf: 'center',
-    marginTop: 30
-  }
-})

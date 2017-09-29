@@ -11,44 +11,56 @@ import {
   Text,
   Image,
   AsyncStorage,
-  Alert
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
 
-var picturePath;
+let picturePath;
 let pic;
 
 export default class CameraScreen extends Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      path: null
-    }
+      path: null,
+      isLoading: true,
+    };
+  }
+
+  componentDidMount() {
+    this.setState({
+      isLoading: false,
+    });
   }
 
   takePicture = () => {
     const options = {};
-    //options.location = ...
-    this.camera.capture({metadata: options})
+    // options.location = ...
+    this.camera.capture({ metadata: options })
       .then(
-        async(data) => {
+        async (data) => {
           console.log('data:', data);
-          this.setState({path: data.path})
+          this.setState({
+            path: data.path,
+          });
           pic = data;
           picturePath = await RNFS.readFile(data.path, 'base64');
           // picturePath = data.path;
-        }
+        },
       )
-      .then(res => {
+      .then((res) => {
         // console.log(res.json());
       })
       .catch(err => console.error(err));
   }
 
-  storePicture = async() => {
-    console.log("picture path:", picturePath);
-    let hello = AsyncStorage.getItem('email', (err, email) => {
-      console.log("Email", email);
+  storePicture = async () => {
+    this.setState({
+      isLoading: false,
+    });
+    console.log('picture path:', picturePath);
+    const hello = AsyncStorage.getItem('email', (err, email) => {
+      console.log('Email', email);
       if (picturePath) {
         const config = {
           method: 'POST',
@@ -59,23 +71,22 @@ export default class CameraScreen extends Component {
           },
           body: JSON.stringify({
             data: picturePath,
-            email: email
-          })
-        }
+            email,
+          }),
+        };
 
         fetch('http://192.168.1.189:3001/api/addPhoto', config)
-        .then((responseData) => {
-          console.log("this is the response:::",responseData._bodyInit);
-          Alert.alert('Image has been uploaded');
-          this.setState({path:null})
+          .then((responseData) => {
+            console.log('this is the response:::', responseData._bodyInit);
+            Alert.alert('Image has been uploaded');
+            this.setState({ path: null });
           //  ImageStore.addImageFromBase64(responseData._bodyInit, (result) => { console.log("working", result) }, (error) => { console.error(error); });
-        })
-        .catch(err => {
-          console.log("YOYOY:",err);
-        })
+          })
+          .catch((err) => {
+            console.log('YOYOY:', err);
+          });
       }
     });
-
   }
 
   // handlePhoto = () => {
@@ -94,43 +105,42 @@ export default class CameraScreen extends Component {
 
   returnToCamera = () => {
     this.setState({
-      path:null
-    })
+      path: null,
+    });
   }
 
-  renderImage = () => {
-    return(
-      <View style={styles.imageCont}>
-        <Image
-          source={{ uri: this.state.path }}
-          style={styles.image}
-        >
-        <View style={styles.imageButtons1}>
-
-        </View>
+  renderImage = () => (
+    <View style={styles.imageCont}>
+      <Image
+        source={{ uri: this.state.path }}
+        style={styles.image}
+      >
+        <View style={styles.imageButtons1} />
         <View style={styles.imageButtons2}>
-          <Button danger
+          <Button
+            danger
             style={styles.button}
             onPress={this.returnToCamera}
-            >
-            <Icon name='close'/>
+          >
+            <Icon name="close" />
             <Text>Cancel</Text>
           </Button>
-          <Button success
+          <Button
+            success
             style={styles.button}
-            onPress={this.storePicture}>
-            <Icon name='arrow-round-up'/>
+            onPress={this.storePicture}
+          >
+            <Icon name="arrow-round-up" />
             <Text>Upload</Text>
           </Button>
         </View>
-        </Image>
-      </View>
-    )
-  }
+      </Image>
+    </View>
+  )
 
   renderCamera = () => {
     const { navigate } = this.props.navigation;
-    return(
+    return (
       <Camera
         ref={(cam) => {
           this.camera = cam;
@@ -138,34 +148,37 @@ export default class CameraScreen extends Component {
         style={styles.preview}
         aspect={Camera.constants.Aspect.fill}
         captureMode={Camera.constants.CaptureMode.still}
-        captureTarget={Camera.constants.CaptureTarget.disk}>
+        captureTarget={Camera.constants.CaptureTarget.disk}
+      >
         <View style={styles.iconContainer}>
-          <Icon dark
-            name='arrow-back'
+          <Icon
+            dark
+            name="arrow-back"
             style={styles.iconCam}
             onPress={() => navigate('Profile')}
           />
           <Icon
-            name='radio-button-on'
+            name="radio-button-on"
             style={styles.iconCapture}
-            onPress={this.takePicture}/>
+            onPress={this.takePicture}
+          />
           <Icon
-            name='arrow-forward'
+            name="arrow-forward"
             style={styles.iconCam}
             onPress={() => navigate('Images')}
-            />
+          />
         </View>
       </Camera>
-    )
+    );
   }
 
-  render(){
+  render() {
     const { navigate } = this.props.navigation;
-    return(
+    return (
       <View style={styles.container}>
-        {this.state.path ? this.renderImage() : this.renderCamera()}
+        {this.state.isLoading ? <ActivityIndicator style={{ padding: 20 }} /> : this.state.path ? this.renderImage() : this.renderCamera()}
       </View>
-    )
+    );
   }
 }
 
@@ -174,16 +187,16 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
   },
-  imageCont:{
-    flex:1,
+  imageCont: {
+    flex: 1,
   },
-  image:{
-    flex:1
+  image: {
+    flex: 1,
   },
   preview: {
     flex: 1,
     justifyContent: 'flex-end',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   capture: {
     flex: 0,
@@ -191,32 +204,32 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     color: '#000',
     padding: 10,
-    margin: 40
+    margin: 40,
   },
   iconContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    alignItems: 'stretch'
+    alignItems: 'stretch',
   },
   iconCam: {
     padding: 20,
     color: '#ffffff',
     marginTop: 20,
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
     // backgroundColor: '#ffffff'
   },
   iconCapture: {
     padding: 20,
     color: '#ffffff',
     fontSize: 70,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   backarrow: {
     alignSelf: 'flex-start',
   },
   imageButtons1: {
     justifyContent: 'center',
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
   },
   imageButtons2: {
     flexDirection: 'row',
@@ -225,6 +238,6 @@ const styles = StyleSheet.create({
   },
   button: {
     padding: 20,
-    margin: 10
-  }
+    margin: 10,
+  },
 });
