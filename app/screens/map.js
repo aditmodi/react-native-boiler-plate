@@ -6,7 +6,20 @@ import {
   Text
 } from 'react-native';
 import { BackHandler } from 'react-native';
+import {
+  Header,
+  Item,
+  Input,
+  Icon,
+  Right,
+  Content,
+  Container,
+  Button
+} from 'native-base';
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
+import Geocoder from 'react-native-geocoding';
+
+let place;
 
 export default class MapScreen extends Component {
   constructor(props){
@@ -14,7 +27,8 @@ export default class MapScreen extends Component {
     this.state = {
       mapRegion: null,
       lastLat: null,
-      lastLong: null
+      lastLong: null,
+      value: null
     }
   }
 
@@ -40,10 +54,11 @@ export default class MapScreen extends Component {
         latitude:       position.coords.latitude,
         longitude:      position.coords.longitude,
         latitudeDelta:  0.00922*1.5,
-        longitudeDelta: 0.00421*1.5
+        longitudeDelta: 0.00421*1.5,
       }
       this.onRegionChange(region, region.latitude, region.longitude);
     });
+
   }
 
   onRegionChange = (region, lastLat, lastLong) => {
@@ -58,10 +73,45 @@ export default class MapScreen extends Component {
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchID);
   }
+  getCoord = () => {
+    console.log("WORKING");
+    console.log("hasdhjsadhj",this.place.state);
+    Geocoder.setApiKey(' AIzaSyCZj_5POs51Xxr6IYFvIfGp1DiPzEl0WVk ');
+    Geocoder.getFromLocation("Kashmere Gate, Delhi").then(
+      json => {
+        var location = json.results[0].geometry.location;
+        // alert(location.lat + ", " + location.lng);
+        let region = {
+          latitude:       location.lat,
+          longitude:      location.lng,
+          latitudeDelta:  0.00922*1.5,
+          longitudeDelta: 0.00421*1.5,
+        }
+        this.onRegionChange(region, region.latitude, region.longitude);
+      },
+      error => {
+        alert(error);
+      }
+    );
+  }
 
   render() {
     return (
       <View style={{flex: 1}}>
+        <Container style={styles.header}>
+          <Header searchBar rounded>
+            <Item>
+              <Input placeholder="Search"
+                ref={(input) => {this.place = input;}}
+              />
+              <Button>
+                <Icon name="ios-search"
+                  onPress={this.getCoord}
+                />
+              </Button>
+            </Item>
+          </Header>
+        </Container>
         <MapView
           style={styles.map}
           region={this.state.mapRegion}
@@ -87,7 +137,14 @@ export default class MapScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+  header:{
+    height: 50
+  },
   map: {
     ...StyleSheet.absoluteFillObject,
+    top: 50,
+  },
+  header: {
+    backgroundColor: '#ffffff'
   }
 });
