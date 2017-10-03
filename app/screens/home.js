@@ -12,7 +12,6 @@ import Menu from '../components/sideBar';
 import SideMenu from 'react-native-side-menu'; // SideMenu component for react-native
 import HomeContent from '../components/homeContent'; // Content of home page
 import HeaderComponent from '../components/headerComponent';
-import ProtectedView from './ProtectedView'; // to access the protected content
 import LoginForm from '../components/loginForm'; // Form with email and password
 // import SplashScreen from 'react-native-splash-screen';
 let name;
