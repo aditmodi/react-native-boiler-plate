@@ -5,6 +5,8 @@ import {
   View,
   Text
 } from 'react-native';
+import { BackHandler } from 'react-native';
+import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
 
 export default class MapScreen extends Component {
   constructor(props){
@@ -17,6 +19,22 @@ export default class MapScreen extends Component {
   }
 
   componentDidMount() {
+    LocationServicesDialogBox.checkLocationServicesIsEnabled({
+        message: "<h2>Use Location ?</h2>This app wants to change your device settings:<br/><br/>Use GPS, Wi-Fi, and cell network for location<br/><br/><a href='#'>Learn more</a>",
+        ok: "YES",
+        cancel: "NO",
+        enableHighAccuracy: true, // true => GPS AND NETWORK PROVIDER, false => ONLY GPS PROVIDER
+        showDialog: true // false => Opens the Location access page directly
+    }).then(function(success) {
+        console.log(success); // success => {alreadyEnabled: false, enabled: true, status: "enabled"}
+
+    }).catch((error) => {
+        console.log(error.message); // error.message => "disabled"
+    });
+
+    BackHandler.addEventListener('hardwareBackPress', () => {
+       LocationServicesDialogBox.forceCloseDialog();
+    });
     this.watchID = navigator.geolocation.watchPosition((position) => {
       let region = {
         latitude:       position.coords.latitude,
@@ -54,7 +72,8 @@ export default class MapScreen extends Component {
             coordinate={{
               latitude: (this.state.lastLat + 0.00050) || -36.82339,
               longitude: (this.state.lastLong + 0.00050) || -73.03569,
-            }}>
+            }}
+            image={require('../../android/app/src/main/assets/pin.png')}>
             <View>
               <Text style={{color: '#000'}}>
                 { this.state.lastLong } / { this.state.lastLat }
