@@ -31,6 +31,9 @@ export default class ProfileScreen extends Component {
           <Button success onPress={() => navigate('Images')}>
             <Text>Show images</Text>
           </Button>
+          <Button success onPress={() => navigate('Maps')}>
+            <Text>Open map</Text>
+          </Button>
         </View>
       </View>
     );

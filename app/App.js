@@ -4,6 +4,7 @@ import HomeScreen from './screens/home';
 import ProfileScreen from './screens/profile';
 import CameraScreen from './screens/camera';
 import ImageScreen from './screens/images';
+import MapScreen from './screens/map';
 // import LayoutWithoutHeader from './layout/layoutWithoutHeader';
 // import LayoutWithHeader from './layout/layoutWithHeader';
 
@@ -13,6 +14,7 @@ const App = StackNavigator({
   Profile: { screen: ProfileScreen, navigationOptions: { header: null } },
   Camera: { screen: CameraScreen, navigationOptions: { header: null } },
   Images: { screen: ImageScreen, navigationOptions: { header: null } },
+  Maps: { screen: MapScreen, navigationOptions: { header: null } },
 });
 
 // const App = StackNavigator({
