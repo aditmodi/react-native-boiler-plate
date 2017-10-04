@@ -12,7 +12,7 @@ var userSchema = new Schema({
   },
   password : Buffer,
   gender : String,
-  phone : String
+  phone : Number
 });
 
 userSchema.plugin(passportLocalMongoose, {
