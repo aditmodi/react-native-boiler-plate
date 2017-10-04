@@ -42,8 +42,9 @@ export default class ProfileScreen extends Component {
 
 const styles = StyleSheet.create({
   buttons: {
+    flex:1,
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'stretch',
   },
 });

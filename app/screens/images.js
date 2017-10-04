@@ -73,18 +73,18 @@ export default class ImageScreen extends Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
+      <ScrollView>
       <View>
         <HeaderComponent
           leftIcon="arrow-back"
           leftPressed={() => navigate('Profile')}
           title="Images"
         />
-        <ScrollView>
           {
             this.state.url.map((item, i) => this.renderImages(item, i))
           }
-        </ScrollView>
       </View>
+    </ScrollView>
     );
   }
 }

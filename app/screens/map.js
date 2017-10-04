@@ -73,11 +73,15 @@ export default class MapScreen extends Component {
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchID);
   }
+
+  handleChange = (text) => {
+    place = text;
+  }
+
   getCoord = () => {
-    console.log("WORKING");
-    console.log("hasdhjsadhj",this.place.state);
+    console.log("hasdhjsadhj", place);
     Geocoder.setApiKey(' AIzaSyCZj_5POs51Xxr6IYFvIfGp1DiPzEl0WVk ');
-    Geocoder.getFromLocation("Kashmere Gate, Delhi").then(
+    Geocoder.getFromLocation(place).then(
       json => {
         var location = json.results[0].geometry.location;
         // alert(location.lat + ", " + location.lng);
@@ -96,15 +100,21 @@ export default class MapScreen extends Component {
   }
 
   render() {
+    const { navigate } = this.props.navigation;
     return (
       <View style={{flex: 1}}>
         <Container style={styles.header}>
           <Header searchBar rounded>
             <Item>
+              <Button transparent
+                onPress={() => navigate('Profile')}
+                >
+                  <Icon name='arrow-back'/>
+                </Button>
               <Input placeholder="Search"
-                ref={(input) => {this.place = input;}}
+                onChangeText={text => this.handleChange(text)}
               />
-              <Button>
+              <Button transparent>
                 <Icon name="ios-search"
                   onPress={this.getCoord}
                 />
@@ -123,7 +133,8 @@ export default class MapScreen extends Component {
               latitude: (this.state.lastLat + 0.00050) || -36.82339,
               longitude: (this.state.lastLong + 0.00050) || -73.03569,
             }}
-            image={require('../../android/app/src/main/assets/pin.png')}>
+            image={require('../../android/app/src/main/assets/pin.png')}
+            >
             <View>
               <Text style={{color: '#000'}}>
                 { this.state.lastLong } / { this.state.lastLat }

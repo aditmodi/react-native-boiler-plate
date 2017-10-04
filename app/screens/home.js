@@ -23,8 +23,7 @@ export default class HomeScreen extends Component {
     this.state = {
       menuOpen: false,
       token: null,
-      animating: true,
-      isLoading: true,
+
     };
   }
 
@@ -94,7 +93,7 @@ export default class HomeScreen extends Component {
         <HeaderComponent
           leftIcon="menu"
           leftPressed={this.menuPressed}
-          title={`Welcome ${name}`}
+          title={name?`Welcome ${name}`:`Welcome`}
         />
         <HomeContent menuPress={this.menuPressed} />
       </SideMenu>
@@ -162,7 +161,7 @@ export default class HomeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.state.isLoading ? <ActivityIndicator style={{ padding: 20 }} /> : this.state.token ? this.renderHome() : this.renderSignIn()}
+        {this.state.token ? this.renderHome() : this.renderSignIn()}
       </View>
     );
   }
