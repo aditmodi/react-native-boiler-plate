@@ -3,7 +3,9 @@ import MapView from 'react-native-maps';
 import {
   StyleSheet,
   View,
-  Text
+  Text,
+  AsyncStorage,
+  Alert
 } from 'react-native';
 import { BackHandler } from 'react-native';
 import {
@@ -28,7 +30,8 @@ export default class MapScreen extends Component {
       mapRegion: null,
       lastLat: null,
       lastLong: null,
-      value: null
+      label: null,
+      visible: false
     }
   }
 
@@ -99,9 +102,62 @@ export default class MapScreen extends Component {
     );
   }
 
-  render() {
-    const { navigate } = this.props.navigation;
-    return (
+
+
+  saveLabel = async() => {
+    let email = await AsyncStorage.getItem('email');
+    fetch('http://192.168.1.189:3001/api/setLabel', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        email,
+        label: 'Home',
+        latitude: this.state.lastLat,
+        longitude: this.state.lastLong
+      })
+    })
+    .then((response) => Alert.alert('Label saved'))
+    .catch((e) => {
+      console.log(e);   //triggers when there is server issue
+    });
+    this.setState({
+      visible: false
+    });
+  }
+
+  labelPressed = () => {
+    console.log("PRESSED");
+    this.saveLabel();
+  }
+
+  // renderMenu = () => {
+  //     return(
+  //       <View>
+  //         <Button>
+  //           <Text>Set Home?</Text>
+  //         </Button>
+  //       </View>
+  //     )
+  // }
+  // renderLabel = () => {
+  //   return(
+  //     <Item style={styles.inputLabel}>
+  //       <Input
+  //         placeholder="Try home"
+  //         onChangeText={text => this.handleLabelChange(text)}
+  //       />
+  //       <Button onPress={this.saveLabel}>
+  //         <Text>Set</Text>
+  //       </Button>
+  //     </Item>
+  //   )
+  // }
+
+  renderMap = () => {
+    return(
       <View style={{flex: 1}}>
         <Container style={styles.header}>
           <Header searchBar rounded>
@@ -111,37 +167,53 @@ export default class MapScreen extends Component {
                 >
                   <Icon name='arrow-back'/>
                 </Button>
-              <Input placeholder="Search"
-                onChangeText={text => this.handleChange(text)}
-              />
-              <Button transparent>
-                <Icon name="ios-search"
-                  onPress={this.getCoord}
+                <Input placeholder="Search"
+                  onChangeText={text => this.handleChange(text)}
                 />
-              </Button>
-            </Item>
-          </Header>
-        </Container>
-        <MapView
-          style={styles.map}
-          region={this.state.mapRegion}
-          showsUserLocation={true}
-          followUserLocation={true}
-          onRegionChange={this.onRegionChange.bind(this)}>
-          <MapView.Marker
-            coordinate={{
-              latitude: (this.state.lastLat + 0.00050) || -36.82339,
-              longitude: (this.state.lastLong + 0.00050) || -73.03569,
-            }}
-            image={require('../../android/app/src/main/assets/pin.png')}
-            >
-            <View>
-              <Text style={{color: '#000'}}>
-                { this.state.lastLong } / { this.state.lastLat }
-              </Text>
-            </View>
-          </MapView.Marker>
-        </MapView>
+                <Button transparent>
+                  <Icon name="ios-search"
+                    onPress={this.getCoord}
+                  />
+                </Button>
+                <Button transparent>
+                  <Icon name="more"
+                    onPress={this.openMore}
+                  />
+                  <View></View>
+                </Button>
+              </Item>
+            </Header>
+          </Container>
+          <MapView
+            style={styles.map}
+            region={this.state.mapRegion}
+            showsUserLocation={true}
+            followUserLocation={true}
+            onRegionChange={this.onRegionChange.bind(this)}>
+            <MapView.Marker
+              coordinate={{
+                latitude: (this.state.lastLat + 0.00050) || -36.82339,
+                longitude: (this.state.lastLong + 0.00050) || -73.03569,
+              }}
+              image={require('../../android/app/src/main/assets/pin.png')}
+              >
+                <MapView.Callout onPress={this.labelPressed}>
+                  <Button>
+                    <Text>Set Home?</Text>
+                  </Button>
+                </MapView.Callout>
+              </MapView.Marker>
+            </MapView>
+          </View>
+    )
+  }
+
+
+  render() {
+    const { navigate } = this.props.navigation;
+    return (
+      <View style={{flex: 1}}>
+        {this.renderMap()}
       </View>
     );
   }
@@ -157,5 +229,13 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#ffffff'
+  },
+  bubble: {
+    backgroundColor: '#ffffff',
+    height: 100,
+    width: 100
+  },
+  inputLabel: {
+    flex: 1
   }
 });
