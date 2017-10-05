@@ -13,9 +13,8 @@ import SideMenu from 'react-native-side-menu'; // SideMenu component for react-n
 import HomeContent from '../components/homeContent'; // Content of home page
 import HeaderComponent from '../components/headerComponent';
 import LoginForm from '../components/loginForm'; // Form with email and password
-// import SplashScreen from 'react-native-splash-screen';
+
 let name;
-// import { name } from './signIn';
 
 export default class HomeScreen extends Component {
   constructor(props) {
@@ -23,7 +22,7 @@ export default class HomeScreen extends Component {
     this.state = {
       menuOpen: false,
       token: null,
-
+      isLoading: true
     };
   }
 
@@ -41,16 +40,17 @@ export default class HomeScreen extends Component {
     if (checkToken != null) {
       this.setState({
         token: checkToken,
+        isLoading: false
       });
+    }
+    else {
+      this.setState({
+        isLoading: false
+      })
     }
     // SplashScreen.hide();
   }
 
-  componentDidMount() {
-    this.setState({
-      isLoading: false,
-    });
-  }
 
   handleLogout = async () => {
     const { navigate } = this.props.navigation;
@@ -66,7 +66,7 @@ export default class HomeScreen extends Component {
         .then((response) => {
           response.json();
           AsyncStorage.removeItem('jwt'); // remove the token from the local storage
-          AsyncStorage.removeItem('email');
+          AsyncStorage.removeItem('id');
           AsyncStorage.removeItem('name');
           this.setState({
             token: null,
@@ -78,6 +78,12 @@ export default class HomeScreen extends Component {
     });
     Alert.alert('You have been logged out.');
     navigate('SignIn');
+  }
+
+  renderBlank = () => {
+    return(
+      <View></View>
+    )
   }
 
   renderHome = () => {
@@ -100,6 +106,7 @@ export default class HomeScreen extends Component {
     );
   }
 
+
   renderSignIn = () => {
     const { navigate } = this.props.navigation; // to navigate to other pages
     return (
@@ -110,7 +117,8 @@ export default class HomeScreen extends Component {
           () => {
             const lengthEmail = this.loginEmail.state.value.length; // calculating length as to see if the fields arent empty
             const lengthPass = this.loginPass.state.value.length;
-            if (lengthEmail != 0 || lengthPass != 0) { // when fields are filled
+            const validEmail = this.loginEmail.state.valid
+            if (lengthEmail != 0 && lengthPass != 0 && validEmail == true) { // when fields are filled
               fetch('http://192.168.1.189:3001/api/login', {
                 method: 'POST',
                 headers: {
@@ -128,7 +136,7 @@ export default class HomeScreen extends Component {
                   if (res.token) {
                     try {
                       await AsyncStorage.setItem('jwt', res.token); // token is stored
-                      await AsyncStorage.setItem('email', this.loginEmail.state.value); // email is stored
+                      await AsyncStorage.setItem('id', res.id); // email is stored
                       await AsyncStorage.setItem('name', res.name); // name is stored
                       Alert.alert(`Welcome ${res.name}`);
                       // Redirect to home screen
@@ -149,6 +157,21 @@ export default class HomeScreen extends Component {
                 })
                 .done();
             } else {
+              this.loginEmail.setState({
+                success: false,
+                error: true,
+                valid: this.loginEmail.state.valid,
+                errorVisible: true,
+                errorMessage: this.loginEmail.state.value ? 'Invalid' : 'Required field',
+                value: this.loginEmail.state.value
+              });
+              this.loginPass.setState({
+                success: false,
+                error: true,
+                errorVisible: true,
+                errorMessage: 'Required field',
+                value: this.loginPass.state.value
+              });
               Alert.alert('Fill the login form'); // when there is error in the fields from the client side
             }
           }
@@ -161,7 +184,7 @@ export default class HomeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.state.token ? this.renderHome() : this.renderSignIn()}
+        {this.state.isLoading === true ? this.renderBlank() :this.state.token ? this.renderHome() : this.renderSignIn()}
       </View>
     );
   }

@@ -59,8 +59,8 @@ export default class CameraScreen extends Component {
       isLoading: false,
     });
     console.log('picture path:', picturePath);
-    const hello = AsyncStorage.getItem('email', (err, email) => {
-      console.log('Email', email);
+    const hello = AsyncStorage.getItem('id', (err, id) => {
+      console.log('id', id);
       if (picturePath) {
         const config = {
           method: 'POST',
@@ -71,7 +71,7 @@ export default class CameraScreen extends Component {
           },
           body: JSON.stringify({
             data: picturePath,
-            email,
+            id,
           }),
         };
 

@@ -30,7 +30,7 @@ export const email = (value) => {
 }
 
 export const passMatch = (value1, value2) => {
-  if(value1 === value2){
+  if(value1 === value2 && value1.length !== 0){
     return true;
   }
   else{

@@ -30,10 +30,14 @@ export default class ImageScreen extends Component {
   }
 
   async componentWillMount() {
-    const hello = AsyncStorage.getItem('email', (err, email) => {
-      console.log('this is the email we get on client side--->', email);
-      fetch(`http://192.168.1.189:3001/api/getPhoto/${email}`, {
+    const token = AsyncStorage.getItem('jwt');
+    const hello = AsyncStorage.getItem('id', (err, id) => {
+      console.log('this is the email we get on client side--->', id);
+      fetch(`http://192.168.1.189:3001/api/getPhoto/${id}`, {
         method: 'GET',
+        headers: {
+          token: token
+        }
       })
         .then(response => response.json())
         .then((res) => {

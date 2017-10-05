@@ -105,7 +105,7 @@ export default class MapScreen extends Component {
 
 
   saveLabel = async() => {
-    let email = await AsyncStorage.getItem('email');
+    let id = await AsyncStorage.getItem('id');
     fetch('http://192.168.1.189:3001/api/setLabel', {
       method: 'POST',
       headers: {
@@ -113,7 +113,7 @@ export default class MapScreen extends Component {
         'Accept': 'application/json'
       },
       body: JSON.stringify({
-        email,
+        id,
         label: 'Home',
         latitude: this.state.lastLat,
         longitude: this.state.lastLong

@@ -19,6 +19,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 30,
   },
+  // signUp: {
+  //   bottom: 20
+  // }
 });
 
 export default class SignUpForm extends Component {
@@ -48,7 +51,7 @@ export default class SignUpForm extends Component {
 
   render() {
     return (
-      <ScrollView>
+      <ScrollView style={styles.signUp}>
         <Form>
           <KeyboardAvoidingView behaviour="padding">
             <InputField
@@ -95,7 +98,6 @@ export default class SignUpForm extends Component {
           </KeyboardAvoidingView>
         </Form>
       </ScrollView>
-
 
     );
   }
