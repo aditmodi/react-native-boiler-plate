@@ -1,7 +1,9 @@
 {
   "scripts": {
-    "babel": "babel --presets react ./*.js",
-    "start": "export CLOUDINARY_URL=cloudinary://611966755818566:5IRHcHHOyHBMB6M6kDWPj3uvTnc@nodexperts && nodemon server.js"
+    "build": "babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
+    "start": "npm run build && export CLOUDINARY_URL=cloudinary://611966755818566:5IRHcHHOyHBMB6M6kDWPj3uvTnc@nodexperts && nodemon server.js",
+    "watch": "babel -w src/ -d dist/",
+    "serve": "babel -w src/ -d dist/ | nodemon --watch dist"
   },
   "dependencies": {
     "bcrypt": "^1.0.3",
@@ -12,23 +14,22 @@
     "express": "^4.15.4",
     "express-passport-logout": "^0.1.0",
     "express-session": "^1.15.6",
-    "jsonwebtoken": "^7.4.2",
+    "jsonwebtoken": "^8.0.1",
     "mongoose": "^4.11.9",
-    "multer": "^1.3.0",
     "passport": "^0.4.0",
     "passport-jwt": "^3.0.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^4.2.1",
-    "react": "16.0.0-alpha.12",
     "serve-static": "^1.13.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-react-native": "^4.0.0"
+    "babel-preset-stage-0": "^6.24.1",
+    "coffee-loader": "^0.8.0"
   }
 }

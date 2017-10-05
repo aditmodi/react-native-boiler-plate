@@ -1,6 +1,8 @@
-var express = require('express');
-var route = express.Router();
-var ctrl = require('../controller/labelCtrl');
+import express from 'express';
+var router = express.Router();
+import {
+  addLabel
+} from'../controller/labelCtrl';
 
-route.post('/setLabel', ctrl.addLabel);
-module.exports = route;
+router.post('/setLabel', addLabel);
+export {router};

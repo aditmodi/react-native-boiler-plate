@@ -4,15 +4,34 @@ var passportLocalMongoose = require('passport-local-mongoose');
 
 //define the Schema
 var userSchema = new Schema({
-  firstName : String,
-  lastName : String,
-  email : {
-    type : String,
-    unique : true
+  firstName: {
+    type: String,
+    required: true,
+    match: /^[a-z0-9]+$/i
   },
-  password : Buffer,
-  gender : String,
-  phone : Number
+  lastName: {
+    type: String,
+    required: true,
+    match: /^[a-z0-9]+$/i
+  },
+  email: {
+    type: String,
+    lowercase: true,
+    unique: true,
+    match: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  },
+  password: {
+    type: Buffer,
+    required: true
+  },
+  gender: {
+    type: String,
+    required: true
+  },
+  phone: {
+    type: Number,
+    required: true
+  }
 });
 
 userSchema.plugin(passportLocalMongoose, {
@@ -21,4 +40,4 @@ userSchema.plugin(passportLocalMongoose, {
 });
 
 //Export mongoose model
-module.exports = mongoose.model('Users', userSchema);
+export default mongoose.model('Users', userSchema);

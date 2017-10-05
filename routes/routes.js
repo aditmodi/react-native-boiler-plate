@@ -1,13 +1,20 @@
-let express  = require('express');
+import express from 'express';
 let router = express.Router();
-let ctrl = require('../controller/controller');
+import {
+  login,
+  check,
+  register,
+  protect,
+  logOut,
+  authUser
+} from '../controller/controller';
 
-router.get('/', ctrl.check);
-router.get('/logout', ctrl.authUser, ctrl.logOut);
-router.get('/protected', ctrl.protected);
-router.post('/register', ctrl.register);
-router.post('/login', ctrl.login);
-module.exports = router;
+router.get('/', check);
+router.get('/logout', authUser, logOut);
+router.get('/protected', protect);
+router.post('/register', register);
+router.post('/login', login);
+export {router};
 
 
 

@@ -1,10 +1,10 @@
-var express = require('express');
-var route = express.Router();
-var ctrl = require('../controller/imageCtrl');
+import express from 'express';
+var router = express.Router();
+import {
+  addImages,
+  getImages
+} from '../controller/imageCtrl';
 
-// route.post('/addPhoto', function (req, res){ctrl.addImage});
-  route.post('/addPhoto',
-  //  upload.fields([{ name: 'photo', maxCount: 1 }]),
-   ctrl.addImages);
-  route.get('/getPhoto/:email', ctrl.getImages);
-module.exports = route;
+  router.post('/addPhoto', addImages);
+  router.get('/getPhoto/:userId', getImages);
+export {router};

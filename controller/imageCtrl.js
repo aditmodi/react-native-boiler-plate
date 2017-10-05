@@ -1,19 +1,16 @@
-const ImageDB = require('../models/images');
-const fs = require('fs');
-var cloudinary = require('cloudinary');
+import ImageDB from '../models/images';
+import User from '../models/user';
+import fs from 'fs';
+import cloudinary from 'cloudinary';
 
-exports.addImages = function(req, res){
-  console.log("It comes here: ..... ", req.body.email);
+export const addImages = (req, res) => {
   var newImg = new ImageDB();
-  cloudinary.uploader.upload(
-     `data:image/jpg;base64,${req.body.data}`,
-    // req.body.photo,
-    function(result){
+  cloudinary.uploader.upload(`data:image/jpg;base64,${req.body.data}`, (result) => {
     console.log("this is the url:", result);
-    newImg.email = req.body.email;
     newImg.img.url = result.secure_url;
+    newImg.userId = req.body.id;
     newImg.date = new Date();
-    newImg.save(function(err){
+    newImg.save((err) => {
       if(err){
         return res.send(err);
       }
@@ -25,19 +22,21 @@ exports.addImages = function(req, res){
   })
 }
 
-exports.getImages = function(req, res) {
-  console.log("BODY EMAIL: ", req.params.email);
-  ImageDB.find({email: req.params.email}).sort({date: -1}).exec(function(err, imageUrl) {
-    console.log("IMAGE URL:::", imageUrl);
-    if (err)
+export const getImages = (req, res) => {
+  if(req.headers.token){
+    ImageDB.find({userId: req.params.id}).sort({date: -1}).exec((err, imageUrl) => {
+      console.log("IMAGE URL:::", imageUrl);
+      if (err)
       res.send(err);
-
-    // res.json({
-    //   data : image
-    // });
+      res.json({
+        'status': 'ok',
+        'data': imageUrl
+      })
+    });
+  }
+  else {
     res.json({
-      'status': 'ok',
-      'data': imageUrl
+      message: "Unauthorised user"
     })
-  });
+  }
 }

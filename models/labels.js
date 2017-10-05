@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 var labelSchema = new Schema({
-  email: String,
+  userId: String,
   label: String,
   coord: {
     latitude: Number,
@@ -10,4 +10,4 @@ var labelSchema = new Schema({
   }
 })
 
-module.exports = mongoose.model('Labels', labelSchema);
+export default mongoose.model('Labels', labelSchema);
