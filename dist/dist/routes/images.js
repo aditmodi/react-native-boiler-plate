@@ -1,12 +1,22 @@
 'use strict';
 
-var express = require('express');
-var route = express.Router();
-var ctrl = require('../controller/imageCtrl');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.router = undefined;
 
-// route.post('/addPhoto', function (req, res){ctrl.addImage});
-route.post('/addPhoto',
-//  upload.fields([{ name: 'photo', maxCount: 1 }]),
-ctrl.addImages);
-route.get('/getPhoto/:userId', ctrl.getImages);
-module.exports = route;
+var _express = require('express');
+
+var _express2 = _interopRequireDefault(_express);
+
+var _imageCtrl = require('../controller/imageCtrl');
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+var router = _express2.default.Router();
+
+router.post('/addPhoto', _imageCtrl.addImages);
+router.get('/getPhoto/:userId', _imageCtrl.getImages);
+exports.router = router;
