@@ -162,6 +162,7 @@ export default class MapScreen extends Component {
   // }
 
   renderMap = () => {
+    const { navigate } = this.props.navigation;
     return(
       <View style={{flex: 1}}>
         <Container style={styles.header}>
@@ -215,7 +216,7 @@ export default class MapScreen extends Component {
 
 
   render() {
-    const { navigate } = this.props.navigation;
+
     return (
       <View style={{flex: 1}}>
         {this.renderMap()}

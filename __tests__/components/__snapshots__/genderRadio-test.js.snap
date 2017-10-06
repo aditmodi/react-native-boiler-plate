@@ -1,0 +1,285 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "justifyContent": "flex-start",
+      "marginLeft": 20,
+      "marginTop": 20,
+    }
+  }
+>
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    disabled={false}
+    ellipsizeMode="tail"
+    style={
+      Object {
+        "fontSize": 17,
+      }
+    }
+  >
+    Gender
+  </Text>
+  <View
+    style={
+      Array [
+        undefined,
+        Object {
+          "marginLeft": 50,
+        },
+        Object {
+          "flexDirection": "row",
+        },
+      ]
+    }
+  >
+    <View
+      style={undefined}
+    >
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "center",
+              "alignSelf": "center",
+              "flexDirection": "row",
+              "marginBottom": 5,
+            },
+            undefined,
+            false,
+          ]
+        }
+      >
+        <View
+          style={undefined}
+        >
+          <View
+            accessibilityComponentType={undefined}
+            accessibilityLabel="radioButtonInput0"
+            accessibilityTraits={undefined}
+            accessible={true}
+            collapsable={undefined}
+            hitSlop={undefined}
+            isTVSelectable={true}
+            nativeID={undefined}
+            onLayout={undefined}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "alignItems": "center",
+                "alignSelf": "center",
+                "borderColor": "#2196f3",
+                "borderRadius": 15,
+                "borderWidth": 3,
+                "height": 30,
+                "justifyContent": "center",
+                "opacity": 1,
+                "width": 30,
+              }
+            }
+            testID="radioButtonInputradioButton|0"
+            tvParallaxProperties={undefined}
+          >
+            <View
+              style={
+                Array [
+                  Object {
+                    "borderRadius": 10,
+                  },
+                  Object {
+                    "backgroundColor": "#2196f3",
+                    "height": 20,
+                    "width": 20,
+                  },
+                  Object {
+                    "borderRadius": 10,
+                    "height": 20,
+                    "width": 20,
+                  },
+                  Object {
+                    "backgroundColor": "#2196f3",
+                  },
+                ]
+              }
+            />
+          </View>
+        </View>
+        <View
+          accessibilityComponentType={undefined}
+          accessibilityLabel="radioButtonLabel0"
+          accessibilityTraits={undefined}
+          accessible={true}
+          hitSlop={undefined}
+          nativeID={undefined}
+          onLayout={undefined}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Array [
+              undefined,
+              Object {
+                "alignItems": "center",
+                "alignSelf": "center",
+                "flexDirection": "row",
+              },
+            ]
+          }
+          testID="radioButtonLabelradioButton|0"
+        >
+          <Text
+            accessible={true}
+            allowFontScaling={true}
+            disabled={false}
+            ellipsizeMode="tail"
+            style={
+              Array [
+                Object {
+                  "lineHeight": 20,
+                  "paddingLeft": 10,
+                },
+                false,
+                Object {
+                  "color": "#000",
+                },
+                undefined,
+              ]
+            }
+          >
+            male
+          </Text>
+        </View>
+      </View>
+    </View>
+    <View
+      style={undefined}
+    >
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "center",
+              "alignSelf": "center",
+              "flexDirection": "row",
+              "marginBottom": 5,
+            },
+            undefined,
+            false,
+          ]
+        }
+      >
+        <View
+          style={undefined}
+        >
+          <View
+            accessibilityComponentType={undefined}
+            accessibilityLabel="radioButtonInput1"
+            accessibilityTraits={undefined}
+            accessible={true}
+            collapsable={undefined}
+            hitSlop={undefined}
+            isTVSelectable={true}
+            nativeID={undefined}
+            onLayout={undefined}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "alignItems": "center",
+                "alignSelf": "center",
+                "borderColor": "#2196f3",
+                "borderRadius": 15,
+                "borderWidth": 3,
+                "height": 30,
+                "justifyContent": "center",
+                "opacity": 1,
+                "width": 30,
+              }
+            }
+            testID="radioButtonInputradioButton|1"
+            tvParallaxProperties={undefined}
+          >
+            <View
+              style={
+                Array [
+                  Object {
+                    "borderRadius": 10,
+                  },
+                  false,
+                  false,
+                  false,
+                ]
+              }
+            />
+          </View>
+        </View>
+        <View
+          accessibilityComponentType={undefined}
+          accessibilityLabel="radioButtonLabel1"
+          accessibilityTraits={undefined}
+          accessible={true}
+          hitSlop={undefined}
+          nativeID={undefined}
+          onLayout={undefined}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Array [
+              undefined,
+              Object {
+                "alignItems": "center",
+                "alignSelf": "center",
+                "flexDirection": "row",
+              },
+            ]
+          }
+          testID="radioButtonLabelradioButton|1"
+        >
+          <Text
+            accessible={true}
+            allowFontScaling={true}
+            disabled={false}
+            ellipsizeMode="tail"
+            style={
+              Array [
+                Object {
+                  "lineHeight": 20,
+                  "paddingLeft": 10,
+                },
+                false,
+                Object {
+                  "color": "#000",
+                },
+                undefined,
+              ]
+            }
+          >
+            female
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
+`;

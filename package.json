@@ -32,6 +32,12 @@
 		"react-test-renderer": "16.0.0-alpha.12"
 	},
 	"jest": {
-		"preset": "react-native"
+		"preset": "react-native",
+		"transform": {
+      "^.+\\.js?$": "babel-jest"
+    },
+		"transformIgnorePatterns": [
+      "node_modules/(?!react-native|native-base-shoutem-theme|@shoutem/animation|@shoutem/ui)"
+    ]
 	}
 }
