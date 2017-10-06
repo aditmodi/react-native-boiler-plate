@@ -5,7 +5,8 @@ import {
   View,
   Text,
   AsyncStorage,
-  Alert
+  Alert,
+  Platform
 } from 'react-native';
 import { BackHandler } from 'react-native';
 import {
@@ -36,22 +37,26 @@ export default class MapScreen extends Component {
   }
 
   componentDidMount() {
-    LocationServicesDialogBox.checkLocationServicesIsEnabled({
-        message: "<h2>Use Location ?</h2>This app wants to change your device settings:<br/><br/>Use GPS, Wi-Fi, and cell network for location<br/><br/><a href='#'>Learn more</a>",
-        ok: "YES",
-        cancel: "NO",
-        enableHighAccuracy: true, // true => GPS AND NETWORK PROVIDER, false => ONLY GPS PROVIDER
-        showDialog: true // false => Opens the Location access page directly
-    }).then(function(success) {
-        console.log(success); // success => {alreadyEnabled: false, enabled: true, status: "enabled"}
+    console.log("Platform:", Platform.OS);
+    if(Platform.OS === 'android'){
+      LocationServicesDialogBox.checkLocationServicesIsEnabled({
+          message: "<h2>Use Location ?</h2>This app wants to change your device settings:<br/><br/>Use GPS, Wi-Fi, and cell network for location<br/><br/><a href='#'>Learn more</a>",
+          ok: "YES",
+          cancel: "NO",
+          enableHighAccuracy: true, // true => GPS AND NETWORK PROVIDER, false => ONLY GPS PROVIDER
+          showDialog: true // false => Opens the Location access page directly
+      }).then(function(success) {
+          console.log(success); // success => {alreadyEnabled: false, enabled: true, status: "enabled"}
 
-    }).catch((error) => {
-        console.log(error.message); // error.message => "disabled"
-    });
+      }).catch((error) => {
+          console.log(error.message); // error.message => "disabled"
+      });
 
-    BackHandler.addEventListener('hardwareBackPress', () => {
-       LocationServicesDialogBox.forceCloseDialog();
-    });
+      BackHandler.addEventListener('hardwareBackPress', () => {
+         LocationServicesDialogBox.forceCloseDialog();
+      });
+    }
+
     this.watchID = navigator.geolocation.watchPosition((position) => {
       let region = {
         latitude:       position.coords.latitude,
