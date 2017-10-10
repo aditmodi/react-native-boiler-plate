@@ -110,42 +110,25 @@ export const register = (req, res) => {
 }
 
 
-export const protect = (req, res, next) => {
-  passport.authenticate('jwt', (err, user, info) => {
-    if (err) {
-      // internal server error occurred
-      return next(err);
-    }
-    if (!user) {
-      // no JWT or user found
-      return res.status(401).json({ error: 'Invalid credentials.' });
-    }
-    if (user) {
-// authentication was successful! send user the secret code.
-      return res
-        .status(200)
-        .json({ secret: '123' });
-    }
-  })(req, res, next);
-}
-
 export const logOut = (req, res) => {
   req.logout();
   res.json({status: 'ok'});
 }
 
 export const authUser = (req, res, next) => {
-  console.log(req.headers);
-  console.log(req.headers['token']);
+  console.log("This is the required middleware");
   let token = req.headers['token'];
   // decode token
   if (token != null) {
     // verifies secret and checks exp
     jwt.verify(token, secret, (err, decoded) => {
       if (err) {
+        console.log("token", token);
+        console.log("secret", secret);
         return res.json({ success: false, message: 'Failed to authenticate token.' });
       } else {
-        // if everything is good, save to request for use in other routes
+        // if everything is good, save to request for use in other routes;
+        console.log("Coming here?");
         req.decoded = decoded;
         req.user = decoded;
         return next();
@@ -154,7 +137,6 @@ export const authUser = (req, res, next) => {
   } else {
     // if there is no token
     // return an error
-    console.log("NO ITS HERE");
     return res.status(403).send({
       success: false,
       message: 'No token provided.'

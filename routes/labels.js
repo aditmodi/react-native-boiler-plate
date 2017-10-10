@@ -2,7 +2,10 @@ import express from 'express';
 var router = express.Router();
 import {
   addLabel
-} from'../controller/labelCtrl';
+} from '../controller/labelCtrl';
+import {
+  authUser
+} from '../controller/controller';
 
-router.post('/setLabel', addLabel);
+router.post('/setLabel', authUser, addLabel);
 export {router};

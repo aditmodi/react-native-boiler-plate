@@ -23,6 +23,7 @@ export const addImages = (req, res) => {
 }
 
 export const getImages = (req, res) => {
+  console.log("token:", req.headers);
   if(req.headers.token){
     ImageDB.find({userId: req.params.id}).sort({date: -1}).exec((err, imageUrl) => {
       console.log("IMAGE URL:::", imageUrl);

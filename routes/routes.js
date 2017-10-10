@@ -4,17 +4,15 @@ import {
   login,
   check,
   register,
-  protect,
   logOut,
   authUser
 } from '../controller/controller';
 
 router.get('/', check);
 router.get('/logout', authUser, logOut);
-router.get('/protected', protect);
 router.post('/register', register);
 router.post('/login', login);
-export {router};
+export { router };
 
 
 
