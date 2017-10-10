@@ -3,7 +3,8 @@
     "build": "babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
     "start": "npm run build && export CLOUDINARY_URL=cloudinary://611966755818566:5IRHcHHOyHBMB6M6kDWPj3uvTnc@nodexperts && nodemon server.js",
     "watch": "babel -w src/ -d dist/",
-    "serve": "babel -w src/ -d dist/ | nodemon --watch dist"
+    "serve": "babel -w src/ -d dist/ | nodemon --watch dist",
+    "test": "export CLOUDINARY_URL=cloudinary://611966755818566:5IRHcHHOyHBMB6M6kDWPj3uvTnc@nodexperts && mocha --timeout 10000 --require babel-register"
   },
   "dependencies": {
     "bcrypt": "^1.0.3",
@@ -30,6 +31,10 @@
     "babel-preset-env": "^1.6.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
-    "coffee-loader": "^0.8.0"
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
+    "coffee-loader": "^0.8.0",
+    "mocha": "^4.0.1"
   }
 }

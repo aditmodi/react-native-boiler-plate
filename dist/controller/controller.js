@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.authUser = exports.logOut = exports.protect = exports.register = exports.check = exports.login = undefined;
+exports.authUser = exports.logOut = exports.register = exports.check = exports.login = undefined;
 
 var _user = require('../models/user');
 
@@ -31,7 +31,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var secret = '7x0jhxt"9(thpX6'; // get an instance of the express Router
 var login = exports.login = function login(req, res, next) {
-  var v = (0, _validationsServer.email)(req.body.username);
+  var v = (0, _validationsServer.emailValidator)(req.body.username);
   var passLen = req.body.password.length;
   if (v === true && passLen !== 0) {
     _passport2.default.authenticate('local', function (err, user, info) {
@@ -68,13 +68,13 @@ var check = exports.check = function check(req, res) {
 
 var register = exports.register = function register(req, res) {
   if (req.body.fname !== null && req.body.lname !== null && req.body.email !== null && req.body.phone !== null && req.body.password !== null && req.body.cPassword !== null && req.body.gender !== null) {
-    var _email = _email(req.body.email);
+    var email = (0, _validationsServer.emailValidator)(req.body.email);
     var fname = (0, _validationsServer.alphaNumeric)(req.body.fname);
     var lname = (0, _validationsServer.alphaNumeric)(req.body.lname);
     var phone = (0, _validationsServer.onlyNumber)(req.body.phone);
     var pass = (0, _validationsServer.passMatch)(req.body.password, req.body.cPassword);
     var gender = req.body.gender;
-    if (fname === true && lname === true && _email === true && phone === true && pass === true && (gender === 'male' || gender === 'female')) {
+    if (fname === true && lname === true && email === true && phone === true && pass === true && (gender === 'male' || gender === 'female')) {
       _user2.default.findOne({ email: req.body.email }, function (err, user) {
         console.log("user:", user);
         if (err) {
@@ -118,40 +118,25 @@ var register = exports.register = function register(req, res) {
   }
 };
 
-var protect = exports.protect = function protect(req, res, next) {
-  _passport2.default.authenticate('jwt', function (err, user, info) {
-    if (err) {
-      // internal server error occurred
-      return next(err);
-    }
-    if (!user) {
-      // no JWT or user found
-      return res.status(401).json({ error: 'Invalid credentials.' });
-    }
-    if (user) {
-      // authentication was successful! send user the secret code.
-      return res.status(200).json({ secret: '123' });
-    }
-  })(req, res, next);
-};
-
 var logOut = exports.logOut = function logOut(req, res) {
   req.logout();
   res.json({ status: 'ok' });
 };
 
 var authUser = exports.authUser = function authUser(req, res, next) {
-  console.log(req.headers);
-  console.log(req.headers['token']);
+  console.log("This is the required middleware");
   var token = req.headers['token'];
   // decode token
   if (token != null) {
     // verifies secret and checks exp
     _jsonwebtoken2.default.verify(token, secret, function (err, decoded) {
       if (err) {
+        console.log("token", token);
+        console.log("secret", secret);
         return res.json({ success: false, message: 'Failed to authenticate token.' });
       } else {
-        // if everything is good, save to request for use in other routes
+        // if everything is good, save to request for use in other routes;
+        console.log("Coming here?");
         req.decoded = decoded;
         req.user = decoded;
         return next();
@@ -160,7 +145,6 @@ var authUser = exports.authUser = function authUser(req, res, next) {
   } else {
     // if there is no token
     // return an error
-    console.log("NO ITS HERE");
     return res.status(403).send({
       success: false,
       message: 'No token provided.'

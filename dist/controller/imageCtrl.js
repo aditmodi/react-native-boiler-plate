@@ -43,6 +43,7 @@ var addImages = exports.addImages = function addImages(req, res) {
 };
 
 var getImages = exports.getImages = function getImages(req, res) {
+  console.log("token:", req.headers);
   if (req.headers.token) {
     _images2.default.find({ userId: req.params.id }).sort({ date: -1 }).exec(function (err, imageUrl) {
       console.log("IMAGE URL:::", imageUrl);

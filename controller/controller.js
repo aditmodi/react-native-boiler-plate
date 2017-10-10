@@ -7,7 +7,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {
   alphaNumeric,
-  email,
+  emailValidator,
   onlyNumber,
   passMatch
 } from '../validations-server';
@@ -15,7 +15,7 @@ import {
 var secret = '7x0jhxt"9(thpX6';
 
 export const login = (req, res, next) => {
-  let v = email(req.body.username);
+  let v = emailValidator(req.body.username);
   let passLen = req.body.password.length;
   if (v === true && passLen !== 0){
     passport.authenticate('local', (err, user, info) => {
@@ -34,7 +34,6 @@ export const login = (req, res, next) => {
             var token = jwt.sign({ id: user._id, email: user.email }, secret, {
               expiresIn: 1440     //expires in 24 hours
             });
-            console.log('login --> auth: success token: ', token);
             return res.json({ success: true, token: token, name: user.firstName, id: user.id });
           }
         })
@@ -54,15 +53,15 @@ export const check = (req, res) => {
 
 export const register = (req, res) => {
   if(req.body.fname!==null && req.body.lname!==null && req.body.email!==null && req.body.phone!==null && req.body.password!==null && req.body.cPassword!==null && req.body.gender!==null){
-    let email = email(req.body.email);
+    let email = emailValidator(req.body.email);
     let fname = alphaNumeric(req.body.fname);
     let lname = alphaNumeric(req.body.lname);
     let phone = onlyNumber(req.body.phone);
     let pass = passMatch(req.body.password, req.body.cPassword);
     let gender = req.body.gender;
+
     if(fname===true && lname===true && email===true && phone===true && pass===true  &&(gender==='male' || gender==='female')){
       User.findOne({email: req.body.email}, (err, user) => {
-        console.log("user:", user);
         if (err) {
           res.send(err)
         }
@@ -97,9 +96,41 @@ export const register = (req, res) => {
       })
     }
     else {
-      return res.json({
-        message: 'Invalid credentials'
-      })
+      if (fname!==true) {
+        return res.json({
+          message: 'First Name is Invalid'
+        })
+      }
+      else if (lname!==true) {
+        return res.json({
+          message: 'Last Name is Invalid'
+        })
+      }
+      else if (email!==true) {
+        return res.json({
+          message: 'Email is Invalid'
+        })
+      }
+      else if (phone!==true) {
+        return res.json({
+          message: 'Phone is Invalid'
+        })
+      }
+      else if (pass!==true) {
+        return res.json({
+          message: 'Passwords do not match'
+        })
+      }
+      else if (gender!=='female' || gender!=='male') {
+        return res.json({
+          message: 'Gender should be either male or female'
+        })
+      }
+      else {
+        return res.json({
+          message: 'Invalid credentials'
+        })
+      }
     }
   }
   else {
@@ -116,19 +147,17 @@ export const logOut = (req, res) => {
 }
 
 export const authUser = (req, res, next) => {
-  console.log("This is the required middleware");
+
   let token = req.headers['token'];
+  console.log("token---> ", token);
   // decode token
   if (token != null) {
     // verifies secret and checks exp
     jwt.verify(token, secret, (err, decoded) => {
       if (err) {
-        console.log("token", token);
-        console.log("secret", secret);
         return res.json({ success: false, message: 'Failed to authenticate token.' });
       } else {
         // if everything is good, save to request for use in other routes;
-        console.log("Coming here?");
         req.decoded = decoded;
         req.user = decoded;
         return next();

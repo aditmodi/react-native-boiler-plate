@@ -93,5 +93,5 @@ _mongoose2.default.connect('mongodb://localhost:27017/react-native', { useMongoC
 }); // connect to our database
 
 // START THE SERVER
-app.listen(port);
+module.exports = app.listen(port);
 console.log('Magic happens on port ' + port);

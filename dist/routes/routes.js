@@ -18,7 +18,6 @@ var router = _express2.default.Router();
 
 router.get('/', _controller.check);
 router.get('/logout', _controller.authUser, _controller.logOut);
-router.get('/protected', _controller.protect);
 router.post('/register', _controller.register);
 router.post('/login', _controller.login);
 exports.router = router;

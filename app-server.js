@@ -69,5 +69,5 @@ mongoose.connect('mongodb://localhost:27017/react-native', { useMongoClient: tru
 }); // connect to our database
 
 // START THE SERVER
-app.listen(port);
+module.exports = app.listen(port);
 console.log(`Magic happens on port ${port}`);
