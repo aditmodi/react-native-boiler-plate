@@ -12,16 +12,14 @@ import {
 } from 'react-native';
 import InputField from './input';
 import GenderRadio from './genderRadio';
+import MatchPass from './matchPass'
 
 const styles = StyleSheet.create({
   submitButton: {
     flexDirection: 'row',
     alignSelf: 'center',
     marginTop: 30,
-  },
-  // signUp: {
-  //   bottom: 20
-  // }
+  }
 });
 
 export default class SignUpForm extends Component {
@@ -29,8 +27,8 @@ export default class SignUpForm extends Component {
     fname: PropTypes.func,
     lname: PropTypes.func,
     email: PropTypes.func,
-    password: PropTypes.func,
-    cPassword: PropTypes.func,
+    // password: PropTypes.func,
+    // cPassword: PropTypes.func,
     gender: PropTypes.func,
     phone: PropTypes.func,
     handleBlur: PropTypes.func,
@@ -41,8 +39,8 @@ export default class SignUpForm extends Component {
     fname: null,
     lname: null,
     email: null,
-    password: null,
-    cPassword: null,
+    // password: null,
+    // cPassword: null,
     gender: null,
     phone: null,
     handleBlur: null,
@@ -69,7 +67,7 @@ export default class SignUpForm extends Component {
               label="Email"
               ref={this.props.email}
             />
-            <InputField
+            {/* <InputField
               type="password"
               label="Password"
               blur={this.props.handleBlur}
@@ -82,6 +80,10 @@ export default class SignUpForm extends Component {
               blur={this.props.handleBlur}
               ref={this.props.cPassword}
               secure
+            /> */}
+            <MatchPass
+              pass={this.props.password}
+              cPass={this.props.cPassword}
             />
             <GenderRadio
               ref={this.props.gender}
@@ -98,7 +100,6 @@ export default class SignUpForm extends Component {
           </KeyboardAvoidingView>
         </Form>
       </ScrollView>
-
     );
   }
 }

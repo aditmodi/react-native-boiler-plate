@@ -14,6 +14,7 @@ import {
   Alert,
   ActivityIndicator
 } from 'react-native';
+import Loaders from '../components/loaders'
 
 let picturePath;
 let pic;
@@ -23,15 +24,10 @@ export default class CameraScreen extends Component {
     super(props);
     this.state = {
       path: null,
-      isLoading: true,
+      isLoading: false,
     };
   }
 
-  componentDidMount() {
-    this.setState({
-      isLoading: false,
-    });
-  }
 
   takePicture = () => {
     const options = {};
@@ -56,52 +52,41 @@ export default class CameraScreen extends Component {
 
   storePicture = async () => {
     this.setState({
-      isLoading: false,
+      isLoading: true,
     });
     console.log('picture path:', picturePath);
-    const hello = AsyncStorage.getItem('id', (err, id) => {
-      console.log('id', id);
-      if (picturePath) {
-        const config = {
-          method: 'POST',
-          headers: {
-            //  'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            //  'Authorization': 'Bearer ' + 'SECRET_OAUTH2_TOKEN_IF_AUTH',
-          },
-          body: JSON.stringify({
-            data: picturePath,
-            id,
-          }),
-        };
 
-        fetch('http://192.168.1.189:3001/api/addPhoto', config)
+    const hello = await AsyncStorage.getItem('id', (err, id) => {
+      console.log('id', id);
+      const hello2 = AsyncStorage.getItem('jwt', (err, token) => {
+        if (picturePath) {
+          const config = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              token
+            },
+            body: JSON.stringify({
+              data: picturePath,
+              id,
+            }),
+          };
+
+          fetch('http://192.168.1.189:3001/api/addPhoto', config)
           .then((responseData) => {
             console.log('this is the response:::', responseData._bodyInit);
             Alert.alert('Image has been uploaded');
-            this.setState({ path: null });
-          //  ImageStore.addImageFromBase64(responseData._bodyInit, (result) => { console.log("working", result) }, (error) => { console.error(error); });
+            this.setState({ path: null, isLoading:false });
+            //  ImageStore.addImageFromBase64(responseData._bodyInit, (result) => { console.log("working", result) }, (error) => { console.error(error); });
           })
           .catch((err) => {
             console.log('YOYOY:', err);
           });
-      }
+        }
+      })
     });
   }
 
-  // handlePhoto = () => {
-  //   this.setState({
-  //     mode: 'Camera.constants.CaptureMode.video'
-  //   });
-  //   console.log("Camera");
-  // }
-  //
-  // handleVideo = () => {
-  //   this.setState({
-  //     mode: 'Camera.constants.CaptureMode.still'
-  //   });
-  //   console.log("Video");
-  // }
 
   returnToCamera = () => {
     this.setState({
@@ -176,7 +161,7 @@ export default class CameraScreen extends Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-        {this.state.isLoading ? <ActivityIndicator style={{ padding: 20 }} /> : this.state.path ? this.renderImage() : this.renderCamera()}
+        {this.state.isLoading === true ? <Loaders/> : this.state.path ? this.renderImage() : this.renderCamera()}
       </View>
     );
   }

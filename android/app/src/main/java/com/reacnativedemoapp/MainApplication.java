@@ -3,6 +3,7 @@ package com.reacnativedemoapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+// import com.remobile.splashscreen.RCTSplashScreenPackage;
 import com.showlocationservicesdialogbox.LocationServicesDialogBoxPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
@@ -13,8 +14,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-// import org.devio.rn.splashscreen.SplashScreen;
-
+// import com.remobile.splashscreen.RCTSplashScreenPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,12 +31,14 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new LocationServicesDialogBoxPackage(),
-            new MapsPackage(),
-            new SplashScreenReactPackage(),
-            new RNFSPackage(),
-            new RNFetchBlobPackage(),
-            new RCTCameraPackage()
+            // new RCTSplashScreenPackage(),
+          // new RCTSplashScreenPackage(MainActivity.activity, true),
+          new LocationServicesDialogBoxPackage(),
+          new MapsPackage(),
+          new SplashScreenReactPackage(),
+          new RNFSPackage(),
+          new RNFetchBlobPackage(),
+          new RCTCameraPackage()
       );
     }
   };
@@ -49,7 +51,6 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
-    // SplashScreen.show(this);
     SoLoader.init(this, /* native exopackage */ false);
   }
 }

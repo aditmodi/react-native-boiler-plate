@@ -30,15 +30,15 @@ export default class ImageScreen extends Component {
   }
 
   async componentWillMount() {
-    const token = AsyncStorage.getItem('jwt');
-    const hello = AsyncStorage.getItem('id', (err, id) => {
+    const hello = await AsyncStorage.getItem('id', (err, id) => {
       console.log('this is the email we get on client side--->', id);
-      fetch(`http://192.168.1.189:3001/api/getPhoto/${id}`, {
-        method: 'GET',
-        headers: {
-          token: token
-        }
-      })
+      const hello2 = AsyncStorage.getItem('jwt', (err, token) => {
+        fetch(`http://192.168.1.189:3001/api/getPhoto/${id}`, {
+          method: 'GET',
+          headers: {
+            token: token
+          }
+        })
         .then(response => response.json())
         .then((res) => {
           console.log('this is the response:::', res);
@@ -58,6 +58,7 @@ export default class ImageScreen extends Component {
         .catch((err) => {
           console.log(err);
         });
+      })
     });
   }
 

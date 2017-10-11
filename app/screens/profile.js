@@ -25,13 +25,13 @@ export default class ProfileScreen extends Component {
           title='Profile'
         />
         <View style={styles.buttons}>
-          <Button success onPress={() => navigate('Camera')}>
+          <Button success onPress={() => navigate('Camera')} style={styles.button}>
             <Text>Open camera</Text>
           </Button>
-          <Button success onPress={() => navigate('Images')}>
+          <Button success onPress={() => navigate('Images')} style={styles.button}>
             <Text>Show images</Text>
           </Button>
-          <Button success onPress={() => navigate('Maps')}>
+          <Button success onPress={() => navigate('Maps')} style={styles.button}>
             <Text>Open map</Text>
           </Button>
         </View>
@@ -42,9 +42,14 @@ export default class ProfileScreen extends Component {
 
 const styles = StyleSheet.create({
   buttons: {
-    flex:1,
     flexDirection: 'column',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'stretch',
+    top: 40
   },
+  button: {
+    margin: 20,
+    flexDirection: 'row',
+    alignSelf: 'center'
+  }
 });

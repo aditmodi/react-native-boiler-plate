@@ -110,26 +110,30 @@ export default class MapScreen extends Component {
 
 
   saveLabel = async() => {
-    let id = await AsyncStorage.getItem('id');
-    fetch('http://192.168.1.189:3001/api/setLabel', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify({
-        id,
-        label: 'Home',
-        latitude: this.state.lastLat,
-        longitude: this.state.lastLong
+    const hello = await AsyncStorage.getItem('id', (err, id) => {
+      const hello2 = AsyncStorage.getItem('jwt', (err, token) => {
+        fetch('http://192.168.1.189:3001/api/setLabel', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            token: `${token}`
+          },
+          body: JSON.stringify({
+            id,
+            label: 'Home',
+            latitude: this.state.lastLat,
+            longitude: this.state.lastLong
+          })
+        })
+        .then((response) => Alert.alert('Label saved'))
+        .catch((e) => {
+          console.log(e);   //triggers when there is server issue
+        });
+        this.setState({
+          visible: false
+        });
       })
-    })
-    .then((response) => Alert.alert('Label saved'))
-    .catch((e) => {
-      console.log(e);   //triggers when there is server issue
-    });
-    this.setState({
-      visible: false
     });
   }
 
@@ -137,29 +141,6 @@ export default class MapScreen extends Component {
     console.log("PRESSED");
     this.saveLabel();
   }
-
-  // renderMenu = () => {
-  //     return(
-  //       <View>
-  //         <Button>
-  //           <Text>Set Home?</Text>
-  //         </Button>
-  //       </View>
-  //     )
-  // }
-  // renderLabel = () => {
-  //   return(
-  //     <Item style={styles.inputLabel}>
-  //       <Input
-  //         placeholder="Try home"
-  //         onChangeText={text => this.handleLabelChange(text)}
-  //       />
-  //       <Button onPress={this.saveLabel}>
-  //         <Text>Set</Text>
-  //       </Button>
-  //     </Item>
-  //   )
-  // }
 
   renderMap = () => {
     const { navigate } = this.props.navigation;
@@ -231,7 +212,7 @@ const styles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject,
-    top: 50,
+    marginTop: 50,
   },
   header: {
     backgroundColor: '#ffffff'

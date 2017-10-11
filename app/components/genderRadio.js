@@ -22,9 +22,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   genderHeading: {
-    // marginLeft : 10,
-    // fontWeight : 'bold',
-    // color : '#00008b',
     fontSize: 17,
   },
   checkbox: {

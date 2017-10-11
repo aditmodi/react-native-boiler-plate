@@ -10,7 +10,7 @@ import {
 const styles = StyleSheet.create({
   menuContainer: {
     flex: 1,
-    backgroundColor: '#393c42',
+    backgroundColor: '#34495e',
   },
   menuItem: {
     color: '#ffffff',

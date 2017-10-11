@@ -68,12 +68,14 @@ export default class InputField extends Component {
       valid = alphaNumeric(text);
     } else if (type === 'number') {
       valid = onlyNumber(text);
-    } else if (type === 'password') {
-      text1 = text;
-    } else if (type === 'cPassword') {
-      text2 = text;
-      valid = passMatch(text1, text2);
-    } else {
+    }
+    // else if (type === 'password') {
+    //   text1 = text;
+    // } else if (type === 'cPassword') {
+    //   text2 = text;
+    //   valid = passMatch(text1, text2);
+    // }
+    else {
       valid = true;
     }
     this.validate(text, valid, type);
@@ -93,19 +95,21 @@ export default class InputField extends Component {
       visible = true;
       error = true;
       success = false;
-    } else if (type === 'password' || type === 'cPassword') {
-      if (valid === false) {
-        msg = 'Passwords do not match';
-        visible = true;
-        error = true;
-        success = false;
-      } else {
-        msg = '';
-        visible = false;
-        error = false;
-        success = true;
-      }
-    } else if (valid === true && type === 'number' && text.length > 10) {
+    }
+    // else if (type === 'password' || type === 'cPassword') {
+    //   if (valid === false) {
+    //     msg = 'Passwords do not match';
+    //     visible = true;
+    //     error = true;
+    //     success = false;
+    //   } else {
+    //     msg = '';
+    //     visible = false;
+    //     error = false;
+    //     success = true;
+    //   }
+    // } 
+    else if (valid === true && type === 'number' && text.length > 10) {
       msg = 'Limit is only upto 10 digits';
       visible = true;
       error = true;

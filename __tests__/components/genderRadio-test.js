@@ -1,12 +1,15 @@
-import 'react-native';
-import React from 'react';
+const React = require('react-native');
+const { View } = React;
+
+const utils = require('react-addons-test-utils');
+
+jest.dontMock('../../app/components/genderRadio');
 import GenderRadio from '../../app/components/genderRadio';
 
-import renderer from 'react-test-renderer';
-
-test('renders correctly', () => {
-  const tree = renderer.create(
-    <GenderRadio/>
-  ).toJSON();
-  expect(tree).toMatchSnapshot();
-});
+describe('GenderRadio', () => {
+  let genderRadio;
+  function renderScreen(props, state) {
+    const renderer = utils.createRenderer();
+    renderer.render
+  }
+})

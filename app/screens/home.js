@@ -13,6 +13,7 @@ import SideMenu from 'react-native-side-menu'; // SideMenu component for react-n
 import HomeContent from '../components/homeContent'; // Content of home page
 import HeaderComponent from '../components/headerComponent';
 import LoginForm from '../components/loginForm'; // Form with email and password
+import Loaders from '../components/loaders';
 
 let name;
 
@@ -29,6 +30,10 @@ export default class HomeScreen extends Component {
   menuPressed = () => {
     this.setState({ menuOpen: true });
   }
+
+  // componentDidMount() {
+  //   SplashScreen.hide();
+  // }
 
   // componentWillMount is here to check if the token of the user still exists or not
   // if it exists, it navigates directly to the home page of that user
@@ -60,7 +65,7 @@ export default class HomeScreen extends Component {
         method: 'GET',
         headers: {
           Accept: 'application/json',
-          token: `${token}`,
+          token: `${token}`
         },
       })
         .then((response) => {
@@ -80,11 +85,13 @@ export default class HomeScreen extends Component {
     navigate('SignIn');
   }
 
-  renderBlank = () => {
-    return(
-      <View></View>
-    )
-  }
+  // renderBlank = () => {
+  //   return(
+  //     <View>
+  //       <Loaders/>
+  //     </View>
+  //   )
+  // }
 
   renderHome = () => {
     const { navigate } = this.props.navigation;
@@ -119,6 +126,9 @@ export default class HomeScreen extends Component {
             const lengthPass = this.loginPass.state.value.length;
             const validEmail = this.loginEmail.state.valid
             if (lengthEmail != 0 && lengthPass != 0 && validEmail == true) { // when fields are filled
+              this.setState({
+                isLoading: true
+              })
               fetch('http://192.168.1.189:3001/api/login', {
                 method: 'POST',
                 headers: {
@@ -142,6 +152,7 @@ export default class HomeScreen extends Component {
                       // Redirect to home screen
                       this.setState({
                         token: res.token,
+                        isLoading: false
                       });
                     } catch (error) {
                       Alert.alert('got this error');
@@ -184,7 +195,7 @@ export default class HomeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.state.isLoading === true ? this.renderBlank() :this.state.token ? this.renderHome() : this.renderSignIn()}
+        {this.state.isLoading === true ? <Loaders/> :this.state.token ? this.renderHome() : this.renderSignIn()}
       </View>
     );
   }

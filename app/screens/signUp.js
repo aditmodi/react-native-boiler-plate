@@ -8,8 +8,12 @@ import {
 import PropTypes from 'prop-types';
 import SignUpForm from '../components/signUpForm';
 import HeaderComponent from '../components/headerComponent'; // separate component for header bar
-import { text1, text2 } from '../components/input';
 import { passMatch } from '../utils/validations';
+import {
+  text1,
+  text2
+} from '../components/matchPass';
+import Loaders from '../components/loaders';
 
 export default class SignUpScreen extends Component {
   static propTypes = {
@@ -22,18 +26,29 @@ export default class SignUpScreen extends Component {
     navigate: null
   }
 
+  constructor(props){
+    super(props);
+    this.state = {
+      isLoading: false
+    }
+  }
+
   handleSubmit = () => {
     const { navigate } = this.props.navigation;
+    console.log("SDFDSSD:", text1);
     let fname = this.fname.state;
     let lname = this.lname.state;
     let email = this.email.state;
-    let password = this.password.state;
-    let cPassword = this.cPassword.state;
+    let password = text1;
+    let cPassword = text2;
     let phone = this.phone.state;
     let gender = this.gender.state;
     // when entered values are valid
-    if (fname.valid === true && lname.valid === true && email.valid === true && phone.valid === true && password.valid === true && cPassword.valid === true && gender.value !== null) {
+    if (fname.valid === true && lname.valid === true && email.valid === true && phone.valid === true && password === cPassword && gender.value !== null) {
       // going to route '/users' to add new user
+      this.setState({
+        isLoading: true
+      })
       fetch('http://192.168.1.189:3001/api/register', {
         method: 'POST',
         headers: {
@@ -44,8 +59,8 @@ export default class SignUpScreen extends Component {
           fname: this.fname.state.value,
           lname: this.lname.state.value,
           email: (this.email.state.value).toLowerCase(),
-          password: this.password.state.value,
-          cPassword: this.cPassword.state.value,
+          password: password,
+          cPassword: cPassword,
           phone: this.phone.state.value,
           gender: this.gender.state.value,
         }),
@@ -56,12 +71,10 @@ export default class SignUpScreen extends Component {
           if (res.message == 'Success!! You may now log in.') {
             navigate('Home');
             // to clear the form after submitting
-            this.fname.clear();
-            this.lname.clear();
-            this.email.clear();
-            this.password.clear();
-            this.phone.clear();
-            this.cPassword.clear();
+            // this.fname.clear();
+            // this.lname.clear();
+            // this.email.clear();
+            // this.phone.clear();
           }
         })
         .catch((error) => {
@@ -74,8 +87,6 @@ export default class SignUpScreen extends Component {
       console.log("lname:", lname.valid);
       console.log("email:", email.valid);
       console.log("phone:", phone.valid);
-      console.log("password:", password.valid);
-      console.log("cPassword:", cPassword.valid);
       // when some value is not valid
       if(fname.valid !== true){
         this.fname.setState({
@@ -107,26 +118,6 @@ export default class SignUpScreen extends Component {
           value: email.value,
         })
       }
-      if(password.valid !== true){
-        this.password.setState({
-          success: false,
-          error: true,
-          valid: password.valid,
-          errorVisible: true,
-          errorMessage: password.value.length == 0 ? 'Required field' : 'Passwords do not match',
-          value: password.value,
-        })
-      }
-      if(cPassword.valid !== true){
-        this.cPassword.setState({
-          success: false,
-          error: true,
-          valid: cPassword.valid,
-          errorVisible: true,
-          errorMessage: cPassword.value.length == 0 ? 'Required field' : 'Passwords do not match',
-          value: cPassword.value,
-        })
-      }
       if(phone.valid !== true){
         this.phone.setState({
           success: false,
@@ -144,33 +135,10 @@ export default class SignUpScreen extends Component {
     }
   }
 
-  handleBlur = () => {
-    const valid = passMatch(text1, text2);
-    if (valid == false) {
-      this.cPassword.setState({
-        success: false,
-        error: true,
-        valid,
-        errorVisible: true,
-        errorMessage: text2.length == 0 ? 'Required field' : 'Passwords do not match',
-        value: text2,
-      });
-    } else {
-      this.cPassword.setState({
-        success: true,
-        error: false,
-        valid,
-        errorVisible: false,
-        errorMessage: '',
-        value: text2,
-      });
-    }
-  }
-
-  render() {
+  renderSignUp = () => {
     const { navigate } = this.props.navigation;
-    return (
-      <ScrollView style={styles.container}>
+    return(
+      <ScrollView>
         <HeaderComponent
           leftIcon="arrow-back" // to navigate back
           leftPressed={() => navigate('Home')}
@@ -191,6 +159,16 @@ export default class SignUpScreen extends Component {
 
         </View>
       </ScrollView>
+    )
+  }
+
+
+  render() {
+
+    return (
+      <View style={styles.container}>
+        {this.state.isLoading === true ? <Loaders/> : this.renderSignUp()}
+      </View>
     );
   }
 }
