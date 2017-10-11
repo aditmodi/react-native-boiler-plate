@@ -151,7 +151,6 @@ dependencies {
     }
     compile 'com.google.android.gms:play-services-base:10.0.1'
     compile 'com.google.android.gms:play-services-maps:10.0.1'
-    compile project(':react-native-splash-screen')
     compile project(':react-native-fs')
     compile project(':react-native-fetch-blob')
     compile project(':react-native-camera')
