@@ -147,17 +147,20 @@ export const logOut = (req, res) => {
 }
 
 export const authUser = (req, res, next) => {
-
+  console.log("Coming here");
   let token = req.headers['token'];
   console.log("token---> ", token);
   // decode token
   if (token != null) {
+            console.log("again here");
     // verifies secret and checks exp
     jwt.verify(token, secret, (err, decoded) => {
       if (err) {
+        console.log("failed");
         return res.json({ success: false, message: 'Failed to authenticate token.' });
       } else {
         // if everything is good, save to request for use in other routes;
+        console.log("passed");
         req.decoded = decoded;
         req.user = decoded;
         return next();

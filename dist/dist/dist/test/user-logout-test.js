@@ -1,40 +1,54 @@
-// process.env.NODE_ENV = 'test';
-//
-// import mongoose from 'mongoose';
-// import User from '../models/user';
-// import DummyUser from './fixtures/user';
-//
-// import chai from 'chai';
-// import chaiHttp from 'chai-http';
-// let server = require('../server');
-// let should = chai.should();
-//
-// chai.use(chaiHttp);
-//
-// describe('Users', () => {
-//   before((done) => {
-//     User.remove({}, (err) => {
-//       done();
-//     });
-//   });
-//
-//   describe('logout', () => {
-//     it('should logout the user', () => {
-//       chai.request('http://192.168.1.189:3001/api')
-//         .post('/register')
-//         .send(DummyUser.register.validUser);
-//
-//       chai.request('http://192.168.1.189:3001/api')
-//         .post('/login')
-//         .send(DummyUser.login.validUser);
-//
-//       chai.request('http://192.168.1.189:3001/api')
-//         .get(/logout)
-//         .end((err, res) => {
-//             res.should.have.status(200);
-//             res.
-//         })
-//     })
-//   })
-// })
-"use strict";
+'use strict';
+
+var _mongoose = require('mongoose');
+
+var _mongoose2 = _interopRequireDefault(_mongoose);
+
+var _user = require('../models/user');
+
+var _user2 = _interopRequireDefault(_user);
+
+var _user3 = require('./fixtures/user');
+
+var _user4 = _interopRequireDefault(_user3);
+
+var _chai = require('chai');
+
+var _chai2 = _interopRequireDefault(_chai);
+
+var _chaiHttp = require('chai-http');
+
+var _chaiHttp2 = _interopRequireDefault(_chaiHttp);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+process.env.NODE_ENV = 'test';
+
+var server = require('../app-server');
+var should = _chai2.default.should();
+
+_chai2.default.use(_chaiHttp2.default);
+
+describe('Users', function () {
+  before(function (done) {
+    _user2.default.remove({}, function (err) {
+      done();
+    });
+  });
+
+  describe('logout', function () {
+    it('should logout the user', function () {
+      _chai2.default.request(server).post('/api/register').send(_user4.default.register.validUser);
+
+      _chai2.default.request(server).post('/api/login').send(_user4.default.login.validUser);
+
+      _chai2.default.request(server).get('/api/logout').end(function (err, res) {
+        res.should.have.status(200);
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').eql('ok');
+      });
+    });
+  });
+});

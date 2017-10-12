@@ -30,50 +30,86 @@ var should = _chai2.default.should();
 _chai2.default.use(_chaiHttp2.default);
 
 describe('Users', function () {
-  beforeEach(function (done) {
+  before(function (done) {
     _user2.default.remove({}, function (err) {
       done();
     });
   });
 
   describe('register', function () {
-    it('should register a user', function (done) {
-      _chai2.default.request('http://192.168.1.189:3001/api').post('/register').send(_user4.default.register.validUser).end(function (err, res) {
-        console.log("REGISTER VALID:", res.status);
-        // res.should.have.status(500);
-        // res.body.should.be.a('object');
-        // // res.body.should.have.property('message').eql('Success!! You may now log in.');
-        // res.body.should.have.property('firstName');
-        // res.body.should.have.property('lastName');
-        // res.body.should.have.property('email');
-        // res.body.should.have.property('password');
-        // res.body.should.have.property('gender');
-        // res.body.should.have.property('phone');
-        // expect(res.status).to.equal(300);
-        done();
+    describe('Success case', function () {
+      it('should register a user', function (done) {
+        _chai2.default.request(server).post('/api/register').send(_user4.default.register.validUser).end(function (err, res) {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          res.body.should.have.property('message').eql('Success!! You may now log in.');
+          done();
+        });
       });
     });
 
-    it('should not register an existing user', function (done) {
-      _chai2.default.request(server).post('/api/register').send(_user4.default.register.existingUser).end(function (err, res) {
-        res.should.have.status(400);
-        res.body.errors.should.have.property('error').eql('Email address in use.');
-        done();
+    describe('Failure cases', function () {
+      it('should not register an existing user', function (done) {
+        _chai2.default.request(server).post('/api/register').send(_user4.default.register.existingUser).end(function (err, res) {
+          res.should.have.status(200);
+          res.body.should.have.property('message').eql('User already exists');
+          done();
+        });
       });
-    });
 
-    it('should not register user with invalid credentials', function (done) {
-      _chai2.default.request(server).post('/api/register').send(_user4.default.register.invalidUser).end(function (err, res) {
-        res.should.have.status(404);
-        res.body.errors.should.have.property('message').eql('Invalid credentials');
+      it('should not register user with invalid first name', function (done) {
+        _chai2.default.request(server).post('/api/register').send(_user4.default.register.invalidUser.one).end(function (err, res) {
+          res.should.have.status(200);
+          res.body.should.have.property('message').eql('First Name is Invalid');
+          done();
+        });
       });
-    });
 
-    it('should not register a null user', function (done) {
-      _chai2.default.request(server).post('/api/register').send(_user4.default.register.nullUser).end(function (err, res) {
-        res.should.have.status(404);
-        res.body.errors.should.have.property('message').eql('All fields are required');
-        done();
+      it('should not register user with invalid last name', function (done) {
+        _chai2.default.request(server).post('/api/register').send(_user4.default.register.invalidUser.two).end(function (err, res) {
+          res.should.have.status(200);
+          res.body.should.have.property('message').eql('Last Name is Invalid');
+          done();
+        });
+      });
+
+      it('should not register user with invalid email', function (done) {
+        _chai2.default.request(server).post('/api/register').send(_user4.default.register.invalidUser.three).end(function (err, res) {
+          res.should.have.status(200);
+          res.body.should.have.property('message').eql('Email is Invalid');
+          done();
+        });
+      });
+
+      it('should not register user with missmatched passwords', function (done) {
+        _chai2.default.request(server).post('/api/register').send(_user4.default.register.invalidUser.four).end(function (err, res) {
+          res.should.have.status(200);
+          res.body.should.have.property('message').eql('Passwords do not match');
+          done();
+        });
+      });
+
+      it('should not register user with invalid gender', function (done) {
+        _chai2.default.request(server).post('/api/register').send(_user4.default.register.invalidUser.five).end(function (err, res) {
+          res.should.have.status(200);
+          res.body.should.have.property('message').eql('Gender should be either male or female');
+          done();
+        });
+      });
+
+      it('should not register user with invalid phone number', function (done) {
+        _chai2.default.request(server).post('/api/register').send(_user4.default.register.invalidUser.six).end(function (err, res) {
+          res.should.have.status(200);
+          res.body.should.have.property('message').eql('Phone is Invalid');
+          done();
+        });
+      });
+
+      it('should not register a null user', function (done) {
+        _chai2.default.request(server).post('/api/register').send(_user4.default.register.nullUser).end(function (err, res) {
+          res.should.have.status(500);
+          done();
+        });
       });
     });
   });

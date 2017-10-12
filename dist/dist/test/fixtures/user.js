@@ -10,6 +10,7 @@ var DummyUser = {
       lastName: 'xyz',
       email: 'abc@xyz.com',
       password: '123456',
+      cPassword: '123456',
       gender: 'male',
       phone: 9876543210
     },
@@ -18,6 +19,7 @@ var DummyUser = {
       lastName: 'abc..',
       email: 'abcxyzcom',
       password: '654321',
+      cPassword: '654321',
       gender: 'female',
       phone: 'abc'
     },
@@ -26,6 +28,7 @@ var DummyUser = {
       lastName: 'abc',
       email: 'abc@xyz.com',
       password: '654321',
+      cPassword: '654321',
       gender: 'female',
       phone: 1234567890
     },

@@ -20,6 +20,8 @@ var _chaiHttp = require('chai-http');
 
 var _chaiHttp2 = _interopRequireDefault(_chaiHttp);
 
+var _userLoginTest = require('./user-login-test');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 process.env.NODE_ENV = 'test';
@@ -30,22 +32,19 @@ var should = _chai2.default.should();
 _chai2.default.use(_chaiHttp2.default);
 
 describe('Users', function () {
-  before(function (done) {
-    _user2.default.remove({}, function (err) {
-      done();
-    });
-  });
+  // after((done) => {
+  //   User.remove({}, (err) => {
+  //     done();
+  //   });
+  // });
 
   describe('logout', function () {
-    it('should logout the user', function () {
-      _chai2.default.request(server).post('/api/register').send(_user4.default.register.validUser);
-
-      _chai2.default.request(server).post('/api/login').send(_user4.default.login.validUser);
-
-      _chai2.default.request(server).get('/api/logout').end(function (err, res) {
+    it('should logout the user', function (done) {
+      _chai2.default.request(server).get('/api/logout').set('token', _userLoginTest.token).end(function (err, res) {
         res.should.have.status(200);
         res.body.should.be.a('object');
         res.body.should.have.property('status').eql('ok');
+        done();
       });
     });
   });

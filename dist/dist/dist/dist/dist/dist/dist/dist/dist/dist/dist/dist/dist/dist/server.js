@@ -1,19 +1,13 @@
-// server.js
 'use strict';
+
+// server.js
 
 // BASE SETUP
 // call the packages we need
 
-var _express = require('express');
-
-var _express2 = _interopRequireDefault(_express);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
+var express = require('express');
 // call express
-var app = (0, _express2.default)(); // define our app using express
+var app = express(); // define our app using express
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var passport = require('passport');

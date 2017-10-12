@@ -58,15 +58,21 @@ describe('Users', function () {
     it('should not login a non-existing user', function () {
       _chai2.default.request('http://192.168.1.189:3001/api').post('/login').send(_user4.default.login.nonExistUser).end(function (err, res) {
         res.should.have.status(400);
-        res.body.should.have.property('success').eql(false);
-        res.body.should.have.property('token').eql(null);
-        res.body.should.have.property('message').eql('Your email or password is wrong!');
+        res.body.should.be.a('object');
+        res.body.errors.should.have.property('success').eql(false);
+        res.body.errors.should.have.property('token').eql(null);
+        res.body.errors.should.have.property('message').eql('Your email or password is wrong!');
         done();
       });
     });
 
-    it('should not register null user', function () {
-      _chai2.default.request('http://192.168.1.189:3001/api').post('/login').send(_user4.default.login.nullUser).end((err, res));
+    it('should not login a null user', function () {
+      _chai2.default.request('http://192.168.1.189:3001/api').post('/login').send(_user4.default.login.nullUser).end(function (err, res) {
+        res.should.have.status(400);
+        res.body.should.be.a('object');
+        res.body.errors.should.have.property('message').eql('Invalid credentials');
+        done();
+      });
     });
   });
 });

@@ -51,7 +51,6 @@ var login = exports.login = function login(req, res, next) {
             var token = _jsonwebtoken2.default.sign({ id: user._id, email: user.email }, secret, {
               expiresIn: 1440 //expires in 24 hours
             });
-            console.log('login --> auth: success token: ', token);
             return res.json({ success: true, token: token, name: user.firstName, id: user.id });
           }
         });
@@ -76,9 +75,9 @@ var register = exports.register = function register(req, res) {
     var phone = (0, _validationsServer.onlyNumber)(req.body.phone);
     var pass = (0, _validationsServer.passMatch)(req.body.password, req.body.cPassword);
     var gender = req.body.gender;
+
     if (fname === true && lname === true && email === true && phone === true && pass === true && (gender === 'male' || gender === 'female')) {
       _user2.default.findOne({ email: req.body.email }, function (err, user) {
-        console.log("user:", user);
         if (err) {
           res.send(err);
         } else if (user == null) {
@@ -109,9 +108,35 @@ var register = exports.register = function register(req, res) {
         }
       });
     } else {
-      return res.json({
-        message: 'Invalid credentials'
-      });
+      if (fname !== true) {
+        return res.json({
+          message: 'First Name is Invalid'
+        });
+      } else if (lname !== true) {
+        return res.json({
+          message: 'Last Name is Invalid'
+        });
+      } else if (email !== true) {
+        return res.json({
+          message: 'Email is Invalid'
+        });
+      } else if (phone !== true) {
+        return res.json({
+          message: 'Phone is Invalid'
+        });
+      } else if (pass !== true) {
+        return res.json({
+          message: 'Passwords do not match'
+        });
+      } else if (gender !== 'female' || gender !== 'male') {
+        return res.json({
+          message: 'Gender should be either male or female'
+        });
+      } else {
+        return res.json({
+          message: 'Invalid credentials'
+        });
+      }
     }
   } else {
     return res.json({
@@ -126,19 +151,17 @@ var logOut = exports.logOut = function logOut(req, res) {
 };
 
 var authUser = exports.authUser = function authUser(req, res, next) {
-  console.log("This is the required middleware");
+
   var token = req.headers['token'];
+  console.log("token---> ", token);
   // decode token
   if (token != null) {
     // verifies secret and checks exp
     _jsonwebtoken2.default.verify(token, secret, function (err, decoded) {
       if (err) {
-        console.log("token", token);
-        console.log("secret", secret);
         return res.json({ success: false, message: 'Failed to authenticate token.' });
       } else {
         // if everything is good, save to request for use in other routes;
-        console.log("Coming here?");
         req.decoded = decoded;
         req.user = decoded;
         return next();
