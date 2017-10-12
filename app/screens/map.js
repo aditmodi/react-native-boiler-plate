@@ -21,6 +21,7 @@ import {
 } from 'native-base';
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
 import Geocoder from 'react-native-geocoding';
+import Address from '../utils/address';
 
 let place;
 
@@ -112,7 +113,7 @@ export default class MapScreen extends Component {
   saveLabel = async() => {
     const hello = await AsyncStorage.getItem('id', (err, id) => {
       const hello2 = AsyncStorage.getItem('jwt', (err, token) => {
-        fetch('http://192.168.1.189:3001/api/setLabel', {
+        fetch(`${Address.url}api/setLabel`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -9,6 +9,8 @@ import {
   ActivityIndicator
 } from 'react-native';
 import HeaderComponent from '../components/headerComponent';
+import Loaders from '../components/loaders';
+import Address from '../utils/address';
 
 let urls = new Array();
 const height = 200;
@@ -19,21 +21,15 @@ export default class ImageScreen extends Component {
     super(props);
     this.state = {
       url: [],
-      isLoading: true,
+      data: true
     };
-  }
-
-  componentDidMount() {
-    this.setState({
-      isLoading: false,
-    });
   }
 
   async componentWillMount() {
     const hello = await AsyncStorage.getItem('id', (err, id) => {
       console.log('this is the email we get on client side--->', id);
       const hello2 = AsyncStorage.getItem('jwt', (err, token) => {
-        fetch(`http://192.168.1.189:3001/api/getPhoto/${id}`, {
+        fetch(`${Address.url}api/getPhoto/${id}`, {
           method: 'GET',
           headers: {
             token: token
@@ -44,16 +40,22 @@ export default class ImageScreen extends Component {
           console.log('this is the response:::', res);
           let n;
           let str;
-          res.data.map((item, index) => {
-            n = item.img.url.lastIndexOf('upload');
-            str = `${item.img.url.slice(0, n + 6)}/w_${width},h_${height}${item.img.url.slice(n + 6)}`;
-            urls[index] = str;
-          });
-          this.setState({
-            url: urls,
-          });
-          console.log('STATE::', this.state.url);
-          urls = new Array();
+          console.log("SADSADSADS",res.data);
+            res.data.map((item, index) => {
+              n = item.img.url.lastIndexOf('upload');
+              str = `${item.img.url.slice(0, n + 6)}/w_${width},h_${height}${item.img.url.slice(n + 6)}`;
+              urls[index] = str;
+            });
+            this.setState({
+              url: urls,
+            });
+            console.log('STATE::', this.state.url);
+            if(this.state.url.length === 0){
+              this.setState({
+                data: false
+              })
+            }
+            urls = new Array();
         })
         .catch((err) => {
           console.log(err);
@@ -62,14 +64,22 @@ export default class ImageScreen extends Component {
     });
   }
 
+  renderNoImage = () => (
+      <View style={styles.noImageContainer}>
+        <Image
+          style={styles.noImage}
+          source={require('../img/noImage.png')}
+        />
+        {/* <Text>No image available</Text> */}
+      </View>
+    )
+
+
   renderImages = (url, i) => (
     <View key={i}>
       <Image
         style={styles.image}
-        source={{ uri: url }}
-      >
-        {this.state.isLoading ? <ActivityIndicator style={{ padding: 20 }} /> : null}
-      </Image>
+        source={{ uri: url }}/>
       <Text>{url}</Text>
     </View>
 
@@ -86,7 +96,7 @@ export default class ImageScreen extends Component {
           title="Images"
         />
           {
-            this.state.url.map((item, i) => this.renderImages(item, i))
+            this.state.data ? this.state.url.map((item, i) => {this.renderImages(item, i)}) : this.renderNoImage()
           }
       </View>
     </ScrollView>
@@ -102,4 +112,15 @@ const styles = StyleSheet.create({
     padding: 20,
     margin: 20,
   },
+  noImage: {
+    alignSelf: 'center',
+    height: 300,
+    width,
+    padding: 20,
+    margin: 20,
+  },
+  noImageContainer: {
+    flex: 1,
+    top:50
+  }
 });

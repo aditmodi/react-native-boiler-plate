@@ -14,6 +14,7 @@ import {
   text2
 } from '../components/matchPass';
 import Loaders from '../components/loaders';
+import Address from '../utils/address';
 
 export default class SignUpScreen extends Component {
   static propTypes = {
@@ -49,7 +50,7 @@ export default class SignUpScreen extends Component {
       this.setState({
         isLoading: true
       })
-      fetch('http://192.168.1.189:3001/api/register', {
+      fetch(`${Address.url}api/register`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -70,11 +71,6 @@ export default class SignUpScreen extends Component {
           Alert.alert(res.message);
           if (res.message == 'Success!! You may now log in.') {
             navigate('Home');
-            // to clear the form after submitting
-            // this.fname.clear();
-            // this.lname.clear();
-            // this.email.clear();
-            // this.phone.clear();
           }
         })
         .catch((error) => {

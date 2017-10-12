@@ -14,7 +14,8 @@ import {
   Alert,
   ActivityIndicator
 } from 'react-native';
-import Loaders from '../components/loaders'
+import Loaders from '../components/loaders';
+import Address from '../utils/address';
 
 let picturePath;
 let pic;
@@ -72,7 +73,7 @@ export default class CameraScreen extends Component {
             }),
           };
 
-          fetch('http://192.168.1.189:3001/api/addPhoto', config)
+          fetch(`${Address.url}api/addPhoto`, config)
           .then((responseData) => {
             console.log('this is the response:::', responseData._bodyInit);
             Alert.alert('Image has been uploaded');

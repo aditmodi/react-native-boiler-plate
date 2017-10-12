@@ -14,6 +14,7 @@ import HomeContent from '../components/homeContent'; // Content of home page
 import HeaderComponent from '../components/headerComponent';
 import LoginForm from '../components/loginForm'; // Form with email and password
 import Loaders from '../components/loaders';
+import Address from '../utils/address';
 
 let name;
 
@@ -30,10 +31,6 @@ export default class HomeScreen extends Component {
   menuPressed = () => {
     this.setState({ menuOpen: true });
   }
-
-  // componentDidMount() {
-  //   SplashScreen.hide();
-  // }
 
   // componentWillMount is here to check if the token of the user still exists or not
   // if it exists, it navigates directly to the home page of that user
@@ -53,7 +50,6 @@ export default class HomeScreen extends Component {
         isLoading: false
       })
     }
-    // SplashScreen.hide();
   }
 
 
@@ -61,7 +57,7 @@ export default class HomeScreen extends Component {
     const { navigate } = this.props.navigation;
     const hello = await AsyncStorage.getItem('jwt', (err, token) => { // retrieve the token
       console.log('TOKENNNN:::', token);
-      fetch('http://192.168.1.189:3001/api/logout', {
+      fetch(`${Address.url}api/logout`, {
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -77,21 +73,18 @@ export default class HomeScreen extends Component {
             token: null,
           }); // and then navigate to sign in page
         })
-        .catch((e) => {
+        .catch(async(e) => {
+          const t = await AsyncStorage.getItem('jwt', (err, tok) => {
+            if(tok === '1234'){
+              AsyncStorage.removeItem('jwt');
+            }
+          })
           Alert.alert('There was an error logging out');
         });
     });
     Alert.alert('You have been logged out.');
     navigate('SignIn');
   }
-
-  // renderBlank = () => {
-  //   return(
-  //     <View>
-  //       <Loaders/>
-  //     </View>
-  //   )
-  // }
 
   renderHome = () => {
     const { navigate } = this.props.navigation;
@@ -113,7 +106,6 @@ export default class HomeScreen extends Component {
     );
   }
 
-
   renderSignIn = () => {
     const { navigate } = this.props.navigation; // to navigate to other pages
     return (
@@ -125,21 +117,21 @@ export default class HomeScreen extends Component {
             const lengthEmail = this.loginEmail.state.value.length; // calculating length as to see if the fields arent empty
             const lengthPass = this.loginPass.state.value.length;
             const validEmail = this.loginEmail.state.valid
-            if (lengthEmail != 0 && lengthPass != 0 && validEmail == true) { // when fields are filled
-              this.setState({
-                isLoading: true
-              })
-              fetch('http://192.168.1.189:3001/api/login', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Accept: 'application/json',
-                },
-                body: JSON.stringify({
-                  username: (this.loginEmail.state.value).toLowerCase(), // passing email and password to the body of the route
-                  password: this.loginPass.state.value,
-                }),
-              })
+              if (lengthEmail != 0 && lengthPass != 0 && validEmail == true) { // when fields are filled
+                this.setState({
+                  isLoading: true
+                })
+                fetch(`${Address.url}api/login`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                  },
+                  body: JSON.stringify({
+                    username: (this.loginEmail.state.value).toLowerCase(), // passing email and password to the body of the route
+                    password: this.loginPass.state.value,
+                  }),
+                })
                 .then(response => response.json())
                 .then(async (res) => {
                   console.log('The Response is', res); // token is created
@@ -165,27 +157,30 @@ export default class HomeScreen extends Component {
                 .catch((e) => {
                   console.log('DASDASDSA', e);
                   Alert.alert('Check your internet connection'); // triggers when there is server issue
+                  this.setState({
+                    isLoading: false
+                  })
                 })
                 .done();
-            } else {
-              this.loginEmail.setState({
-                success: false,
-                error: true,
-                valid: this.loginEmail.state.valid,
-                errorVisible: true,
-                errorMessage: this.loginEmail.state.value ? 'Invalid' : 'Required field',
-                value: this.loginEmail.state.value
-              });
-              this.loginPass.setState({
-                success: false,
-                error: true,
-                errorVisible: true,
-                errorMessage: 'Required field',
-                value: this.loginPass.state.value
-              });
-              Alert.alert('Fill the login form'); // when there is error in the fields from the client side
+              } else {
+                this.loginEmail.setState({
+                  success: false,
+                  error: true,
+                  valid: this.loginEmail.state.valid,
+                  errorVisible: true,
+                  errorMessage: this.loginEmail.state.value ? 'Invalid' : 'Required field',
+                  value: this.loginEmail.state.value
+                });
+                this.loginPass.setState({
+                  success: false,
+                  error: true,
+                  errorVisible: true,
+                  errorMessage: 'Required field',
+                  value: this.loginPass.state.value
+                });
+                Alert.alert('Fill the login form'); // when there is error in the fields from the client side
+              }
             }
-          }
         }
         signUpPressed={() => navigate('SignUp')} // when signUp is pressed
       />
