@@ -8,8 +8,10 @@ import {
   AsyncStorage,
   ActivityIndicator
 } from 'react-native';
+import {
+  Button
+} from 'native-base';
 import HeaderComponent from '../components/headerComponent';
-import Loaders from '../components/loaders';
 import Address from '../utils/address';
 
 let urls = new Array();
@@ -21,8 +23,14 @@ export default class ImageScreen extends Component {
     super(props);
     this.state = {
       url: [],
-      data: true
+      isLoading: true,
     };
+  }
+
+  componentDidMount() {
+    this.setState({
+      isLoading: false,
+    });
   }
 
   async componentWillMount() {
@@ -40,22 +48,16 @@ export default class ImageScreen extends Component {
           console.log('this is the response:::', res);
           let n;
           let str;
-          console.log("SADSADSADS",res.data);
-            res.data.map((item, index) => {
-              n = item.img.url.lastIndexOf('upload');
-              str = `${item.img.url.slice(0, n + 6)}/w_${width},h_${height}${item.img.url.slice(n + 6)}`;
-              urls[index] = str;
-            });
-            this.setState({
-              url: urls,
-            });
-            console.log('STATE::', this.state.url);
-            if(this.state.url.length === 0){
-              this.setState({
-                data: false
-              })
-            }
-            urls = new Array();
+          res.data.map((item, index) => {
+            n = item.img.url.lastIndexOf('upload');
+            str = `${item.img.url.slice(0, n + 6)}/w_${width},h_${height}${item.img.url.slice(n + 6)}`;
+            urls[index] = str;
+          });
+          this.setState({
+            url: urls,
+          });
+          console.log('STATE::', this.state.url);
+          urls = new Array();
         })
         .catch((err) => {
           console.log(err);
@@ -64,22 +66,13 @@ export default class ImageScreen extends Component {
     });
   }
 
-  renderNoImage = () => (
-      <View style={styles.noImageContainer}>
-        <Image
-          style={styles.noImage}
-          source={require('../img/noImage.png')}
-        />
-        {/* <Text>No image available</Text> */}
-      </View>
-    )
-
-
   renderImages = (url, i) => (
     <View key={i}>
       <Image
         style={styles.image}
-        source={{ uri: url }}/>
+        source={{ uri: url }}>
+        {this.state.isLoading ? <ActivityIndicator style={{ padding: 20 }} /> : null}
+      </Image>
       <Text>{url}</Text>
     </View>
 
@@ -96,8 +89,11 @@ export default class ImageScreen extends Component {
           title="Images"
         />
           {
-            this.state.data ? this.state.url.map((item, i) => {this.renderImages(item, i)}) : this.renderNoImage()
+            this.state.url.map((item, i) => this.renderImages(item, i))
           }
+      <Button style={styles.button} onPress={() => navigate('Camera')}>
+        <Text>Add Images</Text>
+      </Button>
       </View>
     </ScrollView>
     );
@@ -112,15 +108,7 @@ const styles = StyleSheet.create({
     padding: 20,
     margin: 20,
   },
-  noImage: {
-    alignSelf: 'center',
-    height: 300,
-    width,
-    padding: 20,
-    margin: 20,
-  },
-  noImageContainer: {
-    flex: 1,
-    top:50
+  button:{
+    alignSelf: 'center'
   }
 });
