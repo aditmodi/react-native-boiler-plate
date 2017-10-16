@@ -14,6 +14,8 @@ import {
 
 var secret = '7x0jhxt"9(thpX6';
 
+export var identity;
+
 export const login = (req, res, next) => {
   let v = emailValidator(req.body.username);
   let passLen = req.body.password.length;
@@ -31,6 +33,7 @@ export const login = (req, res, next) => {
             return res.json({ success: false, token: null, message: 'Incorrect Password' });
           }
           else {
+            identity = user._id;
             var token = jwt.sign({ id: user._id, email: user.email }, secret, {
               expiresIn: 1440     //expires in 24 hours
             });
@@ -147,22 +150,18 @@ export const logOut = (req, res) => {
 }
 
 export const authUser = (req, res, next) => {
-  console.log("Coming here");
   let token = req.headers['token'];
-  console.log("token---> ", token);
   // decode token
   if (token != null) {
-            console.log("again here");
     // verifies secret and checks exp
     jwt.verify(token, secret, (err, decoded) => {
       if (err) {
-        console.log("failed");
         return res.json({ success: false, message: 'Failed to authenticate token.' });
       } else {
         // if everything is good, save to request for use in other routes;
-        console.log("passed");
         req.decoded = decoded;
         req.user = decoded;
+
         return next();
       }
     });
@@ -175,3 +174,14 @@ export const authUser = (req, res, next) => {
     });
   }
 };
+
+export const getUser = (req, res, next) => {
+  User.findById(req.params.id, (err, user) => {
+    if(err)
+      res.send(err)
+    res.json({
+      success: true,
+      user: user
+    })
+  })
+}

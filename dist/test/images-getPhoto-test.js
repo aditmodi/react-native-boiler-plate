@@ -31,27 +31,56 @@ var should = _chai2.default.should();
 
 _chai2.default.use(_chaiHttp2.default);
 
-describe('Images', function () {
+describe('Get Images', function () {
   // after((done) => {
   //   ImageDB.remove({}, (err) => {
   //     done();
   //   })
   // });
+  describe('Success case', function () {
+    it('should show images with token', function (done) {
+      _chai2.default.request(server).get('/api/getPhoto/' + _userLoginTest.Id).set('token', _userLoginTest.token).end(function (err, res) {
+        res.should.have.status(200);
+        res.body.should.have.property('status').eql('ok');
+        done();
+      });
+    });
 
-  it('should show images with token', function (done) {
-    _chai2.default.request(server).get('/api/getPhoto/' + _images4.default.data.id).set('token', _userLoginTest.token).end(function (err, res) {
-      console.log("SDASDSAD:", res.body);
-      res.should.have.status(200);
-      res.body.should.have.property('status').eql('ok');
-      done();
+    it('should add 3 images and show them all', function (done) {
+      _chai2.default.request(server).post('/api/addPhoto').set('token', _userLoginTest.token).send({
+        data: _images4.default.second,
+        id: _userLoginTest.Id
+      }).end(function (err, res) {
+        // done();
+      });
+      _chai2.default.request(server).post('/api/addPhoto').set('token', _userLoginTest.token).send({
+        data: _images4.default.third,
+        id: _userLoginTest.Id
+      }).end(function (err, res) {
+        // done();
+      });
+      _chai2.default.request(server).get('/api/getPhoto/' + _userLoginTest.Id).set('token', _userLoginTest.token).end(function (err, res) {
+        console.log('------', res.status, '----', res.body, '-----', res.body.data.length);
+        done();
+      });
     });
   });
-  it('should not show images without token', function (done) {
-    _chai2.default.request(server).get('/api/getPhoto/' + _images4.default.data.id).set('token', null).end(function (err, res) {
-      console.log("qqqqqqq:", res.body);
-      res.body.should.have.property('success').eql(false);
-      res.body.should.have.property('message').eql('Failed to authenticate token.');
-      done();
+
+  describe('Failure cases', function () {
+    it('should not show images without token', function (done) {
+      _chai2.default.request(server).get('/api/getPhoto/' + _userLoginTest.Id).end(function (err, res) {
+        res.body.should.have.property('success').eql(false);
+        res.body.should.have.property('message').eql('No token provided.');
+        done();
+      });
+    });
+
+    it('should not show images with invalid token', function (done) {
+      _chai2.default.request(server).get('/api/getPhoto/' + _userLoginTest.Id).set('token', '1234').end(function (err, res) {
+        res.body.should.have.property('success').eql(false);
+        res.body.should.have.property('message').eql('Failed to authenticate token.');
+        done();
+      });
     });
   });
 });

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.authUser = exports.logOut = exports.register = exports.check = exports.login = undefined;
+exports.getUser = exports.authUser = exports.logOut = exports.register = exports.check = exports.login = exports.identity = undefined;
 
 var _user = require('../models/user');
 
@@ -30,6 +30,8 @@ var _validationsServer = require('../validations-server');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var secret = '7x0jhxt"9(thpX6'; // get an instance of the express Router
+var identity = exports.identity = undefined;
+
 var login = exports.login = function login(req, res, next) {
   var v = (0, _validationsServer.emailValidator)(req.body.username);
   var passLen = req.body.password.length;
@@ -46,6 +48,7 @@ var login = exports.login = function login(req, res, next) {
           if (ret == false) {
             return res.json({ success: false, token: null, message: 'Incorrect Password' });
           } else {
+            exports.identity = identity = user._id;
             var token = _jsonwebtoken2.default.sign({ id: user._id, email: user.email }, secret, {
               expiresIn: 1440 //expires in 24 hours
             });
@@ -149,9 +152,7 @@ var logOut = exports.logOut = function logOut(req, res) {
 };
 
 var authUser = exports.authUser = function authUser(req, res, next) {
-
   var token = req.headers['token'];
-  console.log("token---> ", token);
   // decode token
   if (token != null) {
     // verifies secret and checks exp
@@ -162,6 +163,7 @@ var authUser = exports.authUser = function authUser(req, res, next) {
         // if everything is good, save to request for use in other routes;
         req.decoded = decoded;
         req.user = decoded;
+
         return next();
       }
     });
@@ -173,4 +175,14 @@ var authUser = exports.authUser = function authUser(req, res, next) {
       message: 'No token provided.'
     });
   }
+};
+
+var getUser = exports.getUser = function getUser(req, res, next) {
+  _user2.default.findById(req.params.id, function (err, user) {
+    if (err) res.send(err);
+    res.json({
+      success: true,
+      user: user
+    });
+  });
 };

@@ -12,6 +12,7 @@ let should = chai.should();
 chai.use(chaiHttp);
 
 export var token;
+export var Id;
 
 describe('Users', () => {
   // after((done) => {
@@ -26,6 +27,7 @@ describe('Users', () => {
         .send(DummyUser.login.validUser)
         .end((err, res) => {
             token = res.body.token;
+            Id = res.body.id;
             res.should.have.status(200);
             res.body.should.be.a('object');
             res.body.should.have.property('success').eql(true);
@@ -59,6 +61,28 @@ describe('Users', () => {
             res.body.should.be.a('object');
           done();
         })
-    })
+    });
+
+    it('should not login with empty email field', (done) => {
+      chai.request(server)
+        .post('/api/login')
+        .send(DummyUser.login.emptyEmail)
+        .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property('message').eql('Invalid credentials');
+          done();
+        })
+    });
+
+    it('should not login with empty password field', (done) => {
+      chai.request(server)
+        .post('/api/login')
+        .send(DummyUser.login.emptyPass)
+        .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property('message').eql('Invalid credentials');
+          done();
+        })
+    });
   })
 })
