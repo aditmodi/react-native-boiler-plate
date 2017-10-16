@@ -43,6 +43,9 @@ export default class Menu extends Component {
         <TouchableOpacity style={styles.sideMenuClick} onPress={this.props.profileButton}>
           <Text style={styles.menuItem}>Profile</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.sideMenuClick} onPress={this.props.profileViewButton}>
+          <Text style={styles.menuItem}>Profile View</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.sideMenuClick} onPress={this.props.logoutButton}>
           <Text style={styles.menuItem}>Logout</Text>
         </TouchableOpacity>

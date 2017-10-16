@@ -92,6 +92,7 @@ export default class HomeScreen extends Component {
       homeButton={() => navigate('Home')}
       profileButton={() => navigate('Profile')}
       logoutButton={this.handleLogout}
+      profileViewButton={() => navigate('ProfileView')}
     />);
     return (
       <SideMenu isOpen={this.state.menuOpen} menu={menu}>

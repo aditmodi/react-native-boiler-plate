@@ -1,5 +1,5 @@
 const Address = {
-  url: 'https://heroku-node-1995.herokuapp.com/'
+  url: 'http://192.168.1.189:3001/'
 }
 
 export default Address;
