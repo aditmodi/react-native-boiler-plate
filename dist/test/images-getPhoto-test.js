@@ -32,11 +32,26 @@ var should = _chai2.default.should();
 _chai2.default.use(_chaiHttp2.default);
 
 describe('Get Images', function () {
-  // after((done) => {
-  //   ImageDB.remove({}, (err) => {
-  //     done();
-  //   })
-  // });
+  before(function (done) {
+    _chai2.default.request(server).post('/api/addPhoto').set('token', _userLoginTest.token).send({
+      data: _images4.default.second,
+      id: _userLoginTest.Id
+    }).end(function (err, res) {
+      // done();
+    });
+    _chai2.default.request(server).post('/api/addPhoto').set('token', _userLoginTest.token).send({
+      data: _images4.default.third,
+      id: _userLoginTest.Id
+    }).end(function (err, res) {
+      done();
+    });
+  });
+
+  after(function (done) {
+    _images2.default.remove({}, function (err) {
+      done();
+    });
+  });
   describe('Success case', function () {
     it('should show images with token', function (done) {
       _chai2.default.request(server).get('/api/getPhoto/' + _userLoginTest.Id).set('token', _userLoginTest.token).end(function (err, res) {
@@ -47,20 +62,10 @@ describe('Get Images', function () {
     });
 
     it('should add 3 images and show them all', function (done) {
-      _chai2.default.request(server).post('/api/addPhoto').set('token', _userLoginTest.token).send({
-        data: _images4.default.second,
-        id: _userLoginTest.Id
-      }).end(function (err, res) {
-        // done();
-      });
-      _chai2.default.request(server).post('/api/addPhoto').set('token', _userLoginTest.token).send({
-        data: _images4.default.third,
-        id: _userLoginTest.Id
-      }).end(function (err, res) {
-        // done();
-      });
+
       _chai2.default.request(server).get('/api/getPhoto/' + _userLoginTest.Id).set('token', _userLoginTest.token).end(function (err, res) {
-        console.log('------', res.status, '----', res.body, '-----', res.body.data.length);
+        res.should.have.status(200);
+        res.body.should.have.property('data').with.length(3);
         done();
       });
     });

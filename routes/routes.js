@@ -6,12 +6,14 @@ import {
   register,
   logOut,
   authUser,
-  getUser
+  getUser,
+  updateUser
 } from '../controller/controller';
 
 router.get('/', check);
 router.get('/logout', authUser, logOut);
 router.post('/register', register);
 router.post('/login', login);
-router.post('/getUser/:id', authUser, getUser)
+router.get('/getUser/:id', authUser, getUser);
+router.post('/updateUser/:id', authUser, updateUser)
 export { router };

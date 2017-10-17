@@ -16,14 +16,14 @@ process.env.NODE_ENV = 'test';
 
 //dev dependencies
 
-var server = require('../server');
+var server = require('../app-server');
 var should = _chai2.default.should();
 
 _chai2.default.use(_chaiHttp2.default);
 
 describe('Check server', function () {
   it('should start the server', function (done) {
-    _chai2.default.request('http://192.168.1.189:3001/api').get('/').end(function (err, res) {
+    _chai2.default.request(server).get('/api').end(function (err, res) {
       res.should.have.status(200);
       res.body.should.be.a('string');
       res.body.length.should.be.eql(26);

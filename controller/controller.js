@@ -151,6 +151,7 @@ export const logOut = (req, res) => {
 
 export const authUser = (req, res, next) => {
   let token = req.headers['token'];
+    console.log('!!!!!!!', token);
   // decode token
   if (token != null) {
     // verifies secret and checks exp
@@ -159,6 +160,7 @@ export const authUser = (req, res, next) => {
         return res.json({ success: false, message: 'Failed to authenticate token.' });
       } else {
         // if everything is good, save to request for use in other routes;
+        console.log('|||||||||||');
         req.decoded = decoded;
         req.user = decoded;
 
@@ -175,13 +177,68 @@ export const authUser = (req, res, next) => {
   }
 };
 
-export const getUser = (req, res, next) => {
+export const getUser = (req, res) => {
+  console.log('-------------');
   User.findById(req.params.id, (err, user) => {
     if(err)
       res.send(err)
-    res.json({
+    return res.json({
       success: true,
       user: user
     })
   })
+}
+
+export const updateUser = (req, res) => {
+  console.log('~~~~~~~~~~~~', req.body);
+  // let f = alphaNumeric(req.body.fname);
+  // let l = alphaNumeric(req.body.lname);
+  // let e = email(req.body.email);
+  // let p = onlyNumber(req.body.phone);
+  // if (f === false){
+  //   res.json({
+  //     success: false,
+  //     message: 'Error in first name'
+  //   })
+  // }
+  // else if (l === false){
+  //   res.json({
+  //     success: false,
+  //     message: 'Error in last name'
+  //   })
+  // }
+  // else if (e === false){
+  //   res.json({
+  //     success: false,
+  //     message: 'Error in email'
+  //   })
+  // }
+  // else if (p === false){
+  //   res.json({
+  //     success: false,
+  //     message: 'Error in phone number'
+  //   })
+  // }
+  // else if (g !== 'male' || g !== 'female'){
+  //   res.json({
+  //     success: false,
+  //     message: 'Error in gender'
+  //   })
+  // }
+  // else {
+    User.findByIdAndUpdate(req.params.id, { $set: {
+      firstName: req.body.fname,
+      lastName: req.body.lname,
+      email: req.body.email,
+      phone: req.body.phone,
+      gender: req.body.gender
+    }}, { new: true }, (err, user) => {
+      if(err)
+      return res.send(err)
+      return res.json({
+        success: true,
+        message: 'User updated'
+      })
+    })
+  // }
 }

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getUser = exports.authUser = exports.logOut = exports.register = exports.check = exports.login = exports.identity = undefined;
+exports.updateUser = exports.getUser = exports.authUser = exports.logOut = exports.register = exports.check = exports.login = exports.identity = undefined;
 
 var _user = require('../models/user');
 
@@ -72,14 +72,14 @@ var check = exports.check = function check(req, res) {
 
 var register = exports.register = function register(req, res) {
   if (req.body.fname !== null && req.body.lname !== null && req.body.email !== null && req.body.phone !== null && req.body.password !== null && req.body.cPassword !== null && req.body.gender !== null) {
-    var email = (0, _validationsServer.emailValidator)(req.body.email);
+    var _email = (0, _validationsServer.emailValidator)(req.body.email);
     var fname = (0, _validationsServer.alphaNumeric)(req.body.fname);
     var lname = (0, _validationsServer.alphaNumeric)(req.body.lname);
     var phone = (0, _validationsServer.onlyNumber)(req.body.phone);
     var pass = (0, _validationsServer.passMatch)(req.body.password, req.body.cPassword);
     var gender = req.body.gender;
 
-    if (fname === true && lname === true && email === true && phone === true && pass === true && (gender === 'male' || gender === 'female')) {
+    if (fname === true && lname === true && _email === true && phone === true && pass === true && (gender === 'male' || gender === 'female')) {
       _user2.default.findOne({ email: req.body.email }, function (err, user) {
         if (err) {
           res.send(err);
@@ -119,7 +119,7 @@ var register = exports.register = function register(req, res) {
         return res.json({
           message: 'Last Name is Invalid'
         });
-      } else if (email !== true) {
+      } else if (_email !== true) {
         return res.json({
           message: 'Email is Invalid'
         });
@@ -155,6 +155,7 @@ var logOut = exports.logOut = function logOut(req, res) {
 
 var authUser = exports.authUser = function authUser(req, res, next) {
   var token = req.headers['token'];
+  console.log('!!!!!!!', token);
   // decode token
   if (token != null) {
     // verifies secret and checks exp
@@ -163,6 +164,7 @@ var authUser = exports.authUser = function authUser(req, res, next) {
         return res.json({ success: false, message: 'Failed to authenticate token.' });
       } else {
         // if everything is good, save to request for use in other routes;
+        console.log('|||||||||||');
         req.decoded = decoded;
         req.user = decoded;
 
@@ -179,12 +181,61 @@ var authUser = exports.authUser = function authUser(req, res, next) {
   }
 };
 
-var getUser = exports.getUser = function getUser(req, res, next) {
+var getUser = exports.getUser = function getUser(req, res) {
+  console.log('-------------');
   _user2.default.findById(req.params.id, function (err, user) {
     if (err) res.send(err);
-    res.json({
+    return res.json({
       success: true,
       user: user
     });
   });
+};
+
+var updateUser = exports.updateUser = function updateUser(req, res) {
+  console.log('~~~~~~~~~~~~', req.body);
+  var f = (0, _validationsServer.alphaNumeric)(req.body.fname);
+  var l = (0, _validationsServer.alphaNumeric)(req.body.lname);
+  var e = email(req.body.email);
+  var p = (0, _validationsServer.onlyNumber)(req.body.phone);
+  if (f === false) {
+    res.json({
+      success: false,
+      message: 'Error in first name'
+    });
+  } else if (l === false) {
+    res.json({
+      success: false,
+      message: 'Error in last name'
+    });
+  } else if (e === false) {
+    res.json({
+      success: false,
+      message: 'Error in email'
+    });
+  } else if (p === false) {
+    res.json({
+      success: false,
+      message: 'Error in phone number'
+    });
+  } else if (g !== 'male' || g !== 'female') {
+    res.json({
+      success: false,
+      message: 'Error in gender'
+    });
+  } else {
+    _user2.default.findByIdAndUpdate(req.params.id, { $set: {
+        firstName: req.body.fname,
+        lastName: req.body.lname,
+        email: req.body.email,
+        phone: req.body.phone,
+        gender: req.body.gender
+      } }, { new: true }, function (err, user) {
+      if (err) return res.send(err);
+      return res.json({
+        success: true,
+        message: 'User updated'
+      });
+    });
+  }
 };

@@ -85,7 +85,15 @@ var DummyUser = {
       username: '123@abc.com',
       password: '123456'
     },
-    nullUser: null
+    nullUser: null,
+    emptyEmail: {
+      username: null,
+      password: '123456'
+    },
+    emptyPass: {
+      username: 'abc@xyz.com',
+      password: ''
+    }
   }
 };
 
