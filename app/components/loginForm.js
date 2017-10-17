@@ -101,12 +101,16 @@ export default class LoginForm extends Component {
                 <InputField
                   type="email"
                   label="Email"
+                  stacked={false}
+                  float={true}
                   ref={this.props.loginEmail}
                 />
                 <InputField
                   type="password"
                   secure
                   label="Password"
+                  stacked={false}
+                  float={true}
                   ref={this.props.loginPass}
                 />
                 <Button

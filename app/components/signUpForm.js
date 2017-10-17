@@ -56,31 +56,23 @@ export default class SignUpForm extends Component {
               type="text"
               label="First Name"
               ref={this.props.fname}
+              float={true}
+              stacked={false}
             />
             <InputField
               type="text"
               label="Last Name"
               ref={this.props.lname}
+              float={true}
+              stacked={false}
             />
             <InputField
               type="email"
               label="Email"
               ref={this.props.email}
+              float={true}
+              stacked={false}
             />
-            {/* <InputField
-              type="password"
-              label="Password"
-              blur={this.props.handleBlur}
-              ref={this.props.password}
-              secure
-            />
-            <InputField
-              type="cPassword"
-              label="Confirm Password"
-              blur={this.props.handleBlur}
-              ref={this.props.cPassword}
-              secure
-            /> */}
             <MatchPass
               pass={this.props.password}
               cPass={this.props.cPassword}
@@ -92,6 +84,8 @@ export default class SignUpForm extends Component {
               type="number"
               label="Phone No."
               ref={this.props.phone}
+              float={true}
+              stacked={false}
               // keyboard={'numeric'}
             />
             <Button style={styles.submitButton} onPress={this.props.submitPressed}>

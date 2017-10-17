@@ -44,8 +44,16 @@ export default class InputField extends Component {
       valid: false,
       errorVisible: false,
       errorMessage: '',
-      value: '',
+      value: props.value,
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.value) {
+      this.setState({
+        value: nextProps.value,
+      });
+    }
   }
 
   clear = () => {
@@ -69,12 +77,6 @@ export default class InputField extends Component {
     } else if (type === 'number') {
       valid = onlyNumber(text);
     }
-    // else if (type === 'password') {
-    //   text1 = text;
-    // } else if (type === 'cPassword') {
-    //   text2 = text;
-    //   valid = passMatch(text1, text2);
-    // }
     else {
       valid = true;
     }
@@ -96,19 +98,6 @@ export default class InputField extends Component {
       error = true;
       success = false;
     }
-    // else if (type === 'password' || type === 'cPassword') {
-    //   if (valid === false) {
-    //     msg = 'Passwords do not match';
-    //     visible = true;
-    //     error = true;
-    //     success = false;
-    //   } else {
-    //     msg = '';
-    //     visible = false;
-    //     error = false;
-    //     success = true;
-    //   }
-    // } 
     else if (valid === true && type === 'number' && text.length > 10) {
       msg = 'Limit is only upto 10 digits';
       visible = true;
@@ -137,7 +126,8 @@ export default class InputField extends Component {
     return (
       <View>
         <Item
-          floatingLabel
+          floatingLabel={this.props.float}
+          stackedLabel={this.props.stacked}
           success={this.state.success}
           error={this.state.error}
         >

@@ -6,6 +6,7 @@ import CameraScreen from './screens/camera';
 import ImageScreen from './screens/images';
 import MapScreen from './screens/map';
 import ProfileView from './screens/profileView';
+import EditForm from './screens/editForm';
 // import LayoutWithoutHeader from './layout/layoutWithoutHeader';
 // import LayoutWithHeader from './layout/layoutWithHeader';
 
@@ -17,6 +18,7 @@ const App = StackNavigator({
   Images: { screen: ImageScreen, navigationOptions: { header: null } },
   Maps: { screen: MapScreen, navigationOptions: { header: null } },
   ProfileView: { screen: ProfileView, navigationOptions: { header: null } },
+  Edit: { screen: EditForm, navigationOptions: { header: null } },
 });
 
 // const App = StackNavigator({
