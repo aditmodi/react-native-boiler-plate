@@ -50,7 +50,7 @@ export default class GenderRadio extends Component {
           style={styles.radio}
           radio_props={radioProps}
           formHorizontal // radioboxes direction
-          initial={0}
+          initial={this.props.initial}
           // animation={'true'}
           labelHorizontal // radiobox label direction
           onPress={(value) => { this.setState({ value }); }}

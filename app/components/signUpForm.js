@@ -78,6 +78,7 @@ export default class SignUpForm extends Component {
               cPass={this.props.cPassword}
             />
             <GenderRadio
+              initial={0}
               ref={this.props.gender}
             />
             <InputField

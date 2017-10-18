@@ -5,10 +5,12 @@ import {
   AsyncStorage,
   StyleSheet,
   Text,
-  Alert
+  Alert,
+  Picker
 } from 'react-native';
 import {
-  Button
+  Button,
+  Label
 } from 'native-base';
 import {
   email,
@@ -20,6 +22,8 @@ import InputField from '../components/input';
 import GenderRadio from '../components/genderRadio';
 import Address from '../utils/address';
 import HeaderComponent from '../components/headerComponent';
+
+let num;
 
 export default class EditForm extends Component {
   constructor(props){
@@ -52,6 +56,12 @@ export default class EditForm extends Component {
           return response.json()})
         .then((res) => {
           console.log('******', res);
+          if(res.user.gender == 'female'){
+            num = 1;
+          }
+          if(res.user.gender == 'male'){
+            num = 0;
+          }
           this.setState({
             fname: res.user.firstName,
             lname: res.user.lastName,
@@ -73,7 +83,8 @@ export default class EditForm extends Component {
     let l = this.lname.state;
     let e = this.email.state;
     let p = this.phone.state;
-    let g = this.gender.state;
+    // let g = this.gender.state;
+    let g = this.state.gender;
     let fv = alphaNumeric(f.value);
     let lv = alphaNumeric(l.value);
     let ev = email(e.value);
@@ -81,10 +92,11 @@ export default class EditForm extends Component {
     console.log('----', f.value);
     console.log('----', l.value);
     console.log('----', e.value);
-    console.log('fname', f);
-    console.log('fname', l);
-    console.log('fname', e);
-    console.log('fname', p);
+    // console.log('----', g.value);
+    console.log('fname', fv);
+    console.log('fname', lv);
+    console.log('fname', ev);
+    console.log('fname', pv);
     // if (fv === true && lv === true && ev === true && pv === true) {
       const checkToken = await AsyncStorage.getItem('jwt', (err, token) => {
         console.log('^^^^^^^', token);
@@ -93,21 +105,26 @@ export default class EditForm extends Component {
           fetch(`${Address.url}api/updateUser/${id}`, {
             method: 'POST',
             headers: {
-              Accept: 'application/json',
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
               token: `${token}`
             },
             body: JSON.stringify({
-              fname: this.fname.state.value,
-              lname: this.lname.state.value,
-              email: this.email.state.value,
-              phone: Number(this.phone.state.value),
-              gender: this.gender.state.value,
+              fname: f.value,
+              lname: l.value,
+              email: e.value,
+              phone: Number(p.value),
+              gender: g,
             })
           })
           .then((response) => {
             return response.json();
-            Alert.alert('Congratulations!! Your profile has been updated');
-            navigate('ProfileView');
+          })
+          .then((res) => {
+            Alert.alert(res.message);
+            if(res.success == true){
+              navigate('ProfileView')
+            }
           })
           .catch((e) => {
             console.error(e);
@@ -122,6 +139,8 @@ export default class EditForm extends Component {
 
   render(){
     const { navigate } = this.props.navigation;
+    console.log('!!!12@@@@@@@@@@', this.state.gender);
+    let male = 'male'
     return(
       <ScrollView>
         <HeaderComponent
@@ -161,10 +180,14 @@ export default class EditForm extends Component {
           float={false}
           stacked={true}
         />
-        <GenderRadio
-          value={this.state.gender}
-          ref={(input) => { this.gender = input }}
-        />
+        <Label>Gender</Label>
+        <Picker
+          selectedValue={this.state.gender}
+          onValueChange={(itemValue, itemIndex) => this.setState({gender: itemValue})}
+          >
+          <Picker.Item label='male' value='male'/>
+          <Picker.Item label='female' value='female'/>
+        </Picker>
         <View style={styles.buttons}>
           <Button style={styles.button} success onPress={this.updateChange}>
             <Text style={styles.buttonText}>Save Changes</Text>

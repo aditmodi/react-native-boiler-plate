@@ -92,7 +92,7 @@ export default class ImageScreen extends Component {
             this.state.url.map((item, i) => this.renderImages(item, i))
           }
       <Button style={styles.button} onPress={() => navigate('Camera')}>
-        <Text>Add Images</Text>
+        <Text style={styles.buttonText}>Add Images</Text>
       </Button>
       </View>
     </ScrollView>
@@ -109,6 +109,12 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   button:{
-    alignSelf: 'center'
+    alignSelf: 'center',
+    padding: 10,
+    marginTop: 10
+  },
+  buttonText: {
+    color: '#ffffff',
+    padding: 10
   }
 });

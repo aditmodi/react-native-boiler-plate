@@ -153,6 +153,10 @@ export default class HomeScreen extends Component {
                     }
                   } else {
                     Alert.alert(res.message);
+                    this.setState({
+                      token: res.token,
+                      isLoading: false
+                    });
                   }
                 })
                 .catch((e) => {
