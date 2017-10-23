@@ -90,7 +90,6 @@ export default class HomeScreen extends Component {
     const { navigate } = this.props.navigation;
     const menu = (<Menu
       homeButton={() => navigate('Home')}
-      profileButton={() => navigate('Profile')}
       logoutButton={this.handleLogout}
       profileViewButton={() => navigate('ProfileView')}
     />);
@@ -102,7 +101,11 @@ export default class HomeScreen extends Component {
           leftPressed={this.menuPressed}
           title={name?`Welcome ${name}`:`Welcome`}
         />
-        <HomeContent menuPress={this.menuPressed} />
+        <HomeContent menuPress={this.menuPressed}
+          cameraPressed={() => navigate('Camera')}
+          imagePressed={() => navigate('Images')}
+          mapPressed={() => navigate('Maps')}
+        />
       </SideMenu>
     );
   }
@@ -188,6 +191,7 @@ export default class HomeScreen extends Component {
             }
         }
         signUpPressed={() => navigate('SignUp')} // when signUp is pressed
+        forgotPassPressed={() => navigate('ForgotPass')}
       />
     );
   }
