@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.token = undefined;
+exports.Id = exports.token = undefined;
 
 var _mongoose = require('mongoose');
 
@@ -37,6 +37,7 @@ var should = _chai2.default.should();
 _chai2.default.use(_chaiHttp2.default);
 
 var token = exports.token = undefined;
+var Id = exports.Id = undefined;
 
 describe('Users', function () {
   // after((done) => {
@@ -48,6 +49,7 @@ describe('Users', function () {
     it('should login an existing user', function (done) {
       _chai2.default.request(server).post('/api/login').send(_user4.default.login.validUser).end(function (err, res) {
         exports.token = token = res.body.token;
+        exports.Id = Id = res.body.id;
         res.should.have.status(200);
         res.body.should.be.a('object');
         res.body.should.have.property('success').eql(true);
@@ -73,6 +75,22 @@ describe('Users', function () {
       _chai2.default.request(server).post('/api/login').send(_user4.default.login.nullUser).end(function (err, res) {
         res.should.have.status(500);
         res.body.should.be.a('object');
+        done();
+      });
+    });
+
+    it('should not login with empty email field', function (done) {
+      _chai2.default.request(server).post('/api/login').send(_user4.default.login.emptyEmail).end(function (err, res) {
+        res.should.have.status(200);
+        res.body.should.have.property('message').eql('Invalid credentials');
+        done();
+      });
+    });
+
+    it('should not login with empty password field', function (done) {
+      _chai2.default.request(server).post('/api/login').send(_user4.default.login.emptyPass).end(function (err, res) {
+        res.should.have.status(200);
+        res.body.should.have.property('message').eql('Invalid credentials');
         done();
       });
     });

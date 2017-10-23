@@ -21,5 +21,6 @@ router.get('/', _controller.check);
 router.get('/logout', _controller.authUser, _controller.logOut);
 router.post('/register', _controller.register);
 router.post('/login', _controller.login);
-router.post('/getUser/:id', _controller.authUser, _controller.getUser);
+router.get('/getUser/:id', _controller.authUser, _controller.getUser);
+router.post('/updateUser/:id', _controller.authUser, _controller.updateUser);
 exports.router = router;

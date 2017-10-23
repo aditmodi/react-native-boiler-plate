@@ -7,7 +7,8 @@ import {
   logOut,
   authUser,
   getUser,
-  updateUser
+  updateUser,
+  sendEmail
 } from '../controller/controller';
 
 router.get('/', check);
@@ -15,5 +16,6 @@ router.get('/logout', authUser, logOut);
 router.post('/register', register);
 router.post('/login', login);
 router.get('/getUser/:id', authUser, getUser);
-router.post('/updateUser/:id', authUser, updateUser)
+router.post('/updateUser/:id', authUser, updateUser);
+router.post('/recoverPass', sendEmail)
 export { router };

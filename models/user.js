@@ -31,6 +31,9 @@ var userSchema = new Schema({
   phone: {
     type: Number,
     required: true
+  },
+  recoveryToken: {
+    type: String
   }
 });
 

@@ -1,5 +1,8 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var passportLocalMongoose = require('passport-local-mongoose');
@@ -42,4 +45,4 @@ userSchema.plugin(passportLocalMongoose, {
 });
 
 //Export mongoose model
-module.exports = mongoose.model('Users', userSchema);
+exports.default = mongoose.model('Users', userSchema);

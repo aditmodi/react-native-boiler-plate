@@ -33,48 +33,58 @@ var should = _chai2.default.should();
 _chai2.default.use(_chaiHttp2.default);
 
 describe('Users', function () {
-  before(function (done) {
-    _user2.default.remove({}, function (err) {
-      done();
-    });
-    _chai2.default.request(server).post('/api/register').send(_user4.default.register.validUser);
-  });
+  // before((done) => {
+  //   User.remove({}, (err) => {
+  //     chai.request(server)
+  //     .post('/api/register')
+  //     .send(DummyUser.register.validUser)
+  //     done();
+  //   })
+  // })
 
   describe('Get User Details', function () {
     describe('Success Case', function () {
       it('should get the details with valid token and id', function (done) {
-        _chai2.default.request(server).get('/api/getUser' + _userLoginTest.Id).set('token', _userLoginTest.token).end(function (err, res) {
-          console.log('>>>>>>>>', res.body, '>>>>', res.status);
+        _chai2.default.request(server).get('/api/getUser/' + _userLoginTest.Id).set('token', _userLoginTest.token).end(function (err, res) {
+          res.should.have.status(200);
+          res.body.should.have.property('success').eqls(true);
+          res.body.should.have.property('user');
           done();
         });
       });
     });
 
     describe('Failure Cases', function () {
-      it('should not fetch details with invalid token', function (done) {
-        _chai2.default.request(server).get('/api/getUser/' + _userLoginTest.Id).set('token', '1234').end(function (err, res) {
-          console.log('>>>>>>>>', res.body, '>>>>', res.status);
+      it('should not fetch details with invalid id', function (done) {
+        _chai2.default.request(server).get('/api/getUser/123123').set('token', _userLoginTest.token).end(function (err, res) {
+          res.should.have.status(200);
+          res.body.should.have.property('success').eqls(false);
+          res.body.should.have.property('message').eqls('Invalid Id');
           done();
         });
       });
 
-      it('should not fetch details with invalid id', function (done) {
-        _chai2.default.request(server).get('/api/getUser/123123').set('token', _userLoginTest.token).end(function (err, res) {
-          console.log('>>>>>>>>', res.body, '>>>>', res.status);
+      it('should not fetch details with invalid token', function (done) {
+        _chai2.default.request(server).get('/api/getUser/' + _userLoginTest.Id).set('token', '1234').end(function (err, res) {
+          res.should.have.status(200);
+          res.body.should.have.property('success').eqls(false);
+          res.body.should.have.property('message').eqls('Failed to authenticate token.');
           done();
         });
       });
 
       it('should not fetch details with null token', function (done) {
         _chai2.default.request(server).get('/api/getUser/' + _userLoginTest.Id).end(function (err, res) {
-          console.log('>>>>>>>>', res.body, '>>>>', res.status);
+          res.should.have.status(403);
+          res.body.should.have.property('success').eqls(false);
+          res.body.should.have.property('message').eqls('No token provided.');
           done();
         });
       });
 
       it('should not fetch details with null id', function (done) {
-        _chai2.default.request(server).get('/api/getUser').set('token', _userLoginTest.token).end(function (err, res) {
-          console.log('>>>>>>>>', res.body, '>>>>', res.status);
+        _chai2.default.request(server).get('/api/getUser/').set('token', _userLoginTest.token).end(function (err, res) {
+          res.should.have.status(404);
           done();
         });
       });

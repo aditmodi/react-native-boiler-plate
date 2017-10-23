@@ -26,7 +26,7 @@ function _interopRequireDefault(obj) {
 
 process.env.NODE_ENV = 'test';
 
-var server = require('../server');
+var server = require('../app-server');
 var should = _chai2.default.should();
 
 _chai2.default.use(_chaiHttp2.default);
@@ -40,9 +40,12 @@ describe('Users', function () {
 
   describe('login', function () {
     it('should login an existing user', function () {
-      _chai2.default.request('http://192.168.1.189:3001/api').post('/register').send(_user4.default.register.validUser);
+      _chai2.default.request(server).post('/register').send(_user4.default.register.validUser);
 
-      _chai2.default.request('http://192.168.1.189:3001/api').post('/login').send(_user4.default.login.validUser).end(function (err, res) {
+      _chai2.default.request(server).post('/login').send(_user4.default.login.validUser).end(function (err, res) {
+        console.log("Valid User----------");
+        console.log("res.status:", res.status);
+        console.log("res.body:", res.body);
         res.should.have.status(200);
         res.body.should.be.a('object');
         res.body.should.have.property('username');
@@ -56,17 +59,29 @@ describe('Users', function () {
     });
 
     it('should not login a non-existing user', function () {
-      _chai2.default.request('http://192.168.1.189:3001/api').post('/login').send(_user4.default.login.nonExistUser).end(function (err, res) {
+      _chai2.default.request(server).post('/login').send(_user4.default.login.nonExistUser).end(function (err, res) {
+        console.log("Non existing User----------");
+        console.log("res.status:", res.status);
+        console.log("res.body:", res.body);
         res.should.have.status(400);
-        res.body.should.have.property('success').eql(false);
-        res.body.should.have.property('token').eql(null);
-        res.body.should.have.property('message').eql('Your email or password is wrong!');
+        res.body.should.be.a('object');
+        res.body.errors.should.have.property('success').eql(false);
+        res.body.errors.should.have.property('token').eql(null);
+        res.body.errors.should.have.property('message').eql('Your email or password is wrong!');
         done();
       });
     });
 
-    it('should not register null user', function () {
-      _chai2.default.request('http://192.168.1.189:3001/api').post('/login').send(_user4.default.login.nullUser).end((err, res));
+    it('should not login a null user', function () {
+      _chai2.default.request(server).post('/login').send(_user4.default.login.nullUser).end(function (err, res) {
+        console.log("Null User----------");
+        console.log("res.status:", res.status);
+        console.log("res.body:", res.body);
+        res.should.have.status(400);
+        res.body.should.be.a('object');
+        res.body.errors.should.have.property('message').eql('Invalid credentials');
+        done();
+      });
     });
   });
 });
