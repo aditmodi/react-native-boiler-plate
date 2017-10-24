@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 // used Radio library from npm
-import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
+import RadioForm, {}
+// { RadioButton, RadioButtonInput, RadioButtonLabel }
+  from 'react-native-simple-radio-button';
 import {
   Text,
   View,
   StyleSheet,
 } from 'react-native';
+import PropTypes from 'prop-types';
 
 const radioProps = [
   { label: 'male', value: 'male' },
@@ -35,6 +38,14 @@ const styles = StyleSheet.create({
 
 // this class is for gender field
 export default class GenderRadio extends Component {
+  static propTypes = {
+    initial: PropTypes.bool,
+  }
+
+  static defaultProps = {
+    initial: null,
+  }
+
   constructor(props) {
     super(props);
     this.state = {

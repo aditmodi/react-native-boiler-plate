@@ -12,14 +12,14 @@ import {
 } from 'react-native';
 import InputField from './input';
 import GenderRadio from './genderRadio';
-import MatchPass from './matchPass'
+import MatchPass from './matchPass';
 
 const styles = StyleSheet.create({
   submitButton: {
     flexDirection: 'row',
     alignSelf: 'center',
     marginTop: 30,
-  }
+  },
 });
 
 export default class SignUpForm extends Component {
@@ -27,11 +27,11 @@ export default class SignUpForm extends Component {
     fname: PropTypes.func,
     lname: PropTypes.func,
     email: PropTypes.func,
-    // password: PropTypes.func,
-    // cPassword: PropTypes.func,
+    password: PropTypes.func,
+    cPassword: PropTypes.func,
     gender: PropTypes.func,
     phone: PropTypes.func,
-    handleBlur: PropTypes.func,
+    // handleBlur: PropTypes.func,
     submitPressed: PropTypes.func,
   }
 
@@ -39,11 +39,11 @@ export default class SignUpForm extends Component {
     fname: null,
     lname: null,
     email: null,
-    // password: null,
-    // cPassword: null,
+    password: null,
+    cPassword: null,
     gender: null,
     phone: null,
-    handleBlur: null,
+    // handleBlur: null,
     submitPressed: null,
   }
 
@@ -56,21 +56,21 @@ export default class SignUpForm extends Component {
               type="text"
               label="First Name"
               ref={this.props.fname}
-              float={true}
+              float
               stacked={false}
             />
             <InputField
               type="text"
               label="Last Name"
               ref={this.props.lname}
-              float={true}
+              float
               stacked={false}
             />
             <InputField
               type="email"
               label="Email"
               ref={this.props.email}
-              float={true}
+              float
               stacked={false}
             />
             <MatchPass
@@ -85,7 +85,7 @@ export default class SignUpForm extends Component {
               type="number"
               label="Phone No."
               ref={this.props.phone}
-              float={true}
+              float
               stacked={false}
               // keyboard={'numeric'}
             />

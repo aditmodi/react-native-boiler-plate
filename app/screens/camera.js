@@ -12,7 +12,7 @@ import {
   Image,
   AsyncStorage,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import Loaders from '../components/loaders';
 import Address from '../utils/address';
@@ -45,7 +45,7 @@ export default class CameraScreen extends Component {
           // picturePath = data.path;
         },
       )
-      .then(res => {
+      .then((res) => {
         // console.log(res.json());
       })
       .catch(err => console.error(err));
@@ -65,7 +65,7 @@ export default class CameraScreen extends Component {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              token
+              token,
             },
             body: JSON.stringify({
               data: picturePath,
@@ -74,17 +74,17 @@ export default class CameraScreen extends Component {
           };
 
           fetch(`${Address.url}api/addPhoto`, config)
-          .then((responseData) => {
-            console.log('this is the response:::', responseData._bodyInit);
-            Alert.alert('Image has been uploaded');
-            this.setState({ path: null, isLoading:false });
+            .then((responseData) => {
+              console.log('this is the response:::', responseData._bodyInit);
+              Alert.alert('Image has been uploaded');
+              this.setState({ path: null, isLoading: false });
             //  ImageStore.addImageFromBase64(responseData._bodyInit, (result) => { console.log("working", result) }, (error) => { console.error(error); });
-          })
-          .catch((err) => {
-            console.log('YOYOY:', err);
-          });
+            })
+            .catch((err) => {
+              console.log('YOYOY:', err);
+            });
         }
-      })
+      });
     });
   }
 
@@ -162,7 +162,7 @@ export default class CameraScreen extends Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-        {this.state.isLoading === true ? <Loaders/> : this.state.path ? this.renderImage() : this.renderCamera()}
+        {this.state.isLoading === true ? <Loaders /> : this.state.path ? this.renderImage() : this.renderCamera()}
       </View>
     );
   }

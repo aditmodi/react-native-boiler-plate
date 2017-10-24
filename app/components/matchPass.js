@@ -2,18 +2,33 @@ import React, { Component } from 'react';
 import {
   Item,
   Input,
-  Label
+  Label,
 } from 'native-base';
 import {
-  View
+  View,
 } from 'react-native';
+import PropTypes from 'prop-types';
 import InputError from './inputError';
 
-export let text1='';
-export let text2='';
+// export let text1 = '';
+// export let text2 = '';
+export const pass = {
+  text1: '',
+  text2: '',
+};
 
 export default class MatchPass extends Component {
-  constructor(props){
+  static propTypes = {
+    pass: PropTypes.func,
+    cPass: PropTypes.func,
+  }
+
+  static defaultProps = {
+    pass: null,
+    cPass: null,
+  }
+
+  constructor(props) {
     super(props);
     this.state = {
       success: false,
@@ -22,33 +37,31 @@ export default class MatchPass extends Component {
       errorVisible: false,
       errorMessage: '',
       value1: '',
-      value2: ''
-    }
+      value2: '',
+    };
   }
 
   handlePass = (text) => {
-    text1 = text;
-    if (text1 !== text2) {
-      console.log("text1text2", text1);
-      console.log("text1text2", text2);
+    pass.text1 = text;
+    if (pass.text1 !== pass.text2) {
       this.setState({
         success: false,
         error: true,
         valid: false,
         errorVisible: true,
-        errorMessage: (text1.length == 0 && text2.length == 0) ? 'Required fields' : 'Passwords do not match',
-        value1: text
-      })
+        errorMessage: (pass.text1.length === 0 && pass.text2.length === 0) ? 'Required fields' : 'Passwords do not match',
+        value1: text,
+      });
     }
-    if (text1 === text2) {
+    if (pass.text1 === pass.text2) {
       this.setState({
         success: true,
         error: false,
         valid: true,
         errorVisible: false,
         errorMessage: '',
-        value1: text
-      })
+        value1: text,
+      });
     }
   }
 
@@ -60,50 +73,46 @@ export default class MatchPass extends Component {
       errorVisible: false,
       errorMessage: '',
       value1: '',
-      value2: ''
-    })
+      value2: '',
+    });
   }
 
   handleCPass = (text) => {
-    text2 = text;
-    if (text1 !== text2) {
-      console.log("text1text2", text1);
-      console.log("text1text2", text2);
+    pass.text2 = text;
+    if (pass.text1 !== pass.text2) {
       this.setState({
         success: false,
         error: true,
         valid: false,
         errorVisible: true,
-        errorMessage: (text1.length == 0 && text2.length == 0) ? 'Required fields' : 'Passwords do not match',
-        value2: text
-      })
+        errorMessage: (pass.text1.length === 0 && pass.text2.length === 0) ? 'Required fields' : 'Passwords do not match',
+        value2: text,
+      });
     }
-    if (text1 === text2) {
+    if (pass.text1 === pass.text2) {
       this.setState({
         success: true,
         error: false,
         valid: true,
         errorVisible: false,
         errorMessage: '',
-        value2: text
-      })
+        value2: text,
+      });
     }
   }
 
   handleBlur = () => {
-    if (text1 !== text2) {
-      console.log("text1text2", text1);
-      console.log("text1text2", text2);
+    if (pass.text1 !== pass.text2) {
       this.setState({
         success: false,
         error: true,
         valid: false,
         errorVisible: true,
-        errorMessage: (text1.length == 0 && text2.length == 0) ? 'Required fields' : 'Passwords do not match',
+        errorMessage: (pass.text1.length === 0 && pass.text2.length === 0) ? 'Required fields' : 'Passwords do not match',
         // value: (type=='password') ? text1 : text2
-      })
+      });
     }
-    if (text1 === text2) {
+    if (pass.text1 === pass.text2) {
       this.setState({
         success: true,
         error: false,
@@ -111,12 +120,12 @@ export default class MatchPass extends Component {
         errorVisible: false,
         errorMessage: '',
         // value: (type=='password') ? text1 : text2
-      })
+      });
     }
   }
 
-  render(){
-    return(
+  render() {
+    return (
       <View>
         <Item
           floatingLabel
@@ -125,7 +134,7 @@ export default class MatchPass extends Component {
         >
           <Label>Password</Label>
           <Input
-            secureTextEntry={true}
+            secureTextEntry
             onChangeText={text => this.handlePass(text)}
             onBlur={this.handleBlur}
             ref={this.props.pass}
@@ -143,7 +152,7 @@ export default class MatchPass extends Component {
         >
           <Label>Confirm Password</Label>
           <Input
-            secureTextEntry={true}
+            secureTextEntry
             onChangeText={text => this.handleCPass(text)}
             onBlur={this.handleBlur}
             ref={this.props.cPass}
@@ -155,6 +164,6 @@ export default class MatchPass extends Component {
           errorMessage={this.state.errorMessage}
         />
       </View>
-    )
+    );
   }
 }

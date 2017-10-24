@@ -24,7 +24,7 @@ export default class HomeScreen extends Component {
     this.state = {
       menuOpen: false,
       token: null,
-      isLoading: true
+      isLoading: true,
     };
   }
 
@@ -42,13 +42,12 @@ export default class HomeScreen extends Component {
     if (checkToken != null) {
       this.setState({
         token: checkToken,
-        isLoading: false
+        isLoading: false,
       });
-    }
-    else {
+    } else {
       this.setState({
-        isLoading: false
-      })
+        isLoading: false,
+      });
     }
   }
 
@@ -61,7 +60,7 @@ export default class HomeScreen extends Component {
         method: 'GET',
         headers: {
           Accept: 'application/json',
-          token: `${token}`
+          token: `${token}`,
         },
       })
         .then((response) => {
@@ -73,12 +72,12 @@ export default class HomeScreen extends Component {
             token: null,
           }); // and then navigate to sign in page
         })
-        .catch(async(e) => {
+        .catch(async (e) => {
           const t = await AsyncStorage.getItem('jwt', (err, tok) => {
-            if(tok === '1234'){
+            if (tok === '1234') {
               AsyncStorage.removeItem('jwt');
             }
-          })
+          });
           Alert.alert('There was an error logging out');
         });
     });
@@ -99,9 +98,10 @@ export default class HomeScreen extends Component {
         <HeaderComponent
           leftIcon="menu"
           leftPressed={this.menuPressed}
-          title={name?`Welcome ${name}`:`Welcome`}
+          title={name ? `Welcome ${name}` : 'Welcome'}
         />
-        <HomeContent menuPress={this.menuPressed}
+        <HomeContent
+          menuPress={this.menuPressed}
           cameraPressed={() => navigate('Camera')}
           imagePressed={() => navigate('Images')}
           mapPressed={() => navigate('Maps')}
@@ -120,22 +120,22 @@ export default class HomeScreen extends Component {
           () => {
             const lengthEmail = this.loginEmail.state.value.length; // calculating length as to see if the fields arent empty
             const lengthPass = this.loginPass.state.value.length;
-            const validEmail = this.loginEmail.state.valid
-              if (lengthEmail != 0 && lengthPass != 0 && validEmail == true) { // when fields are filled
-                this.setState({
-                  isLoading: true
-                })
-                fetch(`${Address.url}api/login`, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                  },
-                  body: JSON.stringify({
-                    username: (this.loginEmail.state.value).toLowerCase(), // passing email and password to the body of the route
-                    password: this.loginPass.state.value,
-                  }),
-                })
+            const validEmail = this.loginEmail.state.valid;
+            if (lengthEmail != 0 && lengthPass != 0 && validEmail == true) { // when fields are filled
+              this.setState({
+                isLoading: true,
+              });
+              fetch(`${Address.url}api/login`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Accept: 'application/json',
+                },
+                body: JSON.stringify({
+                  username: (this.loginEmail.state.value).toLowerCase(), // passing email and password to the body of the route
+                  password: this.loginPass.state.value,
+                }),
+              })
                 .then(response => response.json())
                 .then(async (res) => {
                   console.log('The Response is', res); // token is created
@@ -148,7 +148,7 @@ export default class HomeScreen extends Component {
                       // Redirect to home screen
                       this.setState({
                         token: res.token,
-                        isLoading: false
+                        isLoading: false,
                       });
                     } catch (error) {
                       Alert.alert('got this error');
@@ -158,7 +158,7 @@ export default class HomeScreen extends Component {
                     Alert.alert(res.message);
                     this.setState({
                       token: res.token,
-                      isLoading: false
+                      isLoading: false,
                     });
                   }
                 })
@@ -166,29 +166,29 @@ export default class HomeScreen extends Component {
                   console.log('DASDASDSA', e);
                   Alert.alert('Check your internet connection'); // triggers when there is server issue
                   this.setState({
-                    isLoading: false
-                  })
+                    isLoading: false,
+                  });
                 })
                 .done();
-              } else {
-                this.loginEmail.setState({
-                  success: false,
-                  error: true,
-                  valid: this.loginEmail.state.valid,
-                  errorVisible: true,
-                  errorMessage: this.loginEmail.state.value ? 'Invalid' : 'Required field',
-                  value: this.loginEmail.state.value
-                });
-                this.loginPass.setState({
-                  success: false,
-                  error: true,
-                  errorVisible: true,
-                  errorMessage: 'Required field',
-                  value: this.loginPass.state.value
-                });
-                Alert.alert('Fill the login form'); // when there is error in the fields from the client side
-              }
+            } else {
+              this.loginEmail.setState({
+                success: false,
+                error: true,
+                valid: this.loginEmail.state.valid,
+                errorVisible: true,
+                errorMessage: this.loginEmail.state.value ? 'Invalid' : 'Required field',
+                value: this.loginEmail.state.value,
+              });
+              this.loginPass.setState({
+                success: false,
+                error: true,
+                errorVisible: true,
+                errorMessage: 'Required field',
+                value: this.loginPass.state.value,
+              });
+              Alert.alert('Fill the login form'); // when there is error in the fields from the client side
             }
+          }
         }
         signUpPressed={() => navigate('SignUp')} // when signUp is pressed
         forgotPassPressed={() => navigate('ForgotPass')}
@@ -199,7 +199,7 @@ export default class HomeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.state.isLoading === true ? <Loaders/> :this.state.token ? this.renderHome() : this.renderSignIn()}
+        {this.state.isLoading === true ? <Loaders /> : this.state.token ? this.renderHome() : this.renderSignIn()}
       </View>
     );
   }

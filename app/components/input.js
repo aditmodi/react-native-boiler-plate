@@ -12,12 +12,12 @@ import {
   email,
   alphaNumeric,
   onlyNumber,
-  passMatch,
+  // passMatch,
 } from '../utils/validations';
 import InputError from './inputError';
 
-export let text1 = '';
-export let text2 = '';
+export const text1 = '';
+export const text2 = '';
 
 export default class InputField extends Component {
   static propTypes = {
@@ -26,6 +26,9 @@ export default class InputField extends Component {
     keyboard: PropTypes.string,
     type: PropTypes.string,
     blur: PropTypes.func,
+    value: PropTypes.string,
+    float: PropTypes.bool,
+    stacked: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -34,6 +37,9 @@ export default class InputField extends Component {
     keyboard: null,
     type: null,
     blur: null,
+    value: null,
+    float: null,
+    stacked: null,
   }
 
   constructor(props) {
@@ -76,8 +82,7 @@ export default class InputField extends Component {
       valid = alphaNumeric(text);
     } else if (type === 'number') {
       valid = onlyNumber(text);
-    }
-    else {
+    } else {
       valid = true;
     }
     this.validate(text, valid, type);
@@ -97,8 +102,7 @@ export default class InputField extends Component {
       visible = true;
       error = true;
       success = false;
-    }
-    else if (valid === true && type === 'number' && text.length > 10) {
+    } else if (valid === true && type === 'number' && text.length > 10) {
       msg = 'Limit is only upto 10 digits';
       visible = true;
       error = true;

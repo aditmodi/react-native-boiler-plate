@@ -102,7 +102,7 @@ export default class LoginForm extends Component {
                   type="email"
                   label="Email"
                   stacked={false}
-                  float={true}
+                  float
                   ref={this.props.loginEmail}
                 />
                 <InputField
@@ -110,7 +110,7 @@ export default class LoginForm extends Component {
                   secure
                   label="Password"
                   stacked={false}
-                  float={true}
+                  float
                   ref={this.props.loginPass}
                 />
                 <Button

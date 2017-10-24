@@ -6,80 +6,99 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Alert
+  Alert,
 } from 'react-native';
 import {
-  Button
-} from 'native-base'
+  Button,
+} from 'native-base';
 import {
-  StackNavigator
+  StackNavigator,
 } from 'react-navigation';
 import InputField from '../components/input';
 import Address from '../utils/address';
+import HeaderComponent from '../components/headerComponent';
 
 export default class ForgotPassScreen extends Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
   }
 
   genToken = () => {
-    console.log('PRESSSSSSSED');
-    fetch(`${Address.url}api/recoverPass`,{
+    const { navigate } = this.props.navigation;
+    fetch(`${Address.url}api/recoverPass`, {
       method: 'POST',
-      header: {
-        Accept: 'application/json'
+      headers: {
+        'Content-Type': 'application/json',
+        // Accept: 'application/json',
       },
       body: JSON.stringify({
-        email: 'abc@xyz.com'
+        email: this.email.state.value,
+      }),
+    })
+      .then(response => response.json())
+      .then((res) => {
+        console.log(':::::', res);
+        if (res.success === true) {
+          Alert.alert('Link for password recovery has been sent to your mail');
+          navigate('MidWay');
+        }
       })
-    })
-    .then((response) => {
-      Alert.alert('Link for password recovery has been sent to your mail');
-    })
-    .catch((e) => {
-      console.error(e);
-    })
+      .catch((e) => {
+        console.error(e);
+      });
   }
 
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <KeyboardAvoidingView behaviour="padding" style={styles.container}>
-        <InputField
-          type="email"
-          label="Please enter your recovery email"
-          float={true}
-        />
-        <Button style={styles.submit}
-          onPress={this.genToken}>
+      <View style={styles.majCont}>
+        <KeyboardAvoidingView behaviour="padding" style={styles.container}>
+          <HeaderComponent
+            leftIcon="arrow-back"
+            leftPressed={() => navigate('Home')}
+            title="Enter recovery email"
+          />
+          <InputField
+            type="email"
+            label="Please enter your recovery email"
+            ref={input => this.email = input}
+            float
+          />
+        </KeyboardAvoidingView>
+        <Button
+          style={styles.submit}
+          onPress={this.genToken}
+        >
           <Text style={styles.text}>Submit</Text>
         </Button>
-      </KeyboardAvoidingView>
-    )
+      </View>
+    );
   }
 }
 
-const styles=StyleSheet.create({
-  container: {
+const styles = StyleSheet.create({
+  majCont: {
     flex: 1,
+  },
+  container: {
+    // flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-around',
     alignItems: 'stretch',
-    marginTop: 40
+    marginTop: 40,
   },
   submit: {
     borderWidth: 1,
     marginBottom: 300,
     marginLeft: 30,
     marginRight: 30,
-    backgroundColor: '#00008b'
+    backgroundColor: '#00008b',
   },
   text: {
     padding: 10,
     textAlign: 'center',
     color: '#ffffff',
     fontWeight: 'bold',
-    fontSize: 20
+    fontSize: 20,
   },
-})
+});

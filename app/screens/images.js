@@ -6,10 +6,10 @@ import {
   StyleSheet,
   Text,
   AsyncStorage,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import {
-  Button
+  Button,
 } from 'native-base';
 import HeaderComponent from '../components/headerComponent';
 import Address from '../utils/address';
@@ -40,29 +40,29 @@ export default class ImageScreen extends Component {
         fetch(`${Address.url}api/getPhoto/${id}`, {
           method: 'GET',
           headers: {
-            token: token
-          }
+            token,
+          },
         })
-        .then(response => response.json())
-        .then((res) => {
-          console.log('this is the response:::', res);
-          let n;
-          let str;
-          res.data.map((item, index) => {
-            n = item.img.url.lastIndexOf('upload');
-            str = `${item.img.url.slice(0, n + 6)}/w_${width},h_${height}${item.img.url.slice(n + 6)}`;
-            urls[index] = str;
+          .then(response => response.json())
+          .then((res) => {
+            console.log('this is the response:::', res);
+            let n;
+            let str;
+            res.data.map((item, index) => {
+              n = item.img.url.lastIndexOf('upload');
+              str = `${item.img.url.slice(0, n + 6)}/w_${width},h_${height}${item.img.url.slice(n + 6)}`;
+              urls[index] = str;
+            });
+            this.setState({
+              url: urls,
+            });
+            console.log('STATE::', this.state.url);
+            urls = new Array();
+          })
+          .catch((err) => {
+            console.log(err);
           });
-          this.setState({
-            url: urls,
-          });
-          console.log('STATE::', this.state.url);
-          urls = new Array();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      })
+      });
     });
   }
 
@@ -70,7 +70,8 @@ export default class ImageScreen extends Component {
     <View key={i}>
       <Image
         style={styles.image}
-        source={{ uri: url }}>
+        source={{ uri: url }}
+      >
         {this.state.isLoading ? <ActivityIndicator style={{ padding: 20 }} /> : null}
       </Image>
       <Text>{url}</Text>
@@ -82,20 +83,20 @@ export default class ImageScreen extends Component {
     const { navigate } = this.props.navigation;
     return (
       <ScrollView>
-      <View>
-        <HeaderComponent
-          leftIcon="arrow-back"
-          leftPressed={() => navigate('Profile')}
-          title="Images"
-        />
+        <View>
+          <HeaderComponent
+            leftIcon="arrow-back"
+            leftPressed={() => navigate('Profile')}
+            title="Images"
+          />
           {
             this.state.url.map((item, i) => this.renderImages(item, i))
           }
-      <Button style={styles.button} onPress={() => navigate('Camera')}>
-        <Text style={styles.buttonText}>Add Images</Text>
-      </Button>
-      </View>
-    </ScrollView>
+          <Button style={styles.button} onPress={() => navigate('Camera')}>
+            <Text style={styles.buttonText}>Add Images</Text>
+          </Button>
+        </View>
+      </ScrollView>
     );
   }
 }
@@ -108,13 +109,13 @@ const styles = StyleSheet.create({
     padding: 20,
     margin: 20,
   },
-  button:{
+  button: {
     alignSelf: 'center',
     padding: 10,
-    marginTop: 10
+    marginTop: 10,
   },
   buttonText: {
     color: '#ffffff',
-    padding: 10
-  }
+    padding: 10,
+  },
 });

@@ -6,11 +6,11 @@ import {
   StyleSheet,
   Text,
   Alert,
-  Picker
+  Picker,
 } from 'react-native';
 import {
   Button,
-  Label
+  Label,
 } from 'native-base';
 import {
   email,
@@ -26,18 +26,18 @@ import HeaderComponent from '../components/headerComponent';
 let num;
 
 export default class EditForm extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       fname: '',
       lname: '',
       email: '',
       phone: null,
-      gender: ''
-    }
+      gender: '',
+    };
   }
 
-  async componentWillMount(){
+  async componentWillMount() {
     // console.log('-------------------');
     const { navigate } = this.props.navigation;
     const checkToken = await AsyncStorage.getItem('jwt', (err, token) => {
@@ -46,49 +46,50 @@ export default class EditForm extends Component {
         // console.log('&&&&&&&&&&&&', id);
         fetch(`${Address.url}api/getUser/${id}`, {
           method: 'GET',
-          headers:{
+          headers: {
             Accept: 'application/json',
-            token: `${token}`
-          }
+            token: `${token}`,
+          },
         })
-        .then(response => {
-          console.log('{{{{{{}}}}}}', response);
-          return response.json()})
-        .then((res) => {
-          console.log('******', res);
-          if(res.user.gender == 'female'){
-            num = 1;
-          }
-          if(res.user.gender == 'male'){
-            num = 0;
-          }
-          this.setState({
-            fname: res.user.firstName,
-            lname: res.user.lastName,
-            email: res.user.email,
-            phone: (res.user.phone).toString(),
-            gender: res.user.gender,
+          .then((response) => {
+            console.log('{{{{{{}}}}}}', response);
+            return response.json();
           })
-        })
-        .catch((e) => {
-          console.error(e);
-        })
-      })
+          .then((res) => {
+            console.log('******', res);
+            if (res.user.gender == 'female') {
+              num = 1;
+            }
+            if (res.user.gender == 'male') {
+              num = 0;
+            }
+            this.setState({
+              fname: res.user.firstName,
+              lname: res.user.lastName,
+              email: res.user.email,
+              phone: (res.user.phone).toString(),
+              gender: res.user.gender,
+            });
+          })
+          .catch((e) => {
+            console.error(e);
+          });
+      });
     });
   }
 
   updateChange = async () => {
     const { navigate } = this.props.navigation;
-    let f = this.fname.state;
-    let l = this.lname.state;
-    let e = this.email.state;
-    let p = this.phone.state;
+    const f = this.fname.state;
+    const l = this.lname.state;
+    const e = this.email.state;
+    const p = this.phone.state;
     // let g = this.gender.state;
-    let g = this.state.gender;
-    let fv = alphaNumeric(f.value);
-    let lv = alphaNumeric(l.value);
-    let ev = email(e.value);
-    let pv = onlyNumber(p.value);
+    const g = this.state.gender;
+    const fv = alphaNumeric(f.value);
+    const lv = alphaNumeric(l.value);
+    const ev = email(e.value);
+    const pv = onlyNumber(p.value);
     console.log('----', f.value);
     console.log('----', l.value);
     console.log('----', e.value);
@@ -98,95 +99,93 @@ export default class EditForm extends Component {
     console.log('fname', ev);
     console.log('fname', pv);
     // if (fv === true && lv === true && ev === true && pv === true) {
-      const checkToken = await AsyncStorage.getItem('jwt', (err, token) => {
-        console.log('^^^^^^^', token);
-        const Id = AsyncStorage.getItem('id', (err, id) => {
-          console.log('&&&&&&&', id);
-          fetch(`${Address.url}api/updateUser/${id}`, {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              token: `${token}`
-            },
-            body: JSON.stringify({
-              fname: f.value,
-              lname: l.value,
-              email: e.value,
-              phone: Number(p.value),
-              gender: g,
-            })
-          })
-          .then((response) => {
-            return response.json();
-          })
+    const checkToken = await AsyncStorage.getItem('jwt', (err, token) => {
+      console.log('^^^^^^^', token);
+      const Id = AsyncStorage.getItem('id', (err, id) => {
+        console.log('&&&&&&&', id);
+        fetch(`${Address.url}api/updateUser/${id}`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            token: `${token}`,
+          },
+          body: JSON.stringify({
+            fname: f.value,
+            lname: l.value,
+            email: e.value,
+            phone: Number(p.value),
+            gender: g,
+          }),
+        })
+          .then(response => response.json())
           .then((res) => {
             Alert.alert(res.message);
-            if(res.success == true){
-              navigate('ProfileView')
+            if (res.success == true) {
+              navigate('ProfileView');
             }
           })
           .catch((e) => {
             console.error(e);
-          })
-        })
-      })
+          });
+      });
+    });
     // }
     // else {
     //   Alert.alert('Resolve the highlighted errors')
     // }
   }
 
-  render(){
+  render() {
     const { navigate } = this.props.navigation;
     console.log('!!!12@@@@@@@@@@', this.state.gender);
-    let male = 'male'
-    return(
+    const male = 'male';
+    return (
       <ScrollView>
         <HeaderComponent
-          leftIcon='arrow-back'
+          leftIcon="arrow-back"
           leftPressed={() => navigate('ProfileView')}
-          title='Edit Form'
+          title="Edit Form"
         />
         <InputField
-          type='text'
-          label='First Name'
+          type="text"
+          label="First Name"
           value={this.state.fname}
           ref={(input) => { this.fname = input; }}
           float={false}
-          stacked={true}
+          stacked
         />
         <InputField
-          type='text'
-          label='Last Name'
+          type="text"
+          label="Last Name"
           value={this.state.lname}
-          ref={(input) => { this.lname = input }}
+          ref={(input) => { this.lname = input; }}
           float={false}
-          stacked={true}
+          stacked
         />
         <InputField
-          type='email'
-          label='Email'
+          type="email"
+          label="Email"
           value={this.state.email}
-          ref={(input) => { this.email = input }}
+          ref={(input) => { this.email = input; }}
           float={false}
-          stacked={true}
+          stacked
         />
         <InputField
-          type='number'
-          label='Phone'
+          type="number"
+          label="Phone"
           value={this.state.phone}
-          ref={(input) => { this.phone = input }}
+          ref={(input) => { this.phone = input; }}
           float={false}
-          stacked={true}
+          stacked
         />
         <Label>Gender</Label>
         <Picker
           selectedValue={this.state.gender}
-          onValueChange={(itemValue, itemIndex) => this.setState({gender: itemValue})}
-          >
-          <Picker.Item label='male' value='male'/>
-          <Picker.Item label='female' value='female'/>
+          onValueChange={(itemValue, itemIndex) => this.setState({ gender: itemValue })}
+        >
+          <Picker.Item label="male" value="male" />
+          <Picker.Item label="female" value="female" />
         </Picker>
         <View style={styles.buttons}>
           <Button style={styles.button} success onPress={this.updateChange}>
@@ -197,7 +196,7 @@ export default class EditForm extends Component {
           </Button>
         </View>
       </ScrollView>
-    )
+    );
   }
 }
 
@@ -206,10 +205,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 10
+    padding: 10,
   },
   button: {
-    margin: 20
+    margin: 20,
   },
   buttonText: {
     fontSize: 15,
@@ -217,6 +216,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: 'transparent',
     padding: 10,
-    color: '#ffffff'
-  }
-})
+    color: '#ffffff',
+  },
+});

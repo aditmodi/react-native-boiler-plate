@@ -24,13 +24,13 @@ const styles = StyleSheet.create({
 export default class Menu extends Component {
   static propTypes = {
     homeButton: PropTypes.func,
-    profileButton: PropTypes.func,
+    profileViewButton: PropTypes.func,
     logoutButton: PropTypes.func,
   }
 
   static defaultProps = {
     homeButton: null,
-    profileButton: null,
+    profileViewButton: null,
     logoutButton: null,
   }
 
