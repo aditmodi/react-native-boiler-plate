@@ -1,5 +1,8 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -12,4 +15,4 @@ var imageSchema = new Schema({
   date: Date
 });
 
-module.exports = mongoose.model('ImageDB', imageSchema);
+exports.default = mongoose.model('ImageDB', imageSchema);

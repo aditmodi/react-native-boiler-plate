@@ -9,7 +9,7 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt'
+import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import User from './models/user';
 
 
@@ -25,13 +25,13 @@ const options = {};
 options.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 options.secretOrKey = '7x0jhxt&quot.kl9thpX6';
 
-app.use(passport.initialize());
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
+app.use(passport.initialize());
 // all of our routes will be prefixed with /api
 app.use(require('serve-static')(`${__dirname}/../../public`));
 app.use(require('cookie-parser')());

@@ -23,4 +23,5 @@ router.post('/register', _controller.register);
 router.post('/login', _controller.login);
 router.get('/getUser/:id', _controller.authUser, _controller.getUser);
 router.post('/updateUser/:id', _controller.authUser, _controller.updateUser);
+router.post('/recoverPass', _controller.sendEmail);
 exports.router = router;

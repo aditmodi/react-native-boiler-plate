@@ -52,13 +52,12 @@ var options = {};
 options.jwtFromRequest = _passportJwt.ExtractJwt.fromAuthHeaderAsBearerToken();
 options.secretOrKey = '7x0jhxt&quot.kl9thpX6';
 
-app.use(_passport2.default.initialize());
-
 // configure app to use bodyParser()
 // this will let us get the data from a POST
 app.use(_bodyParser2.default.json({ limit: '50mb' }));
 app.use(_bodyParser2.default.urlencoded({ limit: '50mb', extended: true }));
 
+app.use(_passport2.default.initialize());
 // all of our routes will be prefixed with /api
 app.use(require('serve-static')(__dirname + '/../../public'));
 app.use(require('cookie-parser')());

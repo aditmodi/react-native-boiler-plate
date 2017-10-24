@@ -94,6 +94,51 @@ var DummyUser = {
       username: 'abc@xyz.com',
       password: ''
     }
+
+  },
+  updateUser: {
+    validUser: {
+      fname: 'qwe',
+      lname: 'qwe',
+      email: 'qwe@qwe.qwe',
+      phone: 9999999999,
+      gender: 'male'
+    },
+    invalidFname: {
+      fname: 'qwe....',
+      lname: 'qwe',
+      email: 'qwe@qwe.qwe',
+      phone: 9999999999,
+      gender: 'male'
+    },
+    invalidLname: {
+      fname: 'qwe',
+      lname: 'qwe....',
+      email: 'qwe@qwe.qwe',
+      phone: 9999999999,
+      gender: 'male'
+    },
+    invalidEmail: {
+      fname: 'qwe',
+      lname: 'qwe',
+      email: 'qwe@qw',
+      phone: 9999999999,
+      gender: 'male'
+    },
+    invalidPhone: {
+      fname: 'qwe',
+      lname: 'qwe',
+      email: 'qwe@qwe.qwe',
+      phone: 'dasd',
+      gender: 'male'
+    },
+    invalidGender: {
+      fname: 'qwe',
+      lname: 'qwe',
+      email: 'qwe@qwe.qwe',
+      phone: 9999999999,
+      gender: 'other'
+    }
   }
 };
 
